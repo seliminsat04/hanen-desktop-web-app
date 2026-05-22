@@ -1,146 +1,158 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useFirestoreData } from '../hooks/useFirestoreData';
 import { Patient } from '../types';
 import { 
-  Mic, Send, Phone, Search, User, Square, Play, 
-  Volume2, Clock, Check, Sparkles, BookOpen, Heart, 
-  Activity, CheckCheck, RefreshCw, AlertCircle, Sparkle
+  Search, Mic, StopCircle, RefreshCw, Sparkles, 
+  Play, Send, Youtube, Paperclip, FileText, Check, 
+  AlertCircle, ChevronDown, Clock, User, X, PhoneOff, Phone
 } from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
 import { cn } from '../lib/utils';
 import { doc, setDoc, serverTimestamp, collection, query, orderBy, onSnapshot } from 'firebase/firestore';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { db, storage } from '../lib/firebase';
+import { db } from '../lib/firebase';
 import { useAuth } from '../AuthContext';
 
+// --- Types ---
 interface Message {
   id: string;
   patientId: string;
-  type: 'text' | 'audio';
+  type: 'text' | 'ai_composite';
   content: string;
-  audioUrl: string;
+  videoLink?: string | null;
+  attachedFile?: string | null;
   sender: 'doctor' | 'hanen' | 'patient';
   createdAt: any;
-  speechRate?: 'slow' | 'normal';
-  voiceTone?: 'warm' | 'solemn';
-  deliveryMode?: 'immediate' | 'journal';
   status?: 'scheduled' | 'calling' | 'delivered';
-  category?: string;
 }
 
-const MESSAGE_CATEGORIES = [
-  { id: 'treatment', label: '💊 Conseil / Traitement', bg: 'bg-emerald-50 text-emerald-700 border-slate-200 hover:border-emerald-300', activeBg: 'bg-emerald-600 text-white border-emerald-600 shadow-sm' },
-  { id: 'appointment', label: '📅 Rappel RDV', bg: 'bg-blue-50 text-blue-700 border-slate-200 hover:border-blue-300', activeBg: 'bg-blue-600 text-white border-blue-600 shadow-sm' },
-  { id: 'results', label: '📊 Résultats', bg: 'bg-purple-50 text-purple-700 border-slate-200 hover:border-purple-300', activeBg: 'bg-purple-600 text-white border-purple-600 shadow-sm' },
-  { id: 'motivation', label: '❤️ Motivation / Réconfort', bg: 'bg-pink-50 text-pink-700 border-slate-200 hover:border-pink-300', activeBg: 'bg-pink-600 text-white border-pink-600 shadow-sm' },
-  { id: 'link', label: '🔗 Lien bénéfique', bg: 'bg-amber-50 text-amber-700 border-slate-200 hover:border-amber-300', activeBg: 'bg-amber-600 text-white border-amber-600 shadow-sm' },
-  { id: 'followup', label: '🩹 Suivi', bg: 'bg-indigo-50 text-indigo-700 border-slate-200 hover:border-indigo-300', activeBg: 'bg-indigo-600 text-white border-indigo-600 shadow-sm' },
-];
-
-const CATEGORY_MAP: Record<string, { label: string, color: string }> = {
-  treatment: { label: "💊 Conseil / Traitement", color: "bg-emerald-700/50 text-emerald-100" },
-  appointment: { label: "📅 Rappel RDV", color: "bg-blue-700/55 text-blue-100" },
-  results: { label: "📊 Résultats", color: "bg-purple-700/55 text-purple-100" },
-  motivation: { label: "❤️ Motivation", color: "bg-pink-700/55 text-pink-100" },
-  link: { label: "🔗 Lien bénéfique", color: "bg-amber-700/55 text-amber-100" },
-  followup: { label: "🩹 Suivi", color: "bg-indigo-700/55 text-indigo-100" },
+const COLORS = {
+  navy: '#0F1E36',
+  terracotta: '#E07A5F',
+  sage: '#5C7F67',
+  cream: '#FAF6F0'
 };
 
-const CLINICAL_PRESETS = [
-  {
-    id: 'traitement',
-    label: '💊 Prise de Médicament',
-    desc: 'Observance & hydratation',
-    category: 'treatment',
-    text: "Bonjour, c'est l'assistant Hanen. N'oubliez pas de prendre vos comprimés prescrits à cet instant précis avec un grand verre d'eau tempérée pour garantir une excellente assimilation clinique."
-  },
-  {
-    id: 'analyse',
-    label: '📊 Explication Analyse',
-    desc: 'Description rassurante des résultats',
-    category: 'results',
-    text: "Bonjour, je viens vous rassurer au sujet de vos derniers résultats d'analyse. Le docteur a analysé les chiffres : tout est globalement stable, poursuivez vos efforts habituels."
-  },
-  {
-    id: 'consultation',
-    label: '🩹 Après Consultation',
-    desc: 'Suivi de consultation et repos',
-    category: 'followup',
-    text: "Bonjour, c'est Hanen. Suite à votre rendez-vous d'aujourd'hui, le docteur vous encourage à vous reposer et à bien économiser votre voix pour les prochaines 48 heures."
-  },
-  {
-    id: 'motivation',
-    label: '❤️ Support Rétablissement',
-    desc: 'Soutien orthophonique chaleureux',
-    category: 'motivation',
-    text: "Bonjour ! Hanen tenait à vous envoyer une bonne dose d'énergie. Vos progrès vocaux de cette semaine sont remarquables, continuez ainsi !"
-  },
-  {
-    id: 'examen',
-    label: '🔍 Préparation Examen',
-    desc: 'Directives cliniques importantes',
-    category: 'appointment',
-    text: "Bonjour, Hanen vous rappelle que pour votre examen de demain matin, vous devez veiller à bien reposer vos cordes vocales ce soir et éviter les boissons trop froides."
+function uint8ArrayToBase64(bytes: Uint8Array): string {
+  let binary = '';
+  const len = bytes.byteLength;
+  for (let i = 0; i < len; i += 1024) {
+    const chunk = bytes.subarray(i, Math.min(i + 1024, len));
+    binary += String.fromCharCode.apply(null, chunk as any);
   }
-];
+  return btoa(binary);
+}
+
+function downsample(buffer: Float32Array, fromRate: number, toRate: number): Float32Array {
+  if (fromRate === toRate) {
+    return buffer;
+  }
+  if (fromRate < toRate) {
+    return buffer;
+  }
+  const sampleRateRatio = fromRate / toRate;
+  const newLength = Math.round(buffer.length / sampleRateRatio);
+  const result = new Float32Array(newLength);
+  let offsetResult = 0;
+  let offsetBuffer = 0;
+  while (offsetResult < result.length) {
+    const nextOffsetBuffer = Math.round((offsetResult + 1) * sampleRateRatio);
+    let accum = 0;
+    let count = 0;
+    for (let i = offsetBuffer; i < nextOffsetBuffer && i < buffer.length; i++) {
+      accum += buffer[i];
+      count++;
+    }
+    result[offsetResult] = count > 0 ? accum / count : 0;
+    offsetResult++;
+    offsetBuffer = nextOffsetBuffer;
+  }
+  return result;
+}
 
 export function Messages() {
   const { tenantId } = useAuth();
   const { data: patients, loading } = useFirestoreData<Patient>('patients');
-  const [selectedPatientId, setSelectedPatientId] = useState<string | null>(null);
-  const [message, setMessage] = useState('');
-  const [searchTerm, setSearchTerm] = useState('');
-  const [isRecording, setIsRecording] = useState(false);
-  const [isUploading, setIsUploading] = useState(false);
   
-  // Custom speech properties
-  const [speechRate, setSpeechRate] = useState<'slow' | 'normal'>('normal');
-  const [voiceTone, setVoiceTone] = useState<'warm' | 'solemn'>('warm');
-  const [deliveryMode, setDeliveryMode] = useState<'immediate' | 'journal'>('immediate');
-  const [selectedCategory, setSelectedCategory] = useState<string>('treatment');
-
-  // Interactive feedback alerts
-  const [showToast, setShowToast] = useState<boolean>(false);
-  const [toastMessage, setToastMessage] = useState<string>('');
-
-  // Speech to Text (SST) simulated step
-  const [pendingAudioBlob, setPendingAudioBlob] = useState<Blob | null>(null);
-  const [audioTranscription, setAudioTranscription] = useState('');
-  const [isTranscribing, setIsTranscribing] = useState(false);
-  const [showTranscriptionStep, setShowTranscriptionStep] = useState(false);
-
+  // App State
+  const [selectedPatientId, setSelectedPatientId] = useState<string | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
   
-  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
-  const audioChunksRef = useRef<Blob[]>([]);
-
-  const filteredPatients = patients.filter(p => 
-    p.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  // AI Assistant States (idle, listening, processing, review)
+  const [aiState, setAiState] = useState<'idle' | 'listening' | 'processing' | 'review'>('idle');
+  const [generatedText, setGeneratedText] = useState('');
+  const [suggestedVideo, setSuggestedVideo] = useState<{title: string, url: string, thumbnailUrl?: string} | null>(null);
+  const [attachedContext, setAttachedContext] = useState<string | null>(null);
+  const [isPlayingPreview, setIsPlayingPreview] = useState(false);
+  const [playingMessageId, setPlayingMessageId] = useState<string | null>(null);
+  const [isUploadingFile, setIsUploadingFile] = useState(false);
 
   const selectedPatient = patients.find(p => p.id === selectedPatientId);
 
-  const triggerToast = (msg: string) => {
-    setToastMessage(msg);
-    setShowToast(true);
-    setTimeout(() => {
-      setShowToast(false);
-    }, 6000);
-  };
+  const playSpecificMessageAudio = async (msgId: string, text: string) => {
+    try {
+      setPlayingMessageId(msgId);
+      const res = await fetch('/api/generate-tts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text })
+      });
+      if (!res.ok) {
+        throw new Error(`Erreur TTS (code ${res.status})`);
+      }
+      const data = await res.json();
+      if (data.audio) {
+        const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
+        const binary = atob(data.audio);
+        const arrayBuffer = new ArrayBuffer(binary.length);
+        const view = new Uint8Array(arrayBuffer);
+        for (let i = 0; i < binary.length; i++) {
+          view[i] = binary.charCodeAt(i);
+        }
 
-  const handlePreviewVoice = () => {
-    const currentText = message.trim() || audioTranscription || "Veuillez d'abord écrire un message ou sélectionner un modèle clinique prêt à l'emploi.";
-    if ('speechSynthesis' in window) {
-      window.speechSynthesis.cancel();
-      const utterance = new SpeechSynthesisUtterance(currentText);
-      utterance.lang = 'fr-FR';
-      utterance.rate = speechRate === 'slow' ? 0.72 : 0.90;
-      utterance.pitch = voiceTone === 'warm' ? 1.15 : 0.88; // subtle difference in vocal characteristics
-      window.speechSynthesis.speak(utterance);
-    } else {
-      triggerToast("La synthèse vocale n'est pas activée sur ce navigateur, mais le moteur de capsule Hanen l'interprétera.");
+        // Keep a copy of the buffer as decodeAudioData is destructive (neuters)
+        const arrayBufferCopy = arrayBuffer.slice(0);
+        const viewCopy = new Uint8Array(arrayBufferCopy);
+
+        try {
+          const audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
+          const source = audioCtx.createBufferSource();
+          source.buffer = audioBuffer;
+          source.connect(audioCtx.destination);
+          source.start(0);
+          source.onended = () => setPlayingMessageId(null);
+        } catch (decodeErr) {
+          const pcmFloat = new Float32Array(viewCopy.length / 2);
+          const dataView = new DataView(arrayBufferCopy);
+          for (let i = 0; i < pcmFloat.length; i++) {
+            pcmFloat[i] = dataView.getInt16(i * 2, true) / 32768.0;
+          }
+          const buffer = audioCtx.createBuffer(1, pcmFloat.length, 24000);
+          buffer.getChannelData(0).set(pcmFloat);
+          const source = audioCtx.createBufferSource();
+          source.buffer = buffer;
+          source.connect(audioCtx.destination);
+          source.start();
+          source.onended = () => setPlayingMessageId(null);
+        }
+      } else {
+        alert("Erreur: Pas d'audio reçu");
+        setPlayingMessageId(null);
+      }
+    } catch (err) {
+      console.error("TTS preview error:", err);
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'fr-FR'; 
+        utterance.onend = () => setPlayingMessageId(null);
+        window.speechSynthesis.speak(utterance);
+      } else {
+        setPlayingMessageId(null);
+      }
     }
   };
 
+  // Focus latest messages
   useEffect(() => {
     if (!tenantId || !selectedPatientId) {
        setMessages([]);
@@ -148,7 +160,7 @@ export function Messages() {
     }
     const q = query(
       collection(db, 'tenants', tenantId, 'patients', selectedPatientId, 'messages'),
-      orderBy('createdAt', 'asc')
+      orderBy('createdAt', 'desc')
     );
     const unsubscribe = onSnapshot(q, (snap) => {
        const msgs: Message[] = [];
@@ -158,649 +170,703 @@ export function Messages() {
     return () => unsubscribe();
   }, [tenantId, selectedPatientId]);
 
-  const handleStartRecording = async () => {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      const mediaRecorder = new MediaRecorder(stream);
-      mediaRecorderRef.current = mediaRecorder;
-      audioChunksRef.current = [];
+  // --- Gemini Real-Time Live Session ---
+  const wsRef = useRef<WebSocket | null>(null);
+  const audioCtxRef = useRef<AudioContext | null>(null);
+  const nextStartTimeRef = useRef<number>(0);
+  const streamRef = useRef<MediaStream | null>(null);
+  const processorRef = useRef<ScriptProcessorNode | null>(null);
+  const activeSourcesRef = useRef<AudioBufferSourceNode[]>([]);
+  
+  // Speech Recognition for recording transcript
+  const recognitionRef = useRef<any>(null);
+  const transcriptRef = useRef<string>("");
 
-      mediaRecorder.ondataavailable = (event) => {
-        if (event.data.size > 0) {
-          audioChunksRef.current.push(event.data);
+  const cleanupAudio = () => {
+    if (recognitionRef.current) {
+        try { recognitionRef.current.stop(); } catch(e) {}
+        recognitionRef.current = null;
+    }
+    activeSourcesRef.current.forEach(src => {
+        try { src.stop(); } catch(e) {}
+    });
+    activeSourcesRef.current = [];
+    
+    if (processorRef.current) {
+        processorRef.current.disconnect();
+        processorRef.current = null;
+    }
+    if (streamRef.current) {
+        streamRef.current.getTracks().forEach(t => t.stop());
+        streamRef.current = null;
+    }
+    if (audioCtxRef.current) {
+        audioCtxRef.current.close().catch(() => {});
+        audioCtxRef.current = null;
+    }
+    if (wsRef.current) {
+        wsRef.current.close();
+        wsRef.current = null;
+    }
+  };
+
+  const handleStartLive = async () => {
+    if (!selectedPatientId || !selectedPatient) {
+      alert("Veuillez sélectionner un patient d'abord.");
+      return;
+    }
+    setAiState('listening');
+    transcriptRef.current = "";
+
+    try {
+      const dateStr = new Date().toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' });
+      const docName = "Docteur"; 
+      
+      const sysPrompt = `Vous êtes Hanen (voix féminine Zephyr, douce, rassurante). \
+Nous sommes le ${dateStr}. Vous assistez le ${docName}. \
+Patient évalué actuellement: ${selectedPatient.name}, ${selectedPatient.age} ans, souffrant de: ${selectedPatient.conditions?.[0] || 'Non renseigné'}. \
+RÈGLES DE LANGAGE TRÈS STRICTES (Le Français Majestueux en retour) : \
+Vous comprenez tout (dialecte tunisien darija, arabe pur, français, etc.). \
+Cependant, le prompt oblige strictement Hanen à ne formuler ses réponses et à ne rédiger ses "traductions cliniques" au patient qu'en français clair, professionnel et bienveillant. \
+La règle est : "Comprends tout, mais ne réponds et ne rédige qu'en excellent français." \
+Saluez d'abord le docteur avec une phrase d'accueil TRÈS COURTE en indiquant que vous êtes prête pour ce patient. \
+Écoutez ses consignes vocales. \
+Ensuite, formulez CLAIREMENT ET EN DÉTAIL le message éducatif ou l'instruction médicamenteuse qui sera transmis au patient, toujours en excellent français.`;
+
+      const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+      const url = new URL(`${protocol}//${window.location.host}/live`);
+      url.searchParams.set("sysPrompt", sysPrompt);
+
+      const ws = new WebSocket(url.toString());
+      wsRef.current = ws;
+
+      const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
+      audioCtxRef.current = audioCtx;
+      nextStartTimeRef.current = 0;
+
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true } });
+      streamRef.current = stream;
+
+      // Force resume since getUserMedia is an async browser sandbox transition
+      if (audioCtx.state === 'suspended') {
+        await audioCtx.resume();
+      }
+
+      // Start Web Speech API for transcript
+      const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+      if (SpeechRecognition) {
+          const recognition = new SpeechRecognition();
+          recognition.continuous = true;
+          recognition.interimResults = true;
+          recognition.lang = 'fr-FR'; 
+          
+          recognition.onresult = (event: any) => {
+              let currentTranscript = '';
+              for (let i = 0; i < event.results.length; i++) {
+                  currentTranscript += event.results[i][0].transcript + ' ';
+              }
+              transcriptRef.current = currentTranscript;
+          };
+          recognition.start();
+          recognitionRef.current = recognition;
+      }
+
+      const source = audioCtx.createMediaStreamSource(stream);
+      const processor = audioCtx.createScriptProcessor(4096, 1, 1);
+      processorRef.current = processor;
+
+      source.connect(processor);
+      processor.connect(audioCtx.destination);
+
+      const inputSampleRate = audioCtx.sampleRate;
+      const targetSampleRate = 16000;
+
+      processor.onaudioprocess = (e) => {
+        if (!wsRef.current || wsRef.current.readyState !== WebSocket.OPEN) return;
+        const pcmData = e.inputBuffer.getChannelData(0);
+        
+        // Robust downsampling to 16000Hz (highly compatible with Gemini Live API audio input specs)
+        const downsampled = downsample(pcmData, inputSampleRate, targetSampleRate);
+        
+        // Convert Float32Array to 16bit signed PCM
+        const buffer = new ArrayBuffer(downsampled.length * 2);
+        const view = new DataView(buffer);
+        for (let i = 0; i < downsampled.length; i++) {
+          const s = Math.max(-1, Math.min(1, downsampled[i]));
+          view.setInt16(i * 2, s < 0 ? s * 0x8000 : s * 0x7FFF, true);
+        }
+        
+        const bytes = new Uint8Array(buffer);
+        const base64 = uint8ArrayToBase64(bytes);
+        wsRef.current.send(JSON.stringify({ audio: base64 }));
+      };
+
+      ws.onmessage = (event) => {
+        try {
+          const msg = JSON.parse(event.data);
+          if (msg.interrupted) {
+            console.log("[Client] Gemini interrupted the active playback.");
+            nextStartTimeRef.current = audioCtx.currentTime;
+            // Purge currently playing sources to achieve real "barge-in"
+            activeSourcesRef.current.forEach(src => {
+              try { src.stop(); } catch(e) {}
+            });
+            activeSourcesRef.current = [];
+          }
+          if (msg.audio) {
+            const base64 = msg.audio;
+            const binaryString = atob(base64);
+            const len = binaryString.length;
+            const bytes = new Uint8Array(len);
+            for (let i = 0; i < len; i++) {
+              bytes[i] = binaryString.charCodeAt(i);
+            }
+            
+            // Alignment-safe and robust 16-bit signed PCM decoder
+            const samplesCount = Math.floor(bytes.length / 2);
+            const float32Array = new Float32Array(samplesCount);
+            for (let i = 0; i < samplesCount; i++) {
+              const byte0 = bytes[i * 2];
+              const byte1 = bytes[i * 2 + 1];
+              let val = byte0 | (byte1 << 8);
+              if (val & 0x8000) {
+                val |= ~0xffff; // sign extension for 16-bit signed values
+              }
+              float32Array[i] = val / 32768.0;
+            }
+            
+            const audioBuffer = audioCtx.createBuffer(1, float32Array.length, 24000);
+            audioBuffer.getChannelData(0).set(float32Array);
+            
+            const src = audioCtx.createBufferSource();
+            src.buffer = audioBuffer;
+            src.connect(audioCtx.destination);
+            
+            src.onended = () => {
+               activeSourcesRef.current = activeSourcesRef.current.filter(s => s !== src);
+            };
+            activeSourcesRef.current.push(src);
+
+            const currentTime = audioCtx.currentTime;
+            if (nextStartTimeRef.current < currentTime) {
+              nextStartTimeRef.current = currentTime + 0.05; // minimized queue delay for snappy, ultra-natural conversation
+            }
+            src.start(nextStartTimeRef.current);
+            nextStartTimeRef.current += audioBuffer.duration;
+          }
+        } catch (parsingErr) {
+          console.error("[Client] Error parsing incoming websocket message:", parsingErr);
         }
       };
 
-      mediaRecorder.start();
-      setIsRecording(true);
+      ws.onclose = (event) => {
+        console.warn(`[Client] Live WebSocket connection closed. Code: ${event.code}, Reason: ${event.reason}`);
+        if (event.code !== 1000) {
+          console.error("Live WebSocket connection closed with warning or error.", event);
+        }
+        // Ensure UI doesn't hang in listening or processing state if the connection is terminated
+        setAiState('idle');
+      };
+
+      ws.onerror = (e) => {
+        console.error("Live API WS Error:", e);
+        alert("Erreur de connexion Live API.");
+        handleStopLive(true);
+      };
+
+    } catch (e) {
+      console.error(e);
+      alert("Erreur d'accès au micro");
+      setAiState('idle');
+    }
+  };
+
+  const handleStopLive = async (isError = false) => {
+    // Capture transcript right before cleanup stops speech recognition
+    const finalTranscript = transcriptRef.current;
+    
+    cleanupAudio();
+    if (isError) {
+      setAiState('idle');
+      return;
+    }
+    
+    setAiState('processing');
+    
+    // Call the real API to generate a draft message
+    try {
+      const res = await fetch('/api/draft-message', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ patient: selectedPatient, transcript: finalTranscript })
+      });
+      if (!res.ok) throw new Error('Failed to generate draft');
+      const data = await res.json();
+      
+      setGeneratedText(data.draft);
+      setSuggestedVideo({
+        title: data.videoTitle,
+        url: data.videoUrl,
+        thumbnailUrl: data.thumbnailUrl
+      });
+      setAiState('review');
     } catch (err) {
-      console.error("Error accessing microphone:", err);
-      alert("Impossible d'accéder au microphone.");
+      console.error(err);
+      // Fallback empty if generation fails
+      setGeneratedText(`Bonjour ${selectedPatient?.name.split(' ')[0] || 'Madame / Monsieur'}, c'est l'assistante Hanen. Le docteur m'a chargée de vous rappeler votre consigne de la journée. N'oubliez pas votre traitement, c'est important.`);
+      setSuggestedVideo(null);
+      setAiState('review');
+    }
+  };
+
+  useEffect(() => {
+     return () => cleanupAudio();
+  }, []);
+
+  const playPreview = async () => {
+    try {
+      setIsPlayingPreview(true);
+      const res = await fetch('/api/generate-tts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text: generatedText })
+      });
+      if (!res.ok) {
+        throw new Error(`Erreur TTS (code ${res.status})`);
+      }
+      const data = await res.json();
+      if (data.audio) {
+        const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
+        const binary = atob(data.audio);
+        const arrayBuffer = new ArrayBuffer(binary.length);
+        const view = new Uint8Array(arrayBuffer);
+        for (let i = 0; i < binary.length; i++) {
+          view[i] = binary.charCodeAt(i);
+        }
+        
+        // Keep a copy because decodeAudioData is destructive (neuters)
+        const arrayBufferCopy = arrayBuffer.slice(0);
+        const viewCopy = new Uint8Array(arrayBufferCopy);
+
+        try {
+          const audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
+          const source = audioCtx.createBufferSource();
+          source.buffer = audioBuffer;
+          source.connect(audioCtx.destination);
+          source.start(0);
+          source.onended = () => setIsPlayingPreview(false);
+        } catch (decodeErr) {
+          // Fallback if raw PCM (16-bit 24kHz)
+          const pcmFloat = new Float32Array(viewCopy.length / 2);
+          const dataView = new DataView(arrayBufferCopy);
+          for (let i = 0; i < pcmFloat.length; i++) {
+            pcmFloat[i] = dataView.getInt16(i * 2, true) / 32768.0;
+          }
+          const buffer = audioCtx.createBuffer(1, pcmFloat.length, 24000);
+          buffer.getChannelData(0).set(pcmFloat);
+          const source = audioCtx.createBufferSource();
+          source.buffer = buffer;
+          source.connect(audioCtx.destination);
+          source.start();
+          source.onended = () => setIsPlayingPreview(false);
+        }
+      } else {
+        alert("Erreur: Pas d'audio reçu");
+        setIsPlayingPreview(false);
+      }
+    } catch (err) {
+      console.error("TTS preview error:", err);
+      // Fallback to local
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(generatedText);
+        utterance.lang = 'fr-FR'; 
+        utterance.onend = () => setIsPlayingPreview(false);
+        window.speechSynthesis.speak(utterance);
+      } else {
+        setIsPlayingPreview(false);
+      }
+    }
+  };
+
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setIsUploadingFile(true);
+      setTimeout(() => {
+        setAttachedContext(file.name);
+        setIsUploadingFile(false);
+      }, 1200);
     }
   };
 
   const simulateMessageStatusTransition = (msgId: string) => {
     if (!tenantId || !selectedPatientId) return;
-    
-    // Step 1: transition to 'calling' in 3 seconds
     setTimeout(async () => {
       try {
         const docRef = doc(db, 'tenants', tenantId, 'patients', selectedPatientId, 'messages', msgId);
         await setDoc(docRef, { status: 'calling' }, { merge: true });
         
-        // Step 2: transition to 'delivered' (Écouté / Validé) in 5 seconds
         setTimeout(async () => {
-          try {
-            await setDoc(docRef, { status: 'delivered' }, { merge: true });
-
-            // Step 3: Simulation of patient replying after reading/hearing vocal call
-            setTimeout(async () => {
-              try {
-                const simulatedReplies = [
-                  "Merci beaucoup Docteur ! J'ai bien écouté Hanen, je fais attention aux conseils vocaux.",
-                  "Bien reçu docteur. La capsule audio de Hanen est très rassurante. À demain pour l'exercice !",
-                  "Merci Docteur, je bois ma gorgée d'eau tout de suite et je révise avec l'application.",
-                  "Bonjour, merci pour ce rappel, j'applique les recommandations et je me repose ce matin."
-                ];
-                const replyText = simulatedReplies[Math.floor(Math.random() * simulatedReplies.length)];
-                
-                const replyRef = doc(collection(db, 'tenants', tenantId, 'patients', selectedPatientId, 'messages'));
-                await setDoc(replyRef, {
-                  patientId: selectedPatientId,
-                  type: 'text',
-                  content: replyText,
-                  audioUrl: '',
-                  sender: 'patient',
-                  createdAt: serverTimestamp()
-                });
-              } catch (re) {
-                console.warn("Could not insert dynamic patient response:", re);
-              }
-            }, 4000);
-
-          } catch (e) {
-            console.warn("Status transition error:", e);
-          }
-        }, 5000);
-        
-      } catch (e) {
-        console.warn("Status transition error:", e);
-      }
-    }, 3000);
+          await setDoc(docRef, { status: 'delivered' }, { merge: true });
+        }, 6000);
+      } catch (e) { console.warn(e); }
+    }, 2500);
   };
 
-  const handleStopRecording = () => {
-    if (mediaRecorderRef.current && isRecording) {
-      mediaRecorderRef.current.onstop = () => {
-        const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
-        setPendingAudioBlob(audioBlob);
-        
-        // Trigger high fidelity clinical Speech-to-Text simulation step
-        setIsTranscribing(true);
-        setShowTranscriptionStep(true);
-        
-        if (mediaRecorderRef.current?.stream) {
-           mediaRecorderRef.current.stream.getTracks().forEach(track => track.stop());
-        }
+  const handleSendViaHanen = async () => {
+    if (!tenantId || !selectedPatientId || !generatedText) return;
+    
+    const newMsgRef = doc(collection(db, 'tenants', tenantId, 'patients', selectedPatientId, 'messages'));
+    await setDoc(newMsgRef, {
+      patientId: selectedPatientId,
+      type: 'ai_composite',
+      content: generatedText,
+      videoLink: suggestedVideo?.url || null,
+      attachedFile: attachedContext || null,
+      sender: 'doctor',
+      createdAt: serverTimestamp(),
+      status: 'scheduled'
+    });
 
-        setTimeout(() => {
-          setIsTranscribing(false);
-          const simulatedTranscripts = [
-            "Bonjour j'ai bien analysé votre voix d'hier. Pour aujourd'hui, concentrez-vous sur des respirations diaphragmatiques amples avant chaque phrase.",
-            "Prenez le temps de bien articuler les consonnes occlusives ce matin. Buvez une gorgée d'eau tiède toutes les vingt minutes.",
-            "Excellent début d'exercices d'orthophonie ! Détendons la tension laryngée en effectuant de légers bâillements guidés aujourd'hui."
-          ];
-          const chosen = simulatedTranscripts[Math.floor(Math.random() * simulatedTranscripts.length)];
-          setAudioTranscription(chosen);
-        }, 1200);
-      };
-      
-      mediaRecorderRef.current.stop();
-      setIsRecording(false);
-    }
+    simulateMessageStatusTransition(newMsgRef.id);
+    resetAssistant();
   };
 
-  const handleConfirmAudioSend = async () => {
-    if (!pendingAudioBlob || !tenantId || !selectedPatientId) return;
-    setIsUploading(true);
-    try {
-      const fileName = `audio_${Date.now()}.webm`;
-      let downloadURL = "";
-      
-      try {
-        const storageRef = ref(storage, `tenants/${tenantId}/patients/${selectedPatientId}/messages/${fileName}`);
-        await uploadBytes(storageRef, pendingAudioBlob);
-        downloadURL = await getDownloadURL(storageRef);
-      } catch (storageError: any) {
-        console.warn("Firebase Cloud Storage has restricted access or is unprovisioned. Secure fallback triggered.", storageError);
-        downloadURL = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3";
-      }
-      
-      const newMsgRef = doc(collection(db, 'tenants', tenantId, 'patients', selectedPatientId, 'messages'));
-      await setDoc(newMsgRef, {
-        patientId: selectedPatientId,
-        type: 'audio',
-        content: audioTranscription || "🎤 Message vocal d'instructions",
-        audioUrl: downloadURL,
-        sender: 'doctor',
-        createdAt: serverTimestamp(),
-        speechRate,
-        voiceTone,
-        deliveryMode,
-        status: 'scheduled',
-        category: selectedCategory
-      });
-
-      simulateMessageStatusTransition(newMsgRef.id);
-      triggerToast("Capsule vocale envoyée avec succès via Hanen ! Appel programmé d'ici quelques instants.");
-
-      setShowTranscriptionStep(false);
-      setPendingAudioBlob(null);
-      setAudioTranscription('');
-    } catch (error) {
-      console.error("Error creating audio message document:", error);
-      alert("Erreur lors de l'envoi de la capsule audio.");
-    } finally {
-      setIsUploading(false);
-    }
-  };
-
-  const handleSendText = async () => {
-     if (!message.trim() || !tenantId || !selectedPatientId) return;
-     
-     const newMsgRef = doc(collection(db, 'tenants', tenantId, 'patients', selectedPatientId, 'messages'));
-     await setDoc(newMsgRef, {
-       patientId: selectedPatientId,
-       type: 'text',
-       content: message,
-       audioUrl: '',
-       sender: 'doctor',
-       createdAt: serverTimestamp(),
-       speechRate,
-       voiceTone,
-       deliveryMode,
-       status: 'scheduled',
-       category: selectedCategory
-     });
-
-     simulateMessageStatusTransition(newMsgRef.id);
-     triggerToast("Consigne texte transmise avec succès ! Hanen contacte le patient par la voix incessamment.");
-     setMessage('');
+  const resetAssistant = () => {
+    setAiState('idle');
+    setGeneratedText('');
+    setSuggestedVideo(null);
+    setAttachedContext(null);
   };
 
   return (
-    <div className="max-w-6xl mx-auto h-[calc(100vh-8rem)] flex flex-col space-y-6 animate-in fade-in duration-500 relative">
+    <div className="max-w-6xl mx-auto min-h-[calc(100vh-8rem)] pb-24 relative font-sans animate-in fade-in duration-500 flex flex-col md:flex-row gap-6">
       
-      {/* Premium Alert Toast notification */}
-      {showToast && (
-        <div className="fixed top-6 right-6 z-50 bg-slate-900 text-white rounded-xl shadow-xl px-4 py-3 border border-slate-800 flex items-center gap-3 animate-in slide-in-from-top-6 duration-300 max-w-sm">
-          <div className="p-1.5 bg-emerald-500 rounded-lg text-white">
-            <Sparkles size={16} className="animate-pulse" />
+      {/* 📱 LEFT COLUMN: Patient Selection & History */}
+      <div className="w-full md:w-[350px] flex flex-col gap-4">
+        {/* Patient Selector */}
+        <div className="bg-white rounded-3xl p-5 border border-slate-200 shadow-sm">
+          <h2 className="text-xs font-black text-slate-800 uppercase tracking-widest mb-4 flex items-center gap-2">
+            <User size={14} className="text-[#5C7F67]" /> Patient Cible
+          </h2>
+          <div className="relative">
+            <select
+              value={selectedPatientId || ""}
+              onChange={(e) => setSelectedPatientId(e.target.value)}
+              className="w-full appearance-none bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3.5 text-sm font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#5C7F67] pr-10 cursor-pointer"
+            >
+              <option value="" disabled>-- Sélectionner un patient --</option>
+              {patients.map(p => (
+                <option key={p.id} value={p.id}>{p.name} (Âge: {p.age})</option>
+              ))}
+            </select>
+            <ChevronDown size={16} className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
           </div>
-          <div className="text-left">
-            <p className="text-xs font-bold text-white">Notification Pro</p>
-            <p className="text-[11px] text-slate-300 mt-0.5 leading-relaxed">{toastMessage}</p>
-          </div>
-        </div>
-      )}
 
-      <div className="flex flex-col md:flex-row md:items-center justify-between border-b border-slate-200 pb-4">
-        <div>
-          <h1 className="text-2xl font-black text-slate-800 flex items-center gap-2 tracking-tight">
-            <Volume2 className="text-emerald-600 animate-pulse" size={26} />
-            Messages Vocaux Envoyés
-          </h1>
-          <p className="text-slate-500 text-sm mt-1 font-medium">Communiquez avec vos patients via la voix chaleureuse de Hanen</p>
+          {selectedPatientId && selectedPatient && (
+            <motion.div initial={{opacity:0, y:-10}} animate={{opacity:1, y:0}} className="mt-4 p-4 bg-[#FAF6F0] rounded-2xl border border-[#0F1E36]/5">
+              <p className="text-sm font-black text-[#0F1E36] mb-1">{selectedPatient.name}</p>
+              <p className="text-xs text-slate-500 mb-3">{selectedPatient.conditions?.[0]}</p>
+              <div className="flex flex-wrap gap-2">
+                <span className="text-[9px] uppercase tracking-wider bg-white border border-[#E07A5F]/20 text-[#E07A5F] px-2 py-1 rounded-full font-bold shadow-sm">
+                  Dignité: {selectedPatient.dignityIndex || 85}%
+                </span>
+                <span className="text-[9px] uppercase tracking-wider bg-white border border-[#5C7F67]/20 text-[#5C7F67] px-2 py-1 rounded-full font-bold shadow-sm">
+                  Statut: {selectedPatient.voiceHealthStatus}
+                </span>
+              </div>
+            </motion.div>
+          )}
         </div>
-      </div>
 
-      <div className="flex-1 bg-white rounded-2xl border border-slate-200 shadow-sm flex overflow-hidden">
-        
-        {/* Left Sidebar - Patient List */}
-        <div className="w-80 border-r border-slate-200 flex flex-col bg-slate-50">
-          <div className="p-4 border-b border-slate-200 bg-white">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
-              <input 
-                type="text" 
-                placeholder="Rechercher patient..." 
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm"
-              />
-            </div>
+        {/* Message History */}
+        <div className="bg-white rounded-3xl border border-slate-200 shadow-sm flex-1 flex flex-col overflow-hidden max-h-[60vh]">
+          <div className="p-4 border-b border-slate-100 bg-slate-50/50">
+            <h3 className="text-xs font-black text-slate-700 uppercase tracking-widest flex items-center gap-2">
+              <Clock size={14} className="text-[#0F1E36]" /> Historique des Échanges
+            </h3>
           </div>
-          
-          <div className="flex-1 overflow-y-auto w-full">
-            {loading ? (
-               <div className="p-4 text-center text-slate-500 text-sm">Chargement...</div>
-            ) : filteredPatients.length === 0 ? (
-               <div className="p-4 text-center text-slate-500 text-sm">Aucun patient trouvé.</div>
+          <div className="flex-1 overflow-y-auto p-4 space-y-4">
+            {!selectedPatientId ? (
+              <div className="text-center text-slate-400 text-xs py-10 font-medium">
+                Veuillez sélectionner un patient.
+              </div>
+            ) : messages.length === 0 ? (
+              <div className="text-center text-slate-400 text-xs py-10 font-medium">
+                Aucun message récent.
+              </div>
             ) : (
-               filteredPatients.map(patient => (
-                 <button 
-                   key={patient.id}
-                   onClick={() => setSelectedPatientId(patient.id)}
-                   className={cn(
-                     "w-full flex items-center gap-3 p-4 border-b border-slate-100 transition-colors text-left",
-                     selectedPatientId === patient.id ? "bg-emerald-50 border-emerald-100" : "hover:bg-slate-100"
-                   )}
-                 >
-                    <div className="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center font-bold text-slate-600 shrink-0">
-                      {patient.name.charAt(0)}
+              messages.map(msg => (
+                <motion.div 
+                  initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }}
+                  key={msg.id} 
+                  className={cn(
+                    "p-3 rounded-2xl border shadow-sm flex flex-col gap-2 relative overflow-hidden",
+                    msg.sender === 'doctor' ? "bg-white border-[#5C7F67]/20 ml-4" : "bg-[#FAF6F0] border-[#0F1E36]/10 mr-4"
+                  )}
+                >
+                  <div className={cn("absolute top-0 left-0 w-1 h-full", msg.sender === 'doctor' ? "bg-[#5C7F67]" : "bg-[#E07A5F]")} />
+                  
+                  <div className="flex justify-between items-center pl-2">
+                    <span className="text-[10px] font-black uppercase tracking-wider text-slate-500">
+                      {msg.sender === 'doctor' ? 'Capsule Envoyée' : 'Réponse Patient'}
+                    </span>
+                    <span className="text-[9px] font-bold text-slate-400">
+                      {msg.createdAt?.seconds ? new Date(msg.createdAt.seconds * 1000).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}) : ''}
+                    </span>
+                  </div>
+
+                  <p className="text-xs text-slate-700 font-medium pl-2 leading-relaxed">
+                    « {msg.content} »
+                  </p>
+
+                  {/* Badges for composite stuff */}
+                  {(msg.videoLink || msg.attachedFile || msg.type === 'ai_composite') && (
+                    <div className="flex gap-2 pl-2 mt-1 flex-wrap">
+                      {msg.videoLink && <span className="text-[9px] flex items-center gap-1 text-rose-600 font-bold bg-rose-50 px-1.5 py-0.5 rounded border border-rose-100"><Youtube size={10}/> Vidéo</span>}
+                      {msg.attachedFile && <span className="text-[9px] flex items-center gap-1 text-[#0F1E36] font-bold bg-slate-100 px-1.5 py-0.5 rounded border border-slate-200"><FileText size={10}/> Fichier</span>}
+                      {msg.sender === 'doctor' && (
+                        <button
+                          onClick={() => playSpecificMessageAudio(msg.id, msg.content)}
+                          disabled={playingMessageId === msg.id}
+                          className="text-[9px] flex items-center gap-1 text-[#E07A5F] font-bold bg-[#E07A5F]/10 px-1.5 py-0.5 rounded border border-[#E07A5F]/20 hover:bg-[#E07A5F]/20 transition-colors"
+                        >
+                          {playingMessageId === msg.id ? <RefreshCw size={10} className="animate-spin" /> : <Play size={10} />}
+                          Vocale Hanen
+                        </button>
+                      )}
                     </div>
-                    <div className="overflow-hidden">
-                      <p className={cn("font-medium truncate", selectedPatientId === patient.id ? "text-emerald-800" : "text-slate-800")}>{patient.name}</p>
-                      <p className="text-xs text-slate-500 truncate">{patient.conditions?.[0] || 'Général'}</p>
+                  )}
+
+                  {msg.sender === 'doctor' && (
+                    <div className="flex items-center gap-1 justify-end mt-1">
+                      {(!msg.status || msg.status === 'delivered') && <span className="text-[9px] flex items-center gap-1 text-[#5C7F67] font-bold"><Check size={10}/> Écouté</span>}
+                      {msg.status === 'calling' && <span className="text-[9px] flex items-center gap-1 text-sky-600 font-bold animate-pulse"><RefreshCw size={10}/> En cours...</span>}
+                      {msg.status === 'scheduled' && <span className="text-[9px] flex items-center gap-1 text-[#E07A5F] font-bold"><Clock size={10}/> Programmé</span>}
                     </div>
-                 </button>
-               ))
+                  )}
+                </motion.div>
+              ))
             )}
           </div>
         </div>
+      </div>
 
-        {/* Right Content - Message Area */}
-        <div className="flex-1 flex flex-col bg-white">
-          {selectedPatient ? (
-            <>
-              {/* Chat Header */}
-              <div className="p-4 border-b border-slate-200 flex justify-between items-center bg-slate-50">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center font-bold text-emerald-700 shrink-0">
-                      {selectedPatient.name.charAt(0)}
+      {/* 🚀 RIGHT COLUMN: Main Composition Area (Gemini AI Review Panel) */}
+      <div className="flex-1">
+        {selectedPatientId ? (
+          <div className="h-full">
+            {aiState === 'review' ? (
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}
+                className="bg-white rounded-[32px] p-6 lg:p-10 border border-[#0F1E36]/10 shadow-xl relative overflow-hidden"
+              >
+                {/* Decorative background element */}
+                <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-[#5C7F67]/10 to-transparent rounded-bl-full pointer-events-none" />
+
+                <div className="flex items-center gap-4 mb-8">
+                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#0F1E36] to-slate-800 flex items-center justify-center shadow-lg relative">
+                    <Sparkles size={24} className="text-[#FAF6F0]" />
+                    <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-[#5C7F67] border-2 border-white rounded-full"></div>
                   </div>
                   <div>
-                    <h2 className="font-bold text-slate-800 text-sm md:text-base">{selectedPatient.name}</h2>
-                    <p className="text-xs text-slate-500 flex items-center gap-1"><Phone size={12}/> {selectedPatient.phone}</p>
+                    <h2 className="text-2xl font-black text-[#0F1E36] tracking-tight">Copilote Hanen</h2>
+                    <p className="text-xs font-bold text-[#E07A5F] uppercase tracking-widest mt-1">Brouillon IA Généré</p>
                   </div>
                 </div>
-              </div>
 
-              {/* Chat History */}
-              <div className="flex-1 overflow-y-auto p-6 space-y-6">
-                 {messages.length === 0 ? (
-                    <div className="flex flex-col items-center justify-center h-full text-slate-400 space-y-4 opacity-70">
-                       <User size={48} className="text-slate-350 animate-pulse" />
-                       <p className="text-sm font-medium">Démarrez une nouvelle conversation avec {selectedPatient.name}</p>
-                    </div>
-                 ) : (
-                    messages.map((msg) => (
-                      <div key={msg.id} className={cn("flex", msg.sender === 'doctor' ? "justify-end" : "justify-start")}>
-                        <div className={cn("max-w-[75%] rounded-2xl px-5 py-3.5 shadow-sm border text-left flex flex-col", 
-                           msg.sender === 'doctor' ? "bg-emerald-600 border-emerald-555 text-white animate-in slide-in-from-right-2" : 
-                           msg.sender === 'patient' ? "bg-indigo-50 border-indigo-205 text-indigo-950 animate-in slide-in-from-left-2 shadow-2xs" :
-                           "bg-slate-50 border-slate-200 text-slate-800"
-                        )}>
-                          
-                          {msg.sender === 'patient' && (
-                            <div className="flex items-center gap-1 mb-1.5 self-start">
-                              <span className="text-[9px] font-black uppercase tracking-widest text-indigo-700 bg-indigo-100 rounded px-1.5 py-0.5 inline-flex items-center gap-0.5 select-none">
-                                👤 Réponse du Patient
-                              </span>
-                            </div>
-                          )}
+                <div className="space-y-6 relative z-10">
+                  {/* Text Review Box */}
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest pl-1">Traduction Clinique & Empathique</label>
+                    <textarea 
+                      value={generatedText}
+                      onChange={(e) => setGeneratedText(e.target.value)}
+                      className="w-full h-40 bg-[#FAF6F0] border-2 border-transparent focus:border-[#5C7F67]/30 focus:bg-white rounded-3xl p-5 text-sm text-[#0F1E36] font-medium leading-relaxed resize-none shadow-inner transition-all outline-none"
+                    />
+                  </div>
 
-                          {msg.type === 'text' && <p className="text-sm leading-relaxed whitespace-pre-line font-sans font-medium">{msg.content}</p>}
-                          {msg.type === 'audio' && (
-                             <div className="space-y-2">
-                               <div className="flex items-center gap-3">
-                                  <button 
-                                    onClick={() => {
-                                      if (msg.audioUrl) {
-                                        new Audio(msg.audioUrl).play().catch((err: any) => console.warn(err));
-                                      }
-                                    }}
-                                    className={cn("p-2 rounded-full transition-all flex items-center justify-center shrink-0 shadow-sm", msg.sender === 'doctor' ? "bg-emerald-700 text-white hover:bg-emerald-800" : "bg-slate-200 hover:bg-slate-300 text-slate-700")}
-                                  >
-                                    <Play size={13} className="fill-current" />
-                                  </button>
-                                  <span className="text-xs font-black uppercase tracking-wider">Capsule Vocal Hanen</span>
-                               </div>
-                               {msg.content && (
-                                 <p className={cn("text-xs leading-relaxed italic border-l-2 pl-2.5", msg.sender === 'doctor' ? "border-emerald-300/30 text-emerald-100" : "border-slate-300 text-slate-600")}>
-                                   « {msg.content} »
-                                 </p>
-                               )}
+                  {/* Context Cards */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {/* YouTube Suggestion Box */}
+                    <div className="p-4 rounded-2xl border-2 border-rose-100 bg-rose-50/50 flex flex-col gap-2">
+                      <div className="flex items-center gap-2 text-rose-500">
+                        <Youtube size={16} />
+                        <span className="text-[10px] font-black uppercase tracking-widest">Vidéo Pédagogique Associée</span>
+                      </div>
+                      {suggestedVideo ? (
+                         <a href={suggestedVideo.url} target="_blank" rel="noopener noreferrer" className="block bg-white p-3 rounded-xl border border-rose-100 flex items-center gap-3 shadow-sm hover:shadow-md transition-shadow">
+                           {suggestedVideo.thumbnailUrl ? (
+                             <img src={suggestedVideo.thumbnailUrl} alt="Thumbnail" className="w-16 h-12 object-cover rounded-md flex-shrink-0" />
+                           ) : (
+                             <div className="w-16 h-12 bg-rose-100 rounded-md flex-shrink-0 flex items-center justify-center">
+                               <Youtube size={20} className="text-rose-400" />
                              </div>
-                          )}
+                           )}
+                           <div className="flex-1 min-w-0">
+                             <div className="text-xs font-bold text-slate-800 line-clamp-2 leading-tight">
+                               {suggestedVideo.title}
+                             </div>
+                             <div className="text-[10px] text-slate-500 mt-1 uppercase font-semibold">Regarder la vidéo</div>
+                           </div>
+                         </a>
+                      ) : (
+                         <div className="text-xs text-rose-400 font-medium italic">Aucune vidéo suggérée.</div>
+                      )}
+                    </div>
 
-                          {/* Options indicators */}
-                          {msg.sender === 'doctor' && (
-                            <div className="flex flex-wrap gap-1 mt-2.5 pt-2 border-t border-emerald-500/30">
-                              {msg.category && CATEGORY_MAP[msg.category] && (
-                                <span className="text-[9px] font-bold bg-emerald-800/60 text-emerald-100 rounded px-1.5 py-0.5 inline-flex items-center gap-0.5">
-                                  {CATEGORY_MAP[msg.category].label}
-                                </span>
-                              )}
-                              {msg.speechRate === 'slow' && (
-                                <span className="text-[9px] font-bold bg-emerald-700/50 text-emerald-100 rounded px-1.5 py-0.5 inline-flex items-center gap-0.5">
-                                  🐢 Élocution Lente (Apaisée)
-                                </span>
-                              )}
-                              {msg.voiceTone && (
-                                <span className="text-[9px] font-bold bg-emerald-700/50 text-emerald-100 rounded px-1.5 py-0.5 inline-flex items-center gap-0.5">
-                                  {msg.voiceTone === 'warm' ? '🌟 Ton Chaleureux' : '⚖️ Ton Solennel'}
-                                </span>
-                              )}
-                              {msg.deliveryMode === 'journal' && (
-                                <span className="text-[9px] font-bold bg-indigo-900/40 text-indigo-100 rounded px-1.5 py-0.5 inline-flex items-center gap-0.5 border border-indigo-500/20">
-                                  🌅 Journal du Matin
-                                </span>
-                              )}
-                            </div>
-                          )}
-
-                          {/* Time & Delivery pipeline details */}
-                          <div className="flex items-center justify-between gap-4 mt-2.5 pt-1.5 border-t border-slate-500/10">
-                            <span className={cn("text-[9px] font-semibold block", msg.sender === 'doctor' ? "text-emerald-200 opacity-80" : "text-indigo-400 opacity-80")}>
-                              {msg.createdAt && msg.createdAt.seconds ? new Date(msg.createdAt.seconds * 1000).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '...'}
-                            </span>
-                            {msg.sender === 'doctor' && (
-                              <span className={cn(
-                                "text-[9px] font-bold px-1.5 py-0.5 rounded inline-flex items-center gap-1 uppercase tracking-wider",
-                                (!msg.status || msg.status === 'delivered') && "text-emerald-100 bg-emerald-950/35 border border-emerald-600/30 font-extrabold",
-                                msg.status === 'scheduled' && "text-amber-105 bg-amber-950/35 border border-amber-600/30 animate-pulse font-extrabold",
-                                msg.status === 'calling' && "text-sky-100 bg-sky-950/35 border border-sky-600/30 font-extrabold"
-                              )}>
-                                {(!msg.status || msg.status === 'delivered') && (
-                                  <>
-                                    <CheckCheck size={10} className="text-emerald-300 animate-bounce" />
-                                    Délivré & Écouté (Validé)
-                                  </>
-                                )}
-                                {msg.status === 'scheduled' && (
-                                  <>
-                                    <Clock size={10} className="text-amber-305" />
-                                    📨 Programmé (Prochain Appel)
-                                  </>
-                                )}
-                                {msg.status === 'calling' && (
-                                  <>
-                                    <RefreshCw size={10} className="text-sky-300 animate-spin" />
-                                    📞 En cours d'appel...
-                                  </>
-                                )}
-                              </span>
-                            )}
-                          </div>
+                    {/* Attachment Box */}
+                    <div className={cn("p-4 rounded-2xl border-2 flex flex-col gap-2", attachedContext ? "border-[#0F1E36]/10 bg-slate-50" : "border-dashed border-slate-200 bg-white")}>
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2 text-slate-600">
+                          <Paperclip size={16} />
+                          <span className="text-[10px] font-black uppercase tracking-widest">Contexte Visuel (PDF/Image)</span>
                         </div>
-                      </div>
-                    ))
-                 )}
-              </div>
-
-              {/* Message Input Workspace */}
-              <div className="p-4 bg-slate-50 border-t border-slate-200">
-                {/* Type de Message - Badges sélectionnables */}
-                <div className="mb-3.5">
-                  <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-2 text-left">
-                    🏷️ Type & Catégorisation du Message
-                  </span>
-                  <div className="flex flex-wrap gap-2">
-                    {MESSAGE_CATEGORIES.map((cat) => (
-                      <button
-                        key={cat.id}
-                        type="button"
-                        onClick={() => setSelectedCategory(cat.id)}
-                        className={cn(
-                          "px-3 py-1.5 text-xs font-semibold rounded-full border transition-all cursor-pointer",
-                          selectedCategory === cat.id ? cat.activeBg : cat.bg
+                        
+                        {!attachedContext && (
+                          <label className="cursor-pointer bg-[#0F1E36] text-white p-1.5 rounded-lg hover:bg-slate-800 transition-colors">
+                            {isUploadingFile ? <RefreshCw size={14} className="animate-spin" /> : <Play size={14} className="rotate-90" />}
+                            <input type="file" className="hidden" accept=".pdf,image/*" onChange={handleFileUpload} />
+                          </label>
                         )}
-                      >
-                        {cat.label}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Clinical Presets Shelf */}
-                <div className="mb-3.5">
-                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 flex items-center gap-1.5 text-left">
-                    <BookOpen size={12} className="text-emerald-600" />
-                    Bibliothèque de Modèles Cliniques Presets (Quick-Templates)
-                  </p>
-                  <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-none flex-wrap md:flex-nowrap">
-                    {CLINICAL_PRESETS.map((p) => (
-                      <button
-                        key={p.id}
-                        type="button"
-                        onClick={() => {
-                          setMessage(p.text);
-                          if (p.category) setSelectedCategory(p.category);
-                        }}
-                        className="text-left shrink-0 bg-white hover:bg-emerald-50/50 hover:border-emerald-300 border border-slate-200 p-2.5 rounded-xl transition-all cursor-pointer max-w-[190px] shadow-2xs"
-                      >
-                        <p className="text-[11px] font-bold text-emerald-955">{p.label}</p>
-                        <p className="text-[9px] text-slate-500 truncate mt-0.5">{p.desc}</p>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Cognitive Parameters Box */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-3 bg-white p-3 border border-slate-200 rounded-xl mb-3.5 shadow-2xs">
-                  <div>
-                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-wide block mb-1 text-left">🐢 Élocution Adaptative </label>
-                    <div className="flex bg-slate-100 p-0.5 rounded-lg border border-slate-150">
-                      <button 
-                        type="button"
-                        onClick={() => setSpeechRate('normal')}
-                        className={cn("flex-1 py-1 text-[10px] font-bold text-center rounded-md transition-all", speechRate === 'normal' ? "bg-white text-slate-800 shadow-2xs" : "text-slate-500 hover:text-slate-800")}
-                      >
-                        Standard
-                      </button>
-                      <button 
-                        type="button"
-                        onClick={() => setSpeechRate('slow')}
-                        className={cn("flex-1 py-1 text-[10px] font-bold text-center rounded-md transition-all flex items-center justify-center gap-1", speechRate === 'slow' ? "bg-white text-emerald-800 shadow-2xs" : "text-slate-500 hover:text-slate-800")}
-                      >
-                        🐢 Rythme Apaisé / Lent
-                      </button>
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-wide block mb-1 text-left">🎭 Ton de voix IA Hanen</label>
-                    <div className="flex bg-slate-100 p-0.5 rounded-lg border border-slate-150">
-                      <button 
-                        type="button"
-                        onClick={() => setVoiceTone('warm')}
-                        className={cn("flex-1 py-1 text-[10px] font-bold text-center rounded-md transition-all flex items-center justify-center gap-1", voiceTone === 'warm' ? "bg-white text-amber-800 shadow-2xs" : "text-slate-500 hover:text-slate-800")}
-                      >
-                        🌟 Chaleureux
-                      </button>
-                      <button 
-                        type="button"
-                        onClick={() => setVoiceTone('solemn')}
-                        className={cn("flex-1 py-1 text-[10px] font-bold text-center rounded-md transition-all flex items-center justify-center gap-1", voiceTone === 'solemn' ? "bg-white text-indigo-800 shadow-2xs" : "text-slate-500 hover:text-slate-800")}
-                      >
-                        ⚖️ Solennel
-                      </button>
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-wide block mb-1 text-left">🌅 Liaison Clinique</label>
-                    <div className="flex bg-slate-100 p-0.5 rounded-lg border border-slate-150">
-                      <button 
-                        type="button"
-                        onClick={() => setDeliveryMode('immediate')}
-                        className={cn("flex-1 py-1 text-[10px] font-bold text-center rounded-md transition-all", deliveryMode === 'immediate' ? "bg-white text-slate-800 shadow-2xs" : "text-slate-500 hover:text-slate-800")}
-                      >
-                        Appel Direct
-                      </button>
-                      <button 
-                        type="button"
-                        onClick={() => setDeliveryMode('journal')}
-                        className={cn("flex-1 py-1 text-[10px] font-bold text-center rounded-md transition-all flex items-center justify-center gap-1", deliveryMode === 'journal' ? "bg-white text-emerald-800 shadow-2xs" : "text-slate-500 hover:text-slate-800")}
-                      >
-                        🌅 Journal Vocal Matin
-                      </button>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Speech to Text Review Step Drawer */}
-                {showTranscriptionStep && (
-                  <div className="mb-3.5 p-4 bg-indigo-50/50 border border-indigo-150 rounded-xl space-y-3.5 animate-in slide-in-from-bottom duration-300">
-                    <div className="flex justify-between items-center">
-                      <p className="text-xs font-black text-indigo-950 uppercase tracking-widest inline-flex items-center gap-1.5 text-left">
-                        <Sparkles size={13} className="text-indigo-650 animate-pulse" />
-                        Transcription Automatique en Texte (Speech-to-Text)
-                      </p>
-                      <span className="text-[10px] font-black bg-indigo-100 text-indigo-700 px-2.5 py-0.5 rounded-full uppercase">
-                        {isTranscribing ? "Analyse sonore..." : "Revue clinique"}
-                      </span>
-                    </div>
-
-                    {isTranscribing ? (
-                      <div className="flex items-center gap-2.5 text-xs text-indigo-700 pl-1 py-1.5 italic font-bold text-left">
-                        <RefreshCw size={12} className="animate-spin text-indigo-550" />
-                        Génération instantanée du transcript révisable...
                       </div>
-                    ) : (
-                      <div className="space-y-3.5">
-                        <textarea
-                          value={audioTranscription}
-                          onChange={(e) => setAudioTranscription(e.target.value)}
-                          className="w-full text-xs text-slate-700 bg-white border border-indigo-200 rounded-lg p-2.5 focus:outline-indigo-400 font-medium leading-relaxed shadow-sm resize-none"
-                          rows={2}
-                          placeholder="Ajustez l’élocution écrite si nécessaire avant la transmission au synthétiseur vocal de Hanen..."
-                        />
-                        <div className="flex justify-end gap-2 text-xs">
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setShowTranscriptionStep(false);
-                              setPendingAudioBlob(null);
-                              setAudioTranscription('');
-                            }}
-                            className="bg-white hover:bg-slate-100 border border-slate-200 font-bold px-3 py-2 rounded-lg text-slate-600 transition-all shrink-0 cursor-pointer"
-                          >
-                            Annuler l'enregistrement
-                          </button>
-                          <button
-                            type="button"
-                            disabled={isUploading}
-                            onClick={handleConfirmAudioSend}
-                            className="bg-emerald-600 hover:bg-emerald-700 font-black text-white px-4 py-2 rounded-lg transition-all flex items-center gap-1.5 shrink-0 shadow-sm cursor-pointer"
-                          >
-                            {isUploading ? "Envoi..." : "Confirmer & Livrer"}
-                          </button>
-                        </div>
-                      </div>
-                    )}
+                      {attachedContext ? (
+                         <div className="flex items-center justify-between bg-white p-3 rounded-xl border border-slate-200 shadow-sm">
+                           <span className="text-xs font-bold text-[#0F1E36] truncate">{attachedContext}</span>
+                           <button onClick={() => setAttachedContext(null)} className="text-red-400 hover:text-red-600"><X size={14}/></button>
+                         </div>
+                      ) : (
+                         <div className="text-[10px] text-slate-400 font-medium">Optionnel : Attachez le résumé clinique à lire.</div>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Actions */}
+                  <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 mt-4 border-t border-slate-100">
+                    <button 
+                      onClick={resetAssistant}
+                      className="px-6 py-3 rounded-2xl font-bold text-slate-500 hover:bg-slate-100 transition-colors text-sm"
+                    >
+                      Annuler
+                    </button>
+                    
+                    <div className="flex items-center gap-3 w-full sm:w-auto">
+                      <button 
+                        onClick={playPreview}
+                        disabled={isPlayingPreview}
+                        className="px-5 py-3 rounded-2xl font-bold bg-[#0F1E36] text-white hover:bg-slate-800 transition-colors text-sm flex items-center gap-2 flex-1 sm:flex-none justify-center shadow-lg"
+                      >
+                        {isPlayingPreview ? <RefreshCw className="animate-spin" size={16} /> : <Play size={16} />}
+                        Prévisualiser
+                      </button>
+                      
+                      <button 
+                        onClick={handleSendViaHanen}
+                        className="px-6 py-3 rounded-2xl font-black bg-[#E07A5F] text-white hover:bg-[#C96F53] transition-colors text-sm flex items-center gap-2 flex-1 sm:flex-none justify-center shadow-lg shadow-[#E07A5F]/30"
+                      >
+                        <Send size={16} />
+                        Envoyer via Hanen
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            ) : (
+              <div className="h-full flex flex-col items-center justify-center text-center p-10 bg-white shadow-sm border border-slate-200 rounded-[32px]">
+                
+                <h3 className="text-xl font-black text-[#0F1E36] mb-8">Assistant Vocal IA</h3>
+                
+                <div className="w-32 h-32 mb-8 relative">
+                  <div className="absolute inset-0 bg-[#E8C547]/90 rounded-full scale-[1.05] shadow-inner"></div>
+                  <img 
+                    src="/img_hanen_avatar.png" 
+                    alt="Hanen" 
+                    className="relative w-full h-full object-cover rounded-full border-4 border-white shadow-md bg-[#FAF6F0]" 
+                  />
+                </div>
+                
+                <p className="text-sm font-medium text-slate-500 max-w-sm leading-relaxed mb-8">
+                  Ne tapez plus vos messages. Parlez naturellement, Hanen s'occupe de reformuler vos consignes avec bienveillance pour le patient.
+                </p>
+                
+                <button 
+                  onClick={handleStartLive}
+                  className="bg-blue-600 hover:bg-blue-500 text-white font-bold px-8 py-4 text-lg rounded-2xl transition-all duration-300 flex items-center gap-3 w-64 justify-center shadow-md hover:shadow-blue-500/30 hover:-translate-y-1"
+                >
+                  <Phone size={24} className="text-white" />
+                  Appeler Hanen
+                </button>
+              </div>
+            )}
+          </div>
+        ) : (
+          <div className="h-full border-2 border-dashed border-slate-200 rounded-[32px] flex items-center justify-center text-slate-400 font-bold p-10 text-center bg-white/30 text-sm">
+            Veuillez sélectionner un patient à gauche pour démarrer la messagerie assistée.
+          </div>
+        )}
+      </div>
+
+      {/* 🔴 OVERLAY: Gemini Live "Listening" Modal */}
+      <AnimatePresence>
+        {aiState === 'listening' || aiState === 'processing' ? (
+          <motion.div 
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-[#0F1E36]/30 backdrop-blur-md p-4"
+          >
+            <motion.div 
+              initial={{ scale: 0.9, y: 20 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.9, y: 20 }}
+              className="bg-white p-8 md:p-12 rounded-[40px] shadow-2xl max-w-lg w-full text-center flex flex-col items-center relative overflow-hidden"
+            >
+              <div className="relative w-36 h-36 mb-6 z-10 flex-shrink-0">
+                {/* Animated Rings Background (Emma style) */}
+                {aiState === 'listening' ? (
+                   <>
+                     <div className="absolute inset-0 bg-[#E8C547]/90 rounded-full scale-[1.08] shadow-inner border border-white/50"></div>
+                     <div className="absolute inset-0 bg-blue-100/50 rounded-full scale-[1.16] -z-10 animate-pulse"></div>
+                   </>
+                ) : (
+                   <div className="absolute inset-0 bg-slate-100 rounded-full scale-[1.08]"></div>
+                )}
+                
+                <img 
+                  src="/img_hanen_avatar.png" 
+                  alt="Hanen" 
+                  className="relative w-full h-full object-cover rounded-full border-4 border-white shadow-xl z-20 bg-[#FAF6F0]"
+                />
+                
+                {aiState === 'processing' && (
+                  <div className="absolute inset-0 bg-white/60 rounded-full z-30 flex items-center justify-center backdrop-blur-sm border-4 border-white">
+                    <RefreshCw size={40} className="text-[#0F1E36] animate-spin" />
                   </div>
                 )}
-
-                {/* Main Action Bar with Preview Trigger */}
-                <div className="mb-2.5 flex items-center justify-between flex-wrap gap-2">
-                  <div className="text-xs text-slate-500 font-medium font-sans text-left">
-                    {deliveryMode === 'journal' 
-                      ? "🌅 Ce message sera délicatement intégré au prochain Rituel d'Appel Matinal du patient." 
-                      : "⚡ Ce message sera lu immédiatement par Hanen au patient d'une voix " + (voiceTone === 'warm' ? "chaleureuse" : "solennelle") + "."
-                    }
-                  </div>
-                  <button
-                    type="button"
-                    disabled={!message.trim() && !audioTranscription}
-                    onClick={handlePreviewVoice}
-                    className="px-3 py-1 text-[11px] font-bold bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 text-indigo-700 rounded-full transition-all flex items-center gap-1 cursor-pointer disabled:opacity-50"
-                  >
-                    <Sparkles size={11} className="text-indigo-650" />
-                    🎙️ Prévisualiser la voix de Hanen
-                  </button>
-                </div>
-
-                <div className="flex items-center gap-3">
-                  <button 
-                    onClick={isRecording ? handleStopRecording : handleStartRecording}
-                    disabled={isUploading}
-                    className={cn(
-                      "w-12 h-12 rounded-full border flex items-center justify-center transition-all shadow-sm shrink-0 cursor-pointer hover:scale-105 active:scale-95",
-                      isRecording ? "bg-rose-100 text-rose-600 border-rose-250 animate-pulse" : "bg-white border-slate-250 text-slate-555 hover:text-emerald-600 hover:bg-emerald-50/50"
-                    )}
-                    title={isRecording ? "Arrêter l'enregistrement" : "Enregistrer un message vocal"}
-                  >
-                    {isRecording ? <Square size={15} /> : <Mic size={19} />}
-                  </button>
-                  <div className="flex-1 relative">
-                    <input 
-                      type="text" 
-                      placeholder={isRecording ? "Enregistrement de votre voix..." : isUploading ? "Envoi sécurisé du message..." : "Tapez le message à transmettre via Hanen..."} 
-                      value={message}
-                      onChange={(e) => setMessage(e.target.value)}
-                      disabled={isRecording || isUploading}
-                      className="w-full pl-4 pr-12 py-3.5 rounded-full border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-sm shadow-2xs disabled:opacity-50 font-sans"
-                      onKeyDown={(e) => {
-                         if (e.key === 'Enter') handleSendText();
-                      }}
-                    />
-                    <button 
-                      className="absolute right-2.5 top-1/2 -translate-y-1/2 p-2 bg-emerald-500 text-white rounded-full hover:bg-emerald-600 transition-colors disabled:opacity-50 cursor-pointer"
-                      onClick={handleSendText}
-                      disabled={!message.trim() || isRecording || isUploading}
-                    >
-                      <Send size={15} />
-                    </button>
-                  </div>
-                </div>
               </div>
-            </>
-          ) : (
-            <div className="flex-1 flex flex-col items-center justify-center p-8 text-center bg-slate-50/40 space-y-6">
-              <div className="p-4 bg-emerald-50 rounded-full border border-emerald-100 text-emerald-600 animate-pulse">
-                <Mic size={40} />
-              </div>
-              <div className="max-w-md space-y-2">
-                <h3 className="text-lg font-bold text-slate-800">Nouveau Message Vocal Personnel</h3>
-                <p className="text-slate-500 text-xs leading-relaxed">
-                  Sélectionnez un patient pour démarrer une capsule vocale personnalisée. Hanen s'occupe de reformuler vos directives cliniques avec sa voix humaine et chaleureuse.
-                </p>
-              </div>
+              
+              <h3 className="text-3xl font-black text-[#0F1E36] tracking-tight mb-2 relative z-10">
+                {aiState === 'listening' ? "Appel en cours..." : "Analyse en cours..."}
+              </h3>
+              
+              <p className="text-lg text-slate-500 font-medium mb-8 max-w-sm relative z-10">
+                {aiState === 'listening' 
+                  ? "Hanen vous écoute"
+                  : "Veuillez patienter pendant le traitement..."}
+              </p>
 
-              {/* Research dropdown */}
-              <div className="w-full max-w-sm bg-white p-4 rounded-xl border border-slate-200 shadow-sm space-y-3">
-                <label className="text-[10px] font-black text-slate-400 uppercase block text-left">
-                  🔍 Sélection intelligente du patient :
-                </label>
-                <div className="relative">
-                  <select
-                    onChange={(e) => {
-                      if (e.target.value) setSelectedPatientId(e.target.value);
-                    }}
-                    className="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-750 focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                    defaultValue=""
-                  >
-                    <option value="" disabled>-- Choisir un patient --</option>
-                    {filteredPatients.map(p => (
-                      <option key={p.id} value={p.id}>
-                        {p.name} ({p.phone || 'Sponsorisé'})
-                      </option>
-                    ))}
-                  </select>
-                </div>
+              {aiState === 'listening' && (
+                <button 
+                  onClick={() => handleStopLive(false)}
+                  className="bg-[#FF3B30] hover:bg-[#FF3B30]/90 text-white font-bold px-10 py-4 text-lg rounded-2xl shadow-lg shadow-red-500/30 transition-transform active:scale-95 flex items-center gap-3 relative z-10 justify-center w-[260px]"
+                >
+                  <PhoneOff size={24} />
+                  Raccrocher
+                </button>
+              )}
+            </motion.div>
+          </motion.div>
+        ) : null}
+      </AnimatePresence>
 
-                {/* Patient Quick list tags */}
-                <div className="pt-2">
-                  <p className="text-[9px] font-bold text-slate-400 text-left mb-1.5">PATIENTS FRÉQUENTS :</p>
-                  <div className="flex flex-wrap gap-1.5">
-                    {patients.slice(0, 3).map(p => (
-                      <button
-                        key={p.id}
-                        onClick={() => setSelectedPatientId(p.id)}
-                        className="text-[10px] bg-slate-100 hover:bg-emerald-50 text-slate-650 hover:text-emerald-700 border border-slate-200 rounded-md px-2 py-1 transition-colors font-semibold cursor-pointer"
-                      >
-                        {p.name}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
+      {/* Floating button removed */}
     </div>
   );
 }

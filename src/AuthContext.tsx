@@ -77,7 +77,22 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           const querySnapshot = await getDocs(tenantsQuery);
           
           if (!querySnapshot.empty) {
-            setTenantId(querySnapshot.docs[0].id);
+            const matchedTenantId = querySnapshot.docs[0].id;
+            // Robust check: Ensure the user doc exists inside the matched tenant
+            const userRef = doc(db, 'tenants', matchedTenantId, 'users', currentUser.uid);
+            try {
+              const uSnap = await getDoc(userRef);
+              if (!uSnap.exists()) {
+                await setDoc(userRef, {
+                  email: currentUser.email || '',
+                  role: 'admin',
+                  createdAt: serverTimestamp(),
+                });
+              }
+            } catch (userErr) {
+              console.error("Error ensuring user within existing tenant:", userErr);
+            }
+            setTenantId(matchedTenantId);
           } else {
             // Check if they are part of a tenant's users
             // (Note: Firestore rules don't easily allow cross-tenant query for user without collection group, 

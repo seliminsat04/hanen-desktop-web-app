@@ -25,34 +25,33 @@ service cloud.firestore {
 
     // Tenant Access Control
     function isTenantMember(tenantId) {
-      return exists(/databases/$(database)/documents/tenants/$(tenantId)/users/$(request.auth.uid));
+      return exists(/databases/$(database)/documents/tenants/$(tenantId)/users/$(request.auth.uid))
+        || (exists(/databases/$(database)/documents/tenants/$(tenantId)) && get(/databases/$(database)/documents/tenants/$(tenantId)).data.ownerId == request.auth.uid);
     }
     
     function isTenantAdmin(tenantId) {
-      return get(/databases/$(database)/documents/tenants/$(tenantId)/users/$(request.auth.uid)).data.role == 'admin';
+      return (exists(/databases/$(database)/documents/tenants/$(tenantId)/users/$(request.auth.uid)) && get(/databases/$(database)/documents/tenants/$(tenantId)/users/$(request.auth.uid)).data.role == 'admin')
+        || (exists(/databases/$(database)/documents/tenants/$(tenantId)) && get(/databases/$(database)/documents/tenants/$(tenantId)).data.ownerId == request.auth.uid);
     }
 
     // Validation Blueprints
     function isValidTenant(data) {
       return data.keys().hasAll(['name', 'createdAt', 'ownerId']) 
-        && data.keys().size() == 3
         && data.name is string && data.name.size() <= 100
         && data.name.size() > 0
         && data.ownerId == request.auth.uid
-        && data.createdAt == request.time;
+        && data.createdAt is timestamp;
     }
 
     function isValidUser(data) {
       return data.keys().hasAll(['email', 'role', 'createdAt'])
-        && data.keys().size() == 3
         && data.email is string && data.email.size() <= 150
         && data.role is string && data.role in ['admin', 'doctor', 'staff']
-        && data.createdAt == request.time;
+        && data.createdAt is timestamp;
     }
 
     function isValidPatientCreate(data) {
       return data.keys().hasAll(['name', 'age', 'gender', 'conditions', 'voiceHealthStatus', 'adherenceRate', 'phone', 'dignityIndex', 'createdAt', 'updatedAt'])
-        && data.keys().size() == 10
         && data.name is string && data.name.size() <= 100
         && data.age is number && data.age >= 0 && data.age <= 120
         && data.gender is string && data.gender in ['M', 'F']
@@ -62,13 +61,12 @@ service cloud.firestore {
         && data.adherenceRate is number && data.adherenceRate >= 0 && data.adherenceRate <= 100
         && data.phone is string && data.phone.size() <= 20
         && data.dignityIndex is number && data.dignityIndex >= 0 && data.dignityIndex <= 100
-        && data.createdAt == request.time
-        && data.updatedAt == request.time;
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp;
     }
 
     function isValidVoiceAlertCreate(data) {
        return data.keys().hasAll(['patientId', 'priority', 'date', 'detectedSigns', 'duration', 'aiSuggestion', 'status', 'createdAt', 'updatedAt'])
-        && data.keys().size() == 9
         && data.patientId is string
         && data.priority is string && data.priority in ['High', 'Medium', 'Low']
         && data.date is timestamp
@@ -76,13 +74,12 @@ service cloud.firestore {
         && data.duration is string && data.duration.size() <= 50
         && data.aiSuggestion is string && data.aiSuggestion.size() <= 1000
         && data.status is string && data.status in ['Active', 'Resolved']
-        && data.createdAt == request.time
-        && data.updatedAt == request.time;
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp;
     }
 
     function isValidVoiceSessionCreate(data, patientId) {
       return data.keys().hasAll(['patientId', 'date', 'duration', 'summary', 'stressLevel', 'fatigueLevel', 'sentiment', 'createdAt'])
-        && data.keys().size() == 8
         && data.patientId == patientId
         && data.date is timestamp
         && data.duration is string && data.duration.size() <= 50
@@ -90,18 +87,15 @@ service cloud.firestore {
         && data.stressLevel is number && data.stressLevel >= 0 && data.stressLevel <= 10
         && data.fatigueLevel is number && data.fatigueLevel >= 0 && data.fatigueLevel <= 10
         && data.sentiment is string && data.sentiment in ['Positive', 'Neutral', 'Negative']
-        && data.createdAt == request.time;
+        && data.createdAt is timestamp;
     }
 
     function isValidMessageCreate(data, patientId) {
-      return data.keys().hasAll(['patientId', 'type', 'content', 'audioUrl', 'sender', 'createdAt'])
-        && data.keys().size() == 6
+      return data.keys().hasAll(['patientId', 'type', 'content', 'sender', 'createdAt'])
         && data.patientId == patientId
-        && data.type is string && data.type in ['text', 'audio']
-        && data.content is string && data.content.size() <= 2000
-        && data.audioUrl is string && data.audioUrl.size() <= 1000
-        && data.sender is string && data.sender in ['doctor', 'hanen']
-        && data.createdAt == request.time;
+        && data.type is string && data.type in ['text', 'audio', 'ai_composite']
+        && data.sender is string && data.sender in ['doctor', 'hanen', 'patient']
+        && data.createdAt is timestamp;
     }
 
     // 3. MATCH BLOCKS
@@ -167,7 +161,7 @@ service cloud.firestore {
         match /messages/{messageId} {
           allow read: if isSignedIn() && isTenantMember(tenantId);
           allow create: if isVerifiedUser() && isTenantMember(tenantId) && isValidId(messageId) && isValidMessageCreate(incoming(), patientId);
-          allow update: if false;
+          allow update: if isVerifiedUser() && isTenantMember(tenantId);
           allow delete: if false;
         }
       }

@@ -27,13 +27,15 @@ export function Sidebar() {
 
   return (
     <div className="w-64 bg-slate-900 text-slate-300 h-screen flex flex-col flex-shrink-0 sticky top-0 border-r border-slate-800 shadow-xl">
-      <div className="p-6 flex items-center gap-3">
-        <div className="bg-white/10 p-1.5 rounded-xl border border-white/5 shadow-sm overflow-hidden flex-shrink-0">
-          <img src="/hanen-logo.png" alt="Hanen" className="h-10 w-auto" />
-        </div>
-        <div className="flex flex-col min-w-0">
-          <span className="text-lg font-black font-sans text-white tracking-tight truncate">Hanen Pro</span>
-          <span className="text-[10px] text-emerald-400 font-bold tracking-widest uppercase opacity-80">Espace Médecin</span>
+      <div className="p-6 flex flex-col gap-4">
+        <div className="flex items-center gap-3 group">
+          <div className="bg-white/[0.03] p-1.5 rounded-2xl border border-white/5 shadow-inner overflow-hidden flex-shrink-0 transition-all duration-300 group-hover:bg-white/[0.07] group-hover:border-white/10">
+            <img src="/hanen-vide.png" alt="Hanen" className="h-14 w-auto drop-shadow-lg" />
+          </div>
+          <div className="flex flex-col min-w-0">
+            <span className="text-xl font-black font-sans text-white tracking-tight leading-none">Hanen <span className="text-emerald-400">Pro</span></span>
+            <p className="mt-1.5 text-[9px] text-emerald-400 font-black tracking-[0.2em] uppercase opacity-60">Espace Clinique</p>
+          </div>
         </div>
       </div>
 

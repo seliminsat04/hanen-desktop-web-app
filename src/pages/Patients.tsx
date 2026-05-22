@@ -65,15 +65,22 @@ export function Patients() {
            })
         });
 
-        const data = await res.json();
-        
         if (!res.ok) {
-           if (data.error === "API_KEY_MISSING") {
-             throw new Error(data.message || "La clé API Gemini est introuvable côté serveur.");
-           } else {
-             throw new Error(data.message || "Erreur lors de l'analyse du document.");
+           let errMsg = "Erreur lors de l'analyse du document.";
+           try {
+             const errData = await res.json();
+             if (errData && errData.error === "API_KEY_MISSING") {
+               errMsg = errData.message || "La clé API Gemini est introuvable côté serveur.";
+             } else if (errData && errData.message) {
+               errMsg = errData.message;
+             }
+           } catch (_) {
+             errMsg = `Erreur de communication (code ${res.status}).`;
            }
+           throw new Error(errMsg);
         }
+
+        const data = await res.json();
         
         if (data.isRelevantDocument === false) {
            throw new Error("Ce fichier ne semble pas être un document médical ou une pièce d'identité valide. Par mesure de sécurité, le scan est annulé.");
