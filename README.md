@@ -4,6 +4,8 @@
 
 > **"L'écoute clinique, augmentée par l'intelligence artificielle."**  
 > Hanen Pro est une solution de pointe dédiée aux professionnels de santé pour le suivi à distance des patients via l'analyse biométrique et sémantique de la voix.
+>
+> 🌐 **Explorez notre solution : [hanen-ai.lovable.app](https://hanen-ai.lovable.app)**
 
 ---
 
@@ -109,6 +111,14 @@ Le système repose sur un modèle de **Multi-Tenancy** :
 ## 🩺 À Propos de Hanen
 
 Hanen Pro n'est pas seulement un logiciel ; c'est un partenaire clinique. Chaque micro-interaction a été conçue pour réduire l'épuisement professionnel des médecins tout en garantissant une présence vocale rassurante auprès de chaque patient, 24h/24.
+
+---
+
+## 🌍 Site Officiel & Contact
+
+Pour découvrir l'ensemble de notre écosystème, nos études de cas et nos offres commerciales, visitez notre plateforme de présentation :
+
+👉 [**https://hanen-ai.lovable.app**](https://hanen-ai.lovable.app)
 
 ---
 
