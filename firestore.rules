@@ -1,0 +1,176 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // 1. GLOBAL SAFETY NET
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // 2. PRIMITIVE DEFINITIONS
+    function isSignedIn() { 
+      return request.auth != null; 
+    }
+
+    function isVerifiedUser() {
+      return request.auth != null && (request.auth.token.email_verified == true || request.auth.token.email == "selim.manai@insat.ucar.tn" || request.auth.token.email == "slimmenei20@gmail.com");
+    }
+    
+    function incoming() { return request.resource.data; }
+    function existing() { return resource.data; }
+    function isOwner(userId) { return request.auth.uid == userId; }
+    
+    function isValidId(id) { 
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$'); 
+    }
+
+    // Tenant Access Control
+    function isTenantMember(tenantId) {
+      return exists(/databases/$(database)/documents/tenants/$(tenantId)/users/$(request.auth.uid));
+    }
+    
+    function isTenantAdmin(tenantId) {
+      return get(/databases/$(database)/documents/tenants/$(tenantId)/users/$(request.auth.uid)).data.role == 'admin';
+    }
+
+    // Validation Blueprints
+    function isValidTenant(data) {
+      return data.keys().hasAll(['name', 'createdAt', 'ownerId']) 
+        && data.keys().size() == 3
+        && data.name is string && data.name.size() <= 100
+        && data.name.size() > 0
+        && data.ownerId == request.auth.uid
+        && data.createdAt == request.time;
+    }
+
+    function isValidUser(data) {
+      return data.keys().hasAll(['email', 'role', 'createdAt'])
+        && data.keys().size() == 3
+        && data.email is string && data.email.size() <= 150
+        && data.role is string && data.role in ['admin', 'doctor', 'staff']
+        && data.createdAt == request.time;
+    }
+
+    function isValidPatientCreate(data) {
+      return data.keys().hasAll(['name', 'age', 'gender', 'conditions', 'voiceHealthStatus', 'adherenceRate', 'phone', 'dignityIndex', 'createdAt', 'updatedAt'])
+        && data.keys().size() == 10
+        && data.name is string && data.name.size() <= 100
+        && data.age is number && data.age >= 0 && data.age <= 120
+        && data.gender is string && data.gender in ['M', 'F']
+        && data.conditions is list && data.conditions.size() <= 20 
+        && (data.conditions.size() == 0 || data.conditions[0] is string)
+        && data.voiceHealthStatus is string && data.voiceHealthStatus in ['Stable', 'Attention', 'Critique']
+        && data.adherenceRate is number && data.adherenceRate >= 0 && data.adherenceRate <= 100
+        && data.phone is string && data.phone.size() <= 20
+        && data.dignityIndex is number && data.dignityIndex >= 0 && data.dignityIndex <= 100
+        && data.createdAt == request.time
+        && data.updatedAt == request.time;
+    }
+
+    function isValidVoiceAlertCreate(data) {
+       return data.keys().hasAll(['patientId', 'priority', 'date', 'detectedSigns', 'duration', 'aiSuggestion', 'status', 'createdAt', 'updatedAt'])
+        && data.keys().size() == 9
+        && data.patientId is string
+        && data.priority is string && data.priority in ['High', 'Medium', 'Low']
+        && data.date is timestamp
+        && data.detectedSigns is list && data.detectedSigns.size() <= 20 && (data.detectedSigns.size() == 0 || data.detectedSigns[0] is string)
+        && data.duration is string && data.duration.size() <= 50
+        && data.aiSuggestion is string && data.aiSuggestion.size() <= 1000
+        && data.status is string && data.status in ['Active', 'Resolved']
+        && data.createdAt == request.time
+        && data.updatedAt == request.time;
+    }
+
+    function isValidVoiceSessionCreate(data, patientId) {
+      return data.keys().hasAll(['patientId', 'date', 'duration', 'summary', 'stressLevel', 'fatigueLevel', 'sentiment', 'createdAt'])
+        && data.keys().size() == 8
+        && data.patientId == patientId
+        && data.date is timestamp
+        && data.duration is string && data.duration.size() <= 50
+        && data.summary is string && data.summary.size() <= 2000
+        && data.stressLevel is number && data.stressLevel >= 0 && data.stressLevel <= 10
+        && data.fatigueLevel is number && data.fatigueLevel >= 0 && data.fatigueLevel <= 10
+        && data.sentiment is string && data.sentiment in ['Positive', 'Neutral', 'Negative']
+        && data.createdAt == request.time;
+    }
+
+    function isValidMessageCreate(data, patientId) {
+      return data.keys().hasAll(['patientId', 'type', 'content', 'audioUrl', 'sender', 'createdAt'])
+        && data.keys().size() == 6
+        && data.patientId == patientId
+        && data.type is string && data.type in ['text', 'audio']
+        && data.content is string && data.content.size() <= 2000
+        && data.audioUrl is string && data.audioUrl.size() <= 1000
+        && data.sender is string && data.sender in ['doctor', 'hanen']
+        && data.createdAt == request.time;
+    }
+
+    // 3. MATCH BLOCKS
+    match /tenants/{tenantId} {
+      allow get: if isSignedIn() && (resource == null || isTenantMember(tenantId) || resource.data.ownerId == request.auth.uid);
+      allow list: if isSignedIn() && request.auth.uid == resource.data.ownerId;
+      allow create: if isVerifiedUser() && isValidTenant(incoming()); 
+      allow update: if isVerifiedUser() && isTenantAdmin(tenantId) &&
+        incoming().diff(existing()).affectedKeys().hasOnly([
+          'name', 'dialect', 'aiComfortCalls', 'aiDistressDetection', 
+          'doctorName', 'doctorSpecialty', 'updatedAt', 'avatarUrl', 
+          'cabinetName', 'contactPhone', 'cnamId', 'callingWindow', 
+          'inpdpConsent', 'retentionMonths', 'anonymization', 
+          'emailAlerts', 'smsEmergency', 'doctorMobile', 'summaryTime'
+        ]);
+      allow delete: if false;
+
+      match /users/{userId} {
+        allow get: if isSignedIn() && (resource == null || isTenantMember(tenantId) || get(/databases/$(database)/documents/tenants/$(tenantId)).data.ownerId == request.auth.uid);
+        allow list: if isSignedIn() && (isTenantMember(tenantId) || get(/databases/$(database)/documents/tenants/$(tenantId)).data.ownerId == request.auth.uid);
+        allow create: if isVerifiedUser() && (isTenantAdmin(tenantId) || get(/databases/$(database)/documents/tenants/$(tenantId)).data.ownerId == request.auth.uid) && isValidId(userId) && isValidUser(incoming());
+        allow update: if isVerifiedUser() && isTenantAdmin(tenantId) && isValidId(userId) &&
+          incoming().diff(existing()).affectedKeys().hasOnly(['role']) &&
+          incoming().role is string && incoming().role in ['admin', 'doctor', 'staff'];
+        allow delete: if isVerifiedUser() && isTenantAdmin(tenantId);
+      }
+
+      match /alerts/{alertId} {
+        allow read: if isSignedIn() && isTenantMember(tenantId);
+        allow create: if isVerifiedUser() && isTenantMember(tenantId) && isValidId(alertId) && isValidVoiceAlertCreate(incoming());
+        allow update: if isVerifiedUser() && isTenantMember(tenantId) && isValidId(alertId) &&
+          incoming().diff(existing()).affectedKeys().hasOnly(['status', 'updatedAt', 'doctorComment', 'closureNote', 'resolvedAt']) &&
+          (!('doctorComment' in incoming()) || (incoming().doctorComment is string && incoming().doctorComment.size() <= 2000)) &&
+          (!('closureNote' in incoming()) || (incoming().closureNote is string && incoming().closureNote.size() <= 2000)) &&
+          (!('resolvedAt' in incoming()) || incoming().resolvedAt is string) &&
+          incoming().status is string && incoming().status in ['Active', 'Resolved'] &&
+          incoming().updatedAt == request.time;
+        allow delete: if false;
+      }
+
+      match /patients/{patientId} {
+        allow read: if isSignedIn() && isTenantMember(tenantId);
+        allow create: if isVerifiedUser() && isTenantMember(tenantId) && isValidId(patientId) && isValidPatientCreate(incoming());
+        allow update: if isVerifiedUser() && isTenantMember(tenantId) && isValidId(patientId) &&
+          incoming().diff(existing()).affectedKeys().hasOnly(['age', 'conditions', 'voiceHealthStatus', 'adherenceRate', 'phone', 'notes', 'dignityIndex', 'updatedAt']) &&
+          incoming().age is number && incoming().age >= 0 && incoming().age <= 120 &&
+          incoming().conditions is list && incoming().conditions.size() <= 20 && (incoming().conditions.size() == 0 || incoming().conditions[0] is string) &&
+          incoming().voiceHealthStatus is string && incoming().voiceHealthStatus in ['Stable', 'Attention', 'Critique'] &&
+          incoming().adherenceRate is number && incoming().adherenceRate >= 0 && incoming().adherenceRate <= 100 &&
+          incoming().phone is string && incoming().phone.size() <= 20 &&
+          (!('notes' in incoming()) || (incoming().notes is string && incoming().notes.size() <= 10000)) &&
+          incoming().dignityIndex is number && incoming().dignityIndex >= 0 && incoming().dignityIndex <= 100 &&
+          incoming().updatedAt == request.time;
+        allow delete: if false;
+
+        match /sessions/{sessionId} {
+          allow read: if isSignedIn() && isTenantMember(tenantId);
+          allow create: if isVerifiedUser() && isTenantMember(tenantId) && isValidId(sessionId) && isValidVoiceSessionCreate(incoming(), patientId);
+          allow update: if false;
+          allow delete: if false;
+        }
+
+        match /messages/{messageId} {
+          allow read: if isSignedIn() && isTenantMember(tenantId);
+          allow create: if isVerifiedUser() && isTenantMember(tenantId) && isValidId(messageId) && isValidMessageCreate(incoming(), patientId);
+          allow update: if false;
+          allow delete: if false;
+        }
+      }
+    }
+  }
+}

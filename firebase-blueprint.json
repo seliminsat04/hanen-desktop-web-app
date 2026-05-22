@@ -1,0 +1,100 @@
+{
+  "entities": {
+    "Tenant": {
+      "title": "Tenant",
+      "description": "Represents a clinic or medical cabinet.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "createdAt": { "type": "timestamp" }
+      },
+      "required": ["name", "createdAt"]
+    },
+    "User": {
+      "title": "User",
+      "description": "Represents a doctor or staff member belonging to a tenant.",
+      "type": "object",
+      "properties": {
+        "email": { "type": "string" },
+        "role": { "type": "string", "enum": ["admin", "doctor", "staff"] },
+        "createdAt": { "type": "timestamp" }
+      },
+      "required": ["email", "role", "createdAt"]
+    },
+    "Patient": {
+      "title": "Patient",
+      "description": "Represents a patient under Hanen's voice AI monitoring.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "age": { "type": "number" },
+        "gender": { "type": "string", "enum": ["M", "F"] },
+        "conditions": { "type": "array", "items": { "type": "string" } },
+        "lastCallDate": { "type": "timestamp" },
+        "voiceHealthStatus": { "type": "string", "enum": ["Stable", "Attention", "Critique"] },
+        "adherenceRate": { "type": "number" },
+        "phone": { "type": "string" },
+        "notes": { "type": "string" },
+        "dignityIndex": { "type": "number" },
+        "createdAt": { "type": "timestamp" },
+        "updatedAt": { "type": "timestamp" }
+      },
+      "required": ["name", "age", "gender", "conditions", "voiceHealthStatus", "adherenceRate", "phone", "dignityIndex", "createdAt", "updatedAt"]
+    },
+    "VoiceAlert": {
+      "title": "VoiceAlert",
+      "description": "Represents an anomaly or alert detected by Hanen's voice AI.",
+      "type": "object",
+      "properties": {
+        "patientId": { "type": "string" },
+        "priority": { "type": "string", "enum": ["High", "Medium", "Low"] },
+        "date": { "type": "timestamp" },
+        "detectedSigns": { "type": "array", "items": { "type": "string" } },
+        "duration": { "type": "string" },
+        "aiSuggestion": { "type": "string" },
+        "status": { "type": "string", "enum": ["Active", "Resolved"] },
+        "createdAt": { "type": "timestamp" },
+        "updatedAt": { "type": "timestamp" }
+      },
+      "required": ["patientId", "priority", "date", "detectedSigns", "duration", "aiSuggestion", "status", "createdAt", "updatedAt"]
+    },
+    "VoiceSession": {
+      "title": "VoiceSession",
+      "description": "Represents a voice call between Hanen and a patient.",
+      "type": "object",
+      "properties": {
+        "patientId": { "type": "string" },
+        "date": { "type": "timestamp" },
+        "duration": { "type": "string" },
+        "summary": { "type": "string" },
+        "stressLevel": { "type": "number" },
+        "fatigueLevel": { "type": "number" },
+        "sentiment": { "type": "string", "enum": ["Positive", "Neutral", "Negative"] },
+        "createdAt": { "type": "timestamp" }
+      },
+      "required": ["patientId", "date", "duration", "summary", "stressLevel", "fatigueLevel", "sentiment", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/tenants/{tenantId}": {
+      "schema": { "$ref": "#/entities/Tenant" },
+      "description": "Metadata for a multi-tenant clinic/cabinet."
+    },
+    "/tenants/{tenantId}/users/{userId}": {
+      "schema": { "$ref": "#/entities/User" },
+      "description": "Users (doctors) operating in the clinic. userId corresponds to Firebase Auth uid."
+    },
+    "/tenants/{tenantId}/patients/{patientId}": {
+      "schema": { "$ref": "#/entities/Patient" },
+      "description": "Patients under care of the clinic."
+    },
+    "/tenants/{tenantId}/patients/{patientId}/alerts/{alertId}": {
+      "schema": { "$ref": "#/entities/VoiceAlert" },
+      "description": "Voice alerts for a specific patient."
+    },
+    "/tenants/{tenantId}/patients/{patientId}/sessions/{sessionId}": {
+      "schema": { "$ref": "#/entities/VoiceSession" },
+      "description": "Voice sessions for a specific patient."
+    }
+  }
+}

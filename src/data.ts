@@ -1,0 +1,222 @@
+import { Patient, VoiceAlert, VoiceSession, CabinetStats } from './types';
+
+export const mockPatients: Patient[] = [
+  {
+    id: 'p1',
+    name: 'Fatima Ben Ali',
+    age: 72,
+    gender: 'F',
+    conditions: ['Diabète Type 2', 'Hypertension'],
+    lastCallDate: '2026-05-21T09:30:00Z',
+    voiceHealthStatus: 'Stable',
+    adherenceRate: 92,
+    phone: '216 22 123 456',
+    notes: 'Patiente très régulière. Suivi diabète impeccable.',
+    dignityIndex: 88,
+  },
+  {
+    id: 'p2',
+    name: 'Ahmed Trabelsi',
+    age: 68,
+    gender: 'M',
+    conditions: ['Insuffisance Cardiaque'],
+    lastCallDate: '2026-05-21T10:15:00Z',
+    voiceHealthStatus: 'Attention',
+    adherenceRate: 75,
+    phone: '216 55 987 654',
+    notes: 'Oublie souvent ses diurétiques. Besoin de rappels fréquents.',
+    dignityIndex: 70,
+  },
+  {
+    id: 'p3',
+    name: 'Khadija Mansour',
+    age: 81,
+    gender: 'F',
+    conditions: ['Arthrose', 'Isolement'],
+    lastCallDate: '2026-05-21T08:00:00Z',
+    voiceHealthStatus: 'Critique',
+    adherenceRate: 60,
+    phone: '216 98 111 222',
+    notes: 'Se sent très seule. Dépression légère suspectée via voix.',
+    dignityIndex: 55,
+  },
+  {
+    id: 'p4',
+    name: 'Moncef Gharbi',
+    age: 75,
+    gender: 'M',
+    conditions: ['Hypertension', 'Cholestérol'],
+    lastCallDate: '2026-05-20T18:45:00Z',
+    voiceHealthStatus: 'Stable',
+    adherenceRate: 88,
+    phone: '216 50 444 333',
+    notes: 'Actif, marche tous les jours.',
+    dignityIndex: 95,
+  },
+  {
+    id: 'p5',
+    name: 'Aicha Khemiri',
+    age: 69,
+    gender: 'F',
+    conditions: ['Asthme', 'Diabète Type 2'],
+    lastCallDate: '2026-05-21T11:20:00Z',
+    voiceHealthStatus: 'Attention',
+    adherenceRate: 81,
+    phone: '216 28 777 888',
+    notes: 'Légère toux lors du dernier appel.',
+    dignityIndex: 78,
+  },
+  {
+    id: 'p6',
+    name: 'Habib Jendoubi',
+    age: 78,
+    gender: 'M',
+    conditions: ['Alzheimer (Stade léger)'],
+    lastCallDate: '2026-05-19T14:30:00Z',
+    voiceHealthStatus: 'Attention',
+    adherenceRate: 65,
+    phone: '216 99 222 111',
+    notes: "Sa fille gère l'application. Confusion parfois détectée au téléphone.",
+    dignityIndex: 65,
+  },
+  {
+    id: 'p7',
+    name: 'Samira Boubaker',
+    age: 64,
+    gender: 'F',
+    conditions: ['Hypothyroïdie'],
+    lastCallDate: '2026-05-21T12:00:00Z',
+    voiceHealthStatus: 'Stable',
+    adherenceRate: 98,
+    phone: '216 53 666 555',
+    notes: 'Tout va bien.',
+    dignityIndex: 92,
+  },
+  {
+    id: 'p8',
+    name: 'Youssef Ayari',
+    age: 83,
+    gender: 'M',
+    conditions: ['Maladie de Parkinson'],
+    lastCallDate: '2026-05-21T16:10:00Z',
+    voiceHealthStatus: 'Critique',
+    adherenceRate: 70,
+    phone: '216 21 333 444',
+    notes: "Voix très tremblante, difficulté à parler aujourd'hui.",
+    dignityIndex: 60,
+  }
+];
+
+export const mockAlerts: VoiceAlert[] = [
+  {
+    id: 'a1',
+    patientId: 'p3',
+    priority: 'High',
+    date: '2026-05-21T08:05:00Z',
+    detectedSigns: ['Voix faible et isolée', 'Pleurs détectés', 'Absence prolongée de motivation'],
+    duration: '15 min',
+    aiSuggestion: 'Risque élevé de dépression. Recommander consultation de soutien psychologique ou appel aux proches.',
+    status: 'Active',
+  },
+  {
+    id: 'a2',
+    patientId: 'p8',
+    priority: 'High',
+    date: '2026-05-21T16:12:00Z',
+    detectedSigns: ["Grande difficulté d'élocution", 'Rythme lent', 'Fatigue vocale extrême'],
+    duration: '8 min',
+    aiSuggestion: "Exacerbation possible des symptômes moteurs. Évaluer l'ajustement du traitement Levodopa.",
+    status: 'Active',
+  },
+  {
+    id: 'a3',
+    patientId: 'p2',
+    priority: 'Medium',
+    date: '2026-05-21T10:18:00Z',
+    detectedSigns: ['Essoufflement léger pendant la conversation'],
+    duration: '5 min',
+    aiSuggestion: "Vérifier la rétention d'eau (poids) et la prise des diurétiques.",
+    status: 'Active',
+  },
+  {
+    id: 'a4',
+    patientId: 'p5',
+    priority: 'Low',
+    date: '2026-05-21T11:22:00Z',
+    detectedSigns: ['Toux sèche occasionnelle'],
+    duration: '3 min',
+    aiSuggestion: "Suivre l'évolution. Peut être lié aux allergies saisonnières ou irritation légère.",
+    status: 'Active',
+  }
+];
+
+export const mockStats: CabinetStats = {
+  totalPatients: 145,
+  activeAlerts: 4,
+  todayCalls: 87,
+  avgAdherence: 84,
+  avgDignityIndex: 79,
+};
+
+export const mockVoiceSessions: VoiceSession[] = [
+  {
+    id: 's1',
+    patientId: 'p2',
+    date: '2026-05-21T10:15:00Z',
+    duration: '04:12',
+    summary: 'Le patient rapporte un peu de fatigue ce matin, a admis avoir oublié sa pilule hier soir. Voix avec un léger essoufflement apparent.',
+    transcript: 'Hanen : Bonjour M. Trabelsi, comment vous sentez-vous ce matin ?\nPatient : Ah bonjour, un peu fatigué aujourd\'hui à vrai dire. J\'ai oublié ma pilule hier soir.\nHanen : Ce n\'est pas grave, prenez-la dès maintenant. Avez-vous remarqué un peu d\'essoufflement en marchant ?\nPatient : Oui, un petit peu en allant à la cuisine.',
+    stressLevel: 4,
+    fatigueLevel: 6,
+    sentiment: 'Neutral'
+  },
+  {
+    id: 's2',
+    patientId: 'p2',
+    date: '2026-05-20T09:30:00Z',
+    duration: '05:45',
+    summary: 'Appel de routine positif. Bonne humeur. A pris ses médicaments confirmés.',
+    transcript: 'Hanen : Bonjour, avez-vous bien pris vos médicaments de 9h ?\nPatient : Oui, tout est pris, et je me sens en pleine forme !',
+    stressLevel: 2,
+    fatigueLevel: 3,
+    sentiment: 'Positive'
+  },
+  {
+    id: 's3',
+    patientId: 'p2',
+    date: '2026-05-18T14:20:00Z',
+    duration: '03:10',
+    summary: 'Patient un peu anxieux concernant son prochain rendez-vous. Rassuré par Hanen.',
+    stressLevel: 6,
+    fatigueLevel: 4,
+    sentiment: 'Negative'
+  },
+  {
+    id: 's4',
+    patientId: 'p2',
+    date: '2026-05-15T11:00:00Z',
+    duration: '06:05',
+    summary: 'Longue discussion sur son régime sans sel. Pose des questions pertinentes.',
+    stressLevel: 3,
+    fatigueLevel: 2,
+    sentiment: 'Positive'
+  }
+];
+
+// Data for voice analysis charts
+export const voiceAnalysisData = [
+  { date: '01 Mai', fatigue: 30, essoufflement: 20, stabiliteEmoji: 80 },
+  { date: '05 Mai', fatigue: 35, essoufflement: 25, stabiliteEmoji: 75 },
+  { date: '10 Mai', fatigue: 45, essoufflement: 40, stabiliteEmoji: 65 },
+  { date: '15 Mai', fatigue: 40, essoufflement: 35, stabiliteEmoji: 70 },
+  { date: '18 Mai', fatigue: 60, essoufflement: 55, stabiliteEmoji: 50 },
+  { date: '21 Mai', fatigue: 65, essoufflement: 60, stabiliteEmoji: 45 },
+];
+
+export const adherenceData = [
+  { mois: 'Jan', adherence: 88 },
+  { mois: 'Fév', adherence: 85 },
+  { mois: 'Mar', adherence: 90 },
+  { mois: 'Avr', adherence: 82 },
+  { mois: 'Mai', adherence: 75 },
+];
