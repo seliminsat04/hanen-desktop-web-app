@@ -2,7 +2,7 @@
 
 ![Hanen Pro Logo](public/hanen-logo.png)
 
-> **"L'écoute clinique, augmentée par l'intelligence."**  
+> **"L'écoute clinique, augmentée par l'intelligence artificielle."**  
 > Hanen Pro est une solution de pointe dédiée aux professionnels de santé pour le suivi à distance des patients via l'analyse biométrique et sémantique de la voix.
 
 ---
@@ -11,107 +11,98 @@
 
 **Hanen Pro** (signifiant *Tendresse/Compassion* en arabe) réinvente le lien médecin-patient. En capturant les nuances subtiles de la voix, notre plateforme permet de détecter précocement les signes de fatigue, de stress ou de dégradation cognitive, offrant ainsi une surveillance proactive sans être intrusive.
 
-## 🚀 Fonctionnalités Clés
+## 🚀 Écosystème de Fonctionnalités
 
-### 📊 Dashboard Clinique Intelligent
-- **Surveillance en Temps Réel** : Un aperçu instantané de l'état de santé de votre patientèle via des indicateurs dynamiques (KPIs).
-- **Cartes de Statistiques Animées** : Utilisation de `motion/react` pour des animations de comptage élégantes et fluides.
-- **Visualisation de Données** : Graphiques avancés avec `Recharts` pour suivre l'évolution de l'index de dignité, le niveau de fatigue et l'adhérence thérapeutique.
+### 1. 📊 Dashboard Clinique & Pilotage
+- **Indicateurs KPIs Dynamiques** : Aperçu instantané (Comptage de patients, Alertes Actives, Index de Dignité Moyen, Taux d'Observance).
+- **Animations Count-Up** : Transition fluide des données pour une lecture dynamique.
+- **État de Santé Global** : Visualisation des tendances de la patientèle sur les dernières 24h.
 
-### 👥 Gestion Holistique des Patients
-- **Profils Détaillés** : Âge, sexe, comorbidités, et habitudes de vie.
-- **Index de Dignité** : Une mesure exclusive permettant de s'assurer que le suivi respecte le bien-être émotionnel du patient.
-- **Historique des Sessions Vocales** : Accès aux transcriptions, résumés IA et marqueurs de sentiment (Positif, Neutre, Négatif).
+### 2. 👥 Gestion Patient 360°
+- **Dossier Médical Unifié** : Historique complet, antécédents, comorbidités et traitements en cours.
+- **Fiche Patient Multi-Dimensionnelle** :
+  - **Biométrie Vocale** : Analyse technique du signal (Fréquence, Jitter, Shimmer, Stabilité).
+  - **Profil Comportemental** : Évaluation du stress, de la fatigue et de l'humeur.
+  - **Journal de Bord** : Chronologie des interactions et des événements cliniques.
+  - **Observance (Adhérence)** : Suivi rigoureux de la prise de médicaments.
 
-### 🚨 Système d'Alertes Prédictives
-- **Détection de Signes Faibles** : L'IA identifie les changements de timbre, de débit ou de tonalité.
-- **Priorisation Intelligente** : Alertes classées par niveau d'urgence (High, Medium, Low) pour une gestion efficace du temps médical.
-- **Protocoles de Résolution** : Possibilité de clore des incidents avec des notes cliniques précises.
+### 3. 🎙️ Capsule Vocale Hanen (Communication Avancée)
+- **Moteur de Synthèse IA** : Conversion de consignes (texte ou voix enregistrée) en appels téléphoniques synthétisés.
+- **Paramètres Cognitifs** :
+  - **Élocution Adaptative** : Rythme standard ou *Lent/Apaisé* pour les patients fragiles.
+  - **Tonalité Émotionnelle** : Choix entre un ton *Chaleureux* ou *Solennel*.
+- **Modes de Distribution** : Appels immédiats ou insertion dans le "Journal Vocal Matinal".
+- **Bibliothèque de Modèles** : Templates cliniques pré-paramétrés (Consultation, Résultats, Motivation).
+- **Speech-to-Text** : Transcription automatique des mémos vocaux du médecin avant envoi.
 
-### ⚙️ Configuration & Compliance (RGPD/INPDP)
-- **Gestion du Cycle de Vie des Données** : Paramétrage précis de la durée de conservation (1 mois à 2 ans, ou personnalisé).
-- **Anonymisation Native** : Option de suppression des marqueurs d'identité dans les logs vocaux.
-- **Personnalisation de l'IA** : Ajustement des seuils de détection pour les appels de confort et de détresse.
+### 4. 🤖 Copilote Médical IA (Assistant Virtuel)
+- **Analyse de Contexte** : L'assistant sait quel dossier patient vous consultez pour répondre avec précision.
+- **Aide à la Décision** : Résumés cliniques instantanés, vérification d'interactions médicamenteuses et analyse d'alertes.
+- **Protocoles de Surveillance** : Assistance dans la définition des seuils de détection IA.
+
+### 5. 🚨 Système d'Alertes Prédictives
+- **Détection IA de Signes Faibles** : Identification automatique de détresse respiratoire ou émotionnelle.
+- **Triage Intelligent** : Classification automatique par urgence (Haute, Moyenne, Basse).
+- **Gestion du Cycle d'Alerte** : Archivage des interventions et historique de prise en charge.
+
+### 6. ⚙️ Sécurité & Compliance (INPDP / RGPD)
+- **Consentement Éclairé** : Signature numérique obligatoire pour l'analyse IA.
+- **Gestion de la Rétention** : Paramétrage de la durée de conservation des données avec option de suppression immédiate.
+- **Anonymisation Native** : Option de caviardage des marqueurs d'identité dans les transcriptions vocales.
 
 ---
 
-## 🛠 Tech Stack
+## 🛠 Tech Stack & Architecture
 
-L'architecture de Hanen Pro repose sur les technologies les plus modernes pour garantir performance, sécurité et maintenabilité.
-
-- **Frontend** : [React 19](https://react.dev/) + [Vite 6](https://vitejs.dev/)
-- **Backend** : [Express](https://expressjs.com/) sur Node.js
-- **Base de Données & Auth** : [Firebase 12](https://firebase.google.com/) (Firestore et Authentication)
-- **Intelligence Artificielle** : [Google Gemini API](https://ai.google.dev/) (@google/genai)
-- **Styling** : [Tailwind CSS 4](https://tailwindcss.com/)
-- **Animations** : [Framer Motion](https://motion.dev/) (motion/react)
-- **Graphiques** : [Recharts](https://recharts.org/)
-- **Typographie** : Inter & Space Grotesk (pour une esthétique clinique et moderne)
+- **Core** : [React 19](https://react.dev/) + [Vite 6](https://vitejs.dev/) + [TypeScript](https://www.typescriptlang.org/)
+- **State & Backend** : [Firebase 12](https://firebase.google.com/) (Firestore Real-time, Auth, Storage)
+- **Intelligence Artificielle** : 
+  - [Google Gemini API](https://ai.google.dev/) (Analyse sémantique et contextuelle).
+  - Moteur de Synthèse Vocale (Web Speech API & Cloud Integration).
+- **Design System** : 
+  - [Tailwind CSS 4](https://tailwindcss.com/) (Utilitarisme radical).
+  - [Lucide React](https://lucide.dev/) (Iconographie clinique).
+  - [Framer Motion](https://motion.dev/) (motion/react) pour l'expérience utilisateur premium.
+- **Graphiques** : [Recharts](https://recharts.org/) pour la télémétrie médicale.
 
 ---
 
-## 📁 Structure du Projet
+## 📁 Organisation du Code
 
 ```bash
-├── public/                 # Assets statiques (Logo, Icons)
+├── public/                 # Assets (hanen-logo.png)
 ├── src/
-│   ├── components/         # Composants UI réutilisables (CountUp, Sidebar, Header...)
-│   ├── hooks/              # Custom hooks (useFirestoreData...)
-│   ├── lib/                # Configurations (Firebase, Utils, Seeder)
-│   ├── pages/              # Vues principales (Dashboard, Patients, Settings...)
-│   ├── types.ts            # Définitions strictes des types TypeScript
-│   ├── App.tsx             # Routing et Layout principal
-│   └── main.tsx            # Point d'entrée React
-├── server.ts               # Serveur Express & Middleware Vite
-├── firestore.rules         # Règles de sécurité Firestore (Granular Access Control)
-└── package.json            # Manifeste des dépendances et scripts
+│   ├── components/         # Chatbot, Sidebar, Header, CountUp...
+│   ├── hooks/              # useFirestoreData (Real-time syncing)
+│   ├── lib/                # Firebase Init, Utils, Seeder de données
+│   ├── pages/              
+│   │   ├── Dashboard.tsx   # Tableau de bord principal
+│   │   ├── Patients.tsx    # Liste et filtres patients
+│   │   ├── PatientDetail.tsx # Vue clinique granulaire (Tabs)
+│   │   ├── Alerts.tsx      # Gestionnaire d'urgences
+│   │   ├── Messages.tsx    # Centre de communication vocale
+│   │   └── Settings.tsx    # Configuration Cabinet & IA
+│   ├── types.ts            # Modèles de données (Patient, Alert, Message)
+│   ├── Login.tsx           # Intro animée Hanen Pro
+│   └── App.tsx             # Routing & Auth Guard
+├── server.ts               # Serveur Express & API proxy pour Gemini
+└── firestore.rules         # Sécurité granulaire (RBAC & Isolation Tenant)
 ```
 
 ---
 
-## 🔐 Sécurité & Confidentialité
+## 🔐 Sécurité & Intégrité
 
-Le projet implémente des règles de sécurité Firestore rigoureuses :
-- **Isolation des Locataires (Tenants)** : Les médecins n'accèdent qu'aux données de leur propre cabinet.
-- **Validation des Schémas** : Protection contre l'injection de données invalides via les `affectedKeys`.
-- **Consentement Éclairé** : Système de signature numérique intégré avant toute analyse IA.
-
----
-
-## ⚙️ Installation & Lancement
-
-1. **Cloner le dépôt**
-   ```bash
-   git clone https://github.com/votre-repo/hanen-pro.git
-   ```
-
-2. **Installer les dépendances**
-   ```bash
-   npm install
-   ```
-
-3. **Variables d'environnement**
-   Créez un fichier `.env` à la racine (voir `.env.example`) :
-   - `GEMINI_API_KEY` : Votre clé API Google AI.
-   - Configuration Firebase (API Key, Project ID, etc.).
-
-4. **Lancer en mode développement**
-   ```bash
-   npm run dev
-   ```
-
-5. **Build pour la production**
-   ```bash
-   npm run build
-   npm start
-   ```
+Le système repose sur un modèle de **Multi-Tenancy** :
+- **Isolation Critique** : Chaque médecin accède exclusivement aux données de son cabinet via des règles Firestore strictes.
+- **Vérification de Schémas** : Les modifications de données sont filtrées par des règles de sécurité (affectedKeys) pour prévenir toute altération malveillante.
 
 ---
 
-## 👨‍⚕️ À Propos
+## 🩺 À Propos de Hanen
 
-Hanen Pro a été conçu pour humaniser la technologie. Chaque aspect de l'interface, du choix des couleurs au timing des animations, a été pensé pour réduire la charge cognitive des médecins et maximiser l'efficacité du suivi.
+Hanen Pro n'est pas seulement un logiciel ; c'est un partenaire clinique. Chaque micro-interaction a été conçue pour réduire l'épuisement professionnel des médecins tout en garantissant une présence vocale rassurante auprès de chaque patient, 24h/24.
 
 ---
 
-*Développé avec ❤️ pour le secteur de la santé par l'équipe Hanen.*
+*Conçu avec expertise pour le futur de la médecine connectée.*
