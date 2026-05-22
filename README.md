@@ -26,7 +26,13 @@
   - **Journal de Bord** : Chronologie des interactions et des événements cliniques.
   - **Observance (Adhérence)** : Suivi rigoureux de la prise de médicaments.
 
-### 3. 🎙️ Capsule Vocale Hanen (Communication Avancée)
+### 3. 📊 Analyse Statistique & Reporting Avancé
+- **Tableau d'Observance Clinique** : Suivi temporel de l'adhérence thérapeutique corrélé à l'indice de dignité.
+- **Biomarqueurs Vocaux** : Visualisation des anomalies détectées (Dyspnée, Fatigue, Tremblements) via `Recharts`.
+- **Exportation de Rapports PDF** : Génération de synthèses cliniques professionnelles avec `jsPDF` pour le dossier patient physique.
+- **Filtrage par Pathologie** : Analyse granulaire des cohortes (Diabète, Insuffisance Cardiaque, Alzheimer).
+
+### 4. 🎙️ Capsule Vocale Hanen (Communication Avancée)
 - **Moteur de Synthèse IA** : Conversion de consignes (texte ou voix enregistrée) en appels téléphoniques synthétisés.
 - **Paramètres Cognitifs** :
   - **Élocution Adaptative** : Rythme standard ou *Lent/Apaisé* pour les patients fragiles.
@@ -35,17 +41,17 @@
 - **Bibliothèque de Modèles** : Templates cliniques pré-paramétrés (Consultation, Résultats, Motivation).
 - **Speech-to-Text** : Transcription automatique des mémos vocaux du médecin avant envoi.
 
-### 4. 🤖 Copilote Médical IA (Assistant Virtuel)
+### 5. 🤖 Copilote Médical IA (Assistant Virtuel)
 - **Analyse de Contexte** : L'assistant sait quel dossier patient vous consultez pour répondre avec précision.
 - **Aide à la Décision** : Résumés cliniques instantanés, vérification d'interactions médicamenteuses et analyse d'alertes.
 - **Protocoles de Surveillance** : Assistance dans la définition des seuils de détection IA.
 
-### 5. 🚨 Système d'Alertes Prédictives
+### 6. 🚨 Système d'Alertes Prédictives
 - **Détection IA de Signes Faibles** : Identification automatique de détresse respiratoire ou émotionnelle.
 - **Triage Intelligent** : Classification automatique par urgence (Haute, Moyenne, Basse).
 - **Gestion du Cycle d'Alerte** : Archivage des interventions et historique de prise en charge.
 
-### 6. ⚙️ Sécurité & Compliance (INPDP / RGPD)
+### 7. ⚙️ Sécurité & Compliance (INPDP / RGPD)
 - **Consentement Éclairé** : Signature numérique obligatoire pour l'analyse IA.
 - **Gestion de la Rétention** : Paramétrage de la durée de conservation des données avec option de suppression immédiate.
 - **Anonymisation Native** : Option de caviardage des marqueurs d'identité dans les transcriptions vocales.
@@ -80,6 +86,7 @@
 │   │   ├── Patients.tsx    # Liste et filtres patients
 │   │   ├── PatientDetail.tsx # Vue clinique granulaire (Tabs)
 │   │   ├── Alerts.tsx      # Gestionnaire d'urgences
+│   │   ├── Statistics.tsx  # Analyse analytique & Rapports PDF
 │   │   ├── Messages.tsx    # Centre de communication vocale
 │   │   └── Settings.tsx    # Configuration Cabinet & IA
 │   ├── types.ts            # Modèles de données (Patient, Alert, Message)
