@@ -1,0 +1,2 @@
+# Hanen Pro - Public Assets
+This directory contains the visual assets, branding icons, and clinician avatar images used across the Hanen Pro platform.
