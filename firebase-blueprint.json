@@ -1,4 +1,5 @@
 {
+  "_comment": "Database blueprint",
   "entities": {
     "Tenant": {
       "title": "Tenant",

@@ -1,4 +1,5 @@
 {
+  "_comment": "Applet metadata",
   "name": "Copilote Médical",
   "description": "Assistant clinique intelligent et copilote médical doté d'analyses de santé vocale et d'IA conversationnelle en temps réel.",
   "requestFramePermissions": [

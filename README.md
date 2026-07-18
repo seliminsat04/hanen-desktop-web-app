@@ -1,3 +1,4 @@
+<!-- Project documentation -->
 # 🩺 Hanen Pro | Plateforme Clinique de Télésurveillance Vocale
 
 ![Hanen Pro Logo](public/hanen-logo.png)

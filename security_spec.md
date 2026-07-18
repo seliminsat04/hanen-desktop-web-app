@@ -1,3 +1,4 @@
+<!-- Security specification -->
 # Security Specification: Multi-tenant Medical Dashboard (Hanen Pro)
 
 ## 1. Data Invariants
