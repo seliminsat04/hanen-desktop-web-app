@@ -1,3 +1,4 @@
+// Database seeder
 import {
   collection,
   doc,

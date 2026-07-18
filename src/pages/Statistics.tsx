@@ -1,3 +1,4 @@
+// Diagnostic analytics
 import React, { useState, useMemo } from 'react';
 import { jsPDF } from 'jspdf';
 import { 

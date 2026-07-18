@@ -1,3 +1,4 @@
+// Messages board
 import React, { useState, useEffect, useRef } from 'react';
 import { useFirestoreData } from '../hooks/useFirestoreData';
 import { Patient } from '../types';

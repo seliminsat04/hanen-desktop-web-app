@@ -1,3 +1,4 @@
+// Visual counter
 import React, { useEffect } from 'react';
 import { motion, useSpring, useTransform } from 'motion/react';
 

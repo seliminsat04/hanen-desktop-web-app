@@ -1,3 +1,4 @@
+// Mock database
 import { Patient, VoiceAlert, VoiceSession, CabinetStats } from './types';
 
 export const mockPatients: Patient[] = [

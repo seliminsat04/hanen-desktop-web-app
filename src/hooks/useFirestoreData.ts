@@ -1,3 +1,4 @@
+// Firestore synchronization
 import { useState, useEffect } from 'react';
 import { collection, query, onSnapshot, orderBy, doc, writeBatch } from 'firebase/firestore';
 import { db, auth } from '../lib/firebase';

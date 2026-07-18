@@ -1,3 +1,4 @@
+// Patient directory
 import React, { useState, useRef } from 'react';
 import { Search, Filter, Phone, PlayCircle, Activity, Plus, X, Heart, Sun, Cloud, MessageCircle, Home, FileText, UploadCloud, AlertCircle, Scan } from 'lucide-react';
 import { Link } from 'react-router-dom';

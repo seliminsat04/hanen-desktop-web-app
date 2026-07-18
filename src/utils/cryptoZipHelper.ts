@@ -1,3 +1,4 @@
+// Cryptographic export
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
 import { Patient, VoiceAlert, VoiceSession } from '../types';

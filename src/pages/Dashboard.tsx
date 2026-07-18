@@ -1,3 +1,4 @@
+// Stats dashboard
 import React from 'react';
 import { Users, PhoneCall, TrendingUp, AlertCircle, ArrowRight, Mic, Heart } from 'lucide-react';
 import { mockStats } from '../data';

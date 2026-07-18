@@ -1,3 +1,4 @@
+// Type definitions
 export type HealthStatus = 'Stable' | 'Attention' | 'Critique';
 
 export type AlertPriority = 'High' | 'Medium' | 'Low';

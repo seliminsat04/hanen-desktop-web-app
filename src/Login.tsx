@@ -1,3 +1,4 @@
+// Login interface
 import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 import { useAuth } from './AuthContext';

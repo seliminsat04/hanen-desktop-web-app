@@ -1,3 +1,4 @@
+// Name formatting
 /**
  * Helper to ensure a clinician's name is formatted with "Dr." prefix.
  * If the name already starts with "Dr", "Dr.", "Docteur", "Pr" or "Pr.", it returns the name unchanged.

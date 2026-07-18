@@ -1,3 +1,4 @@
+// Cabinet configuration
 import React, { useState, useEffect } from 'react';
 import { Bell, ShieldCheck, User, Volume2, Save, Phone, Clock, FileText, Smartphone, UploadCloud, Link as LinkIcon, Image as ImageIcon, Sparkles, Check, AlertCircle, Globe, RefreshCw } from 'lucide-react';
 import { useAuth } from '../AuthContext';

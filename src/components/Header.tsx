@@ -1,3 +1,4 @@
+// Header navigation
 import React from 'react';
 import { Search, Bell, Menu, Database } from 'lucide-react';
 import { mockAlerts } from '../data';

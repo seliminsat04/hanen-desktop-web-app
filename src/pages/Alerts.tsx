@@ -1,3 +1,4 @@
+// Alerts management
 import React, { useState, useMemo, useEffect } from 'react';
 import { mockAlerts, mockPatients } from '../data';
 import { 

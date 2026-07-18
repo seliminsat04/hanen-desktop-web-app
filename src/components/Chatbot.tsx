@@ -1,3 +1,4 @@
+// Assistant interface
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Stethoscope, X, Maximize2, Minimize2, Send, Bot, Sparkles, AlertCircle } from 'lucide-react';

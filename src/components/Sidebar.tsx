@@ -1,3 +1,4 @@
+// Sidebar navigation
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { LayoutDashboard, Users, BellRing, BarChart3, Mic, Settings, Stethoscope, LogOut } from 'lucide-react';
