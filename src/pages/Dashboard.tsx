@@ -56,7 +56,7 @@ export function Dashboard() {
               <Heart size={20} />
             </div>
             <div>
-              <p className="text-[10px] uppercase font-bold tracking-widest text-slate-400">Accompagnement</p>
+              <p className="text-[10px] uppercase font-bold tracking-widest text-slate-500">Accompagnement</p>
               <p className="text-sm font-bold text-slate-900 mt-0.5">Soutien Continu</p>
             </div>
           </div>
@@ -66,7 +66,7 @@ export function Dashboard() {
               <Mic size={20} />
             </div>
             <div>
-              <p className="text-[10px] uppercase font-bold tracking-widest text-slate-400">Analyse Vocale</p>
+              <p className="text-[10px] uppercase font-bold tracking-widest text-slate-500">Analyse Vocale</p>
               <p className="text-sm font-bold text-slate-900 mt-0.5">Biosignaux Captés</p>
             </div>
           </div>
@@ -80,8 +80,8 @@ export function Dashboard() {
             <div className="absolute top-0 right-0 w-32 h-32 bg-slate-50 opacity-50 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 group-hover:scale-150 transition-transform duration-700"></div>
             <div className="flex justify-between items-start relative z-10">
               <div>
-                <p className="text-slate-500 text-xs font-black tracking-wide uppercase">{stat.label}</p>
-                <div className="text-3xl font-black text-slate-800 mt-2 tracking-tight">
+                <p className="text-slate-500 text-xs font-bold tracking-wide uppercase">{stat.label}</p>
+                <div className="text-3xl font-extrabold text-slate-800 mt-2 tracking-tight">
                   <CountUp value={stat.value} />
                 </div>
               </div>
@@ -125,7 +125,7 @@ export function Dashboard() {
 
                   <div className="flex items-center gap-5">
                     <div className={cn(
-                      "w-14 h-14 rounded-xl font-black flex items-center justify-center text-xl shrink-0 shadow-inner group-hover:scale-105 transition-transform duration-300 border",
+                      "w-14 h-14 rounded-xl font-extrabold flex items-center justify-center text-xl shrink-0 shadow-inner group-hover:scale-105 transition-transform duration-300 border",
                       isCrit 
                         ? "bg-rose-100/90 text-rose-800 border-rose-200" 
                         : "bg-amber-100/90 text-amber-800 border-amber-200"
@@ -149,14 +149,14 @@ export function Dashboard() {
                   </div>
                   <div className="text-right shrink-0">
                     <span className={cn(
-                      "px-3.5 py-1.5 rounded-full text-xs font-black uppercase tracking-wider border",
+                      "px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider border",
                       isCrit 
                         ? 'bg-rose-600 border-rose-600 text-white shadow-xs' 
-                        : 'bg-amber-500 border-amber-500 text-white shadow-xs'
+                        : 'bg-amber-100 border-amber-300 text-amber-800 shadow-xs'
                     )}>
                       {patient.voiceHealthStatus === 'Critique' ? '🔴 CRITIQUE' : '🟡 IMPORTANT'}
                     </span>
-                    <p className="text-[11px] font-black text-slate-500 mt-3 uppercase tracking-wider">Dernier appel: {formatSafeDate(patient.lastCallDate, 'time')}</p>
+                    <p className="text-[11px] font-bold text-slate-500 mt-3 uppercase tracking-wider">Dernier appel: {formatSafeDate(patient.lastCallDate, 'time')}</p>
                   </div>
                 </div>
               );
@@ -191,7 +191,7 @@ export function Dashboard() {
                       <span key={sign} className="text-[10px] font-bold tracking-wider bg-indigo-400/20 text-indigo-200 px-2.5 py-1 rounded-lg">{sign}</span>
                     ))}
                   </div>
-                  <div className="flex justify-between items-center mt-5 text-xs text-white/50 border-t border-white/10 pt-4">
+                  <div className="flex justify-between items-center mt-5 text-xs text-indigo-200 border-t border-white/10 pt-4">
                     <span className="font-medium tracking-wide">{new Date(alert.date).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
                     <Link to={`/patients/${patient?.id}`} className="text-indigo-200 hover:text-white font-bold transition-colors">
                        Consulter

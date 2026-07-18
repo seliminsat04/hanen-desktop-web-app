@@ -212,7 +212,7 @@ export function Settings() {
     <div className="max-w-6xl mx-auto space-y-8 animate-in fade-in duration-500 pb-16">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 border-b border-slate-100 pb-6">
         <div>
-          <h1 className="text-3xl font-black text-slate-800 tracking-tight">Paramètres du Cabinet</h1>
+          <h1 className="text-3xl font-extrabold text-slate-800 tracking-tight">Paramètres du Cabinet</h1>
           <p className="text-slate-500 text-sm mt-1">Configurez l'IA Hanen, l'intégration légale INPDP et votre profil de consultation.</p>
         </div>
         <div>
@@ -254,7 +254,7 @@ export function Settings() {
                 : "text-slate-600 hover:bg-slate-200/50 hover:text-slate-800"
             )}
           >
-            <User size={18} className={activeTab === 'profile' ? "text-indigo-600" : "text-slate-400"} /> 
+            <User size={18} className={activeTab === 'profile' ? "text-indigo-600" : "text-slate-500"} /> 
             Mon Profil
           </button>
 
@@ -268,7 +268,7 @@ export function Settings() {
                 : "text-slate-600 hover:bg-slate-200/50 hover:text-slate-800"
             )}
           >
-            <Volume2 size={18} className={activeTab === 'ia-config' ? "text-indigo-600" : "text-slate-400"} /> 
+            <Volume2 size={18} className={activeTab === 'ia-config' ? "text-indigo-600" : "text-slate-500"} /> 
             Configuration IA
           </button>
 
@@ -282,7 +282,7 @@ export function Settings() {
                 : "text-slate-600 hover:bg-slate-200/50 hover:text-slate-800"
             )}
           >
-            <ShieldCheck size={18} className={activeTab === 'consent' ? "text-indigo-600" : "text-slate-400"} /> 
+            <ShieldCheck size={18} className={activeTab === 'consent' ? "text-indigo-600" : "text-slate-500"} /> 
             Consentements
           </button>
 
@@ -296,7 +296,7 @@ export function Settings() {
                 : "text-slate-600 hover:bg-slate-200/50 hover:text-slate-800"
             )}
           >
-            <Bell size={18} className={activeTab === 'notifications' ? "text-indigo-600" : "text-slate-400"} /> 
+            <Bell size={18} className={activeTab === 'notifications' ? "text-indigo-600" : "text-slate-500"} /> 
             Notifications
           </button>
         </div>
@@ -439,9 +439,9 @@ export function Settings() {
                           )}
                         >
                           <input id="avatar-file-upload" type="file" className="hidden" accept="image/*" onChange={handleFileChange} />
-                          <UploadCloud size={20} className="text-slate-400 mb-2" />
+                          <UploadCloud size={20} className="text-slate-500 mb-2" />
                           <p className="text-[11px] font-bold text-slate-600">Glissez-déposez ou cliquez pour parcourir</p>
-                          <p className="text-[9px] text-slate-400 mt-1">PNG, JPG ou WebP (Max 1.5MB)</p>
+                          <p className="text-[9px] text-slate-500 mt-1">PNG, JPG ou WebP (Max 1.5MB)</p>
                         </div>
                       </div>
                     )}
@@ -450,7 +450,7 @@ export function Settings() {
                       <div className="space-y-3">
                         <p className="text-xs font-bold text-slate-700">Lien URL externe</p>
                         <div className="relative">
-                          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500">
                             <LinkIcon size={14} />
                           </div>
                           <input 
@@ -461,7 +461,7 @@ export function Settings() {
                             className="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none text-xs font-medium"
                           />
                         </div>
-                        <p className="text-[10px] text-slate-400">Pointez vers un fichier public (JPG, PNG, SVG, WebP).</p>
+                        <p className="text-[10px] text-slate-500">Pointez vers un fichier public (JPG, PNG, SVG, WebP).</p>
                       </div>
                     )}
                   </div>
@@ -486,7 +486,7 @@ export function Settings() {
                     onChange={(e) => setDoctorName(e.target.value)} 
                     className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none font-medium transition-all text-sm" 
                   />
-                  <p className="text-[11px] text-slate-400 font-medium">Ex: Dr. Slim N. (utilisé pour se présenter au téléphone)</p>
+                  <p className="text-[11px] text-slate-500 font-medium">Ex: Dr. Slim N. (utilisé pour se présenter au téléphone)</p>
                 </div>
 
                 <div className="space-y-2">
@@ -528,7 +528,7 @@ export function Settings() {
                     placeholder="Ex: 12345/C/67"
                     className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none font-medium transition-all text-sm" 
                   />
-                  <p className="text-[11px] text-slate-400 font-medium">Requis pour l'alignement réglementaire d'assurance maladie de vos patients.</p>
+                  <p className="text-[11px] text-slate-500 font-medium">Requis pour l'alignement réglementaire d'assurance maladie de vos patients.</p>
                 </div>
 
                 <div className="space-y-2">
@@ -537,9 +537,9 @@ export function Settings() {
                     type="email" 
                     value={email} 
                     disabled 
-                    className="w-full px-4 py-2.5 bg-slate-100 border border-slate-100 text-slate-400 rounded-xl outline-none font-medium text-sm cursor-not-allowed" 
+                    className="w-full px-4 py-2.5 bg-slate-100 border border-slate-100 text-slate-500 rounded-xl outline-none font-medium text-sm cursor-not-allowed" 
                   />
-                  <p className="text-[11px] text-slate-400 font-medium">L'adresse de connexion ne peut pas être modifiée.</p>
+                  <p className="text-[11px] text-slate-500 font-medium">L'adresse de connexion ne peut pas être modifiée.</p>
                 </div>
               </div>
             </div>
@@ -648,7 +648,7 @@ export function Settings() {
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-white border border-slate-100 rounded-xl hover:bg-slate-50/50 transition-all gap-6">
                   <div className="space-y-0.5">
                     <p className="text-xs font-bold text-slate-700 uppercase tracking-wider">Durée de conservation</p>
-                    <p className="text-[10px] text-slate-400 font-medium whitespace-nowrap">Gestion du cycle de vie des données</p>
+                    <p className="text-[10px] text-slate-500 font-medium whitespace-nowrap">Gestion du cycle de vie des données</p>
                   </div>
                   <div className="flex flex-col items-end gap-3">
                     <select value={retentionMonths} onChange={(e) => setRetentionMonths(e.target.value)} className="w-full sm:w-[220px] px-3 py-2.5 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none text-xs font-bold text-slate-700 transition-all">
@@ -715,7 +715,7 @@ export function Settings() {
                   <div className="space-y-2">
                     <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">Téléphone d'urgence</label>
                     <div className="relative">
-                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500">
                         <Smartphone size={14} />
                       </div>
                       <input 
@@ -724,7 +724,7 @@ export function Settings() {
                         onChange={(e) => setDoctorMobile(e.target.value)} 
                         disabled={!smsEmergency}
                         placeholder="+216 -- --- ---"
-                        className="w-full pl-10 pr-4 py-2 bg-white border border-slate-200 rounded-lg focus:ring-1 focus:ring-indigo-500 outline-none text-xs font-semibold disabled:bg-slate-50 disabled:text-slate-400" 
+                        className="w-full pl-10 pr-4 py-2 bg-white border border-slate-200 rounded-lg focus:ring-1 focus:ring-indigo-500 outline-none text-xs font-semibold disabled:bg-slate-50 disabled:text-slate-500" 
                       />
                     </div>
                   </div>
@@ -732,7 +732,7 @@ export function Settings() {
                   <div className="space-y-2">
                     <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">Heure de la synthèse</label>
                     <div className="relative">
-                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500">
                         <Clock size={14} />
                       </div>
                       <input 

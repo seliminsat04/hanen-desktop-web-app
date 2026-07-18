@@ -153,7 +153,7 @@ Il est CRITIQUE de n'utiliser QUE ces informations. N'invente pas de faux patien
                   <p className="text-[10px] text-slate-300 uppercase tracking-wider font-semibold">Assistant Virtuel</p>
                 </div>
               </div>
-              <div className="flex items-center gap-1 text-slate-400">
+              <div className="flex items-center gap-1 text-slate-500">
                 <button
                   onClick={() => setIsExpanded(!isExpanded)}
                   className="p-1.5 hover:bg-slate-700 hover:text-white rounded transition-colors"

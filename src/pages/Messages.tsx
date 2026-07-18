@@ -547,7 +547,7 @@ Ensuite, formulez CLAIREMENT ET EN DÉTAIL le message éducatif ou l'instruction
       <div className="w-full md:w-[350px] flex flex-col gap-4">
         {/* Patient Selector */}
         <div className="bg-white rounded-3xl p-5 border border-slate-200 shadow-sm">
-          <h2 className="text-xs font-black text-slate-800 uppercase tracking-widest mb-4 flex items-center gap-2">
+          <h2 className="text-xs font-bold text-slate-800 uppercase tracking-widest mb-4 flex items-center gap-2">
             <User size={14} className="text-[#5C7F67]" /> Patient Cible
           </h2>
           <div className="relative">
@@ -561,12 +561,12 @@ Ensuite, formulez CLAIREMENT ET EN DÉTAIL le message éducatif ou l'instruction
                 <option key={p.id} value={p.id}>{p.name} (Âge: {p.age})</option>
               ))}
             </select>
-            <ChevronDown size={16} className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+            <ChevronDown size={16} className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none" />
           </div>
 
           {selectedPatientId && selectedPatient && (
             <motion.div initial={{opacity:0, y:-10}} animate={{opacity:1, y:0}} className="mt-4 p-4 bg-[#FAF6F0] rounded-2xl border border-[#0F1E36]/5">
-              <p className="text-sm font-black text-[#0F1E36] mb-1">{selectedPatient.name}</p>
+              <p className="text-sm font-bold text-[#0F1E36] mb-1">{selectedPatient.name}</p>
               <p className="text-xs text-slate-500 mb-3">{selectedPatient.conditions?.[0]}</p>
               <div className="flex flex-wrap gap-2">
                 <span className="text-[9px] uppercase tracking-wider bg-white border border-[#E07A5F]/20 text-[#E07A5F] px-2 py-1 rounded-full font-bold shadow-sm">
@@ -583,17 +583,17 @@ Ensuite, formulez CLAIREMENT ET EN DÉTAIL le message éducatif ou l'instruction
         {/* Message History */}
         <div className="bg-white rounded-3xl border border-slate-200 shadow-sm flex-1 flex flex-col overflow-hidden max-h-[60vh]">
           <div className="p-4 border-b border-slate-100 bg-slate-50/50">
-            <h3 className="text-xs font-black text-slate-700 uppercase tracking-widest flex items-center gap-2">
+            <h3 className="text-xs font-bold text-slate-700 uppercase tracking-widest flex items-center gap-2">
               <Clock size={14} className="text-[#0F1E36]" /> Historique des Échanges
             </h3>
           </div>
           <div className="flex-1 overflow-y-auto p-4 space-y-4">
             {!selectedPatientId ? (
-              <div className="text-center text-slate-400 text-xs py-10 font-medium">
+              <div className="text-center text-slate-500 text-xs py-10 font-medium">
                 Veuillez sélectionner un patient.
               </div>
             ) : messages.length === 0 ? (
-              <div className="text-center text-slate-400 text-xs py-10 font-medium">
+              <div className="text-center text-slate-500 text-xs py-10 font-medium">
                 Aucun message récent.
               </div>
             ) : (
@@ -609,10 +609,10 @@ Ensuite, formulez CLAIREMENT ET EN DÉTAIL le message éducatif ou l'instruction
                   <div className={cn("absolute top-0 left-0 w-1 h-full", msg.sender === 'doctor' ? "bg-[#5C7F67]" : "bg-[#E07A5F]")} />
                   
                   <div className="flex justify-between items-center pl-2">
-                    <span className="text-[10px] font-black uppercase tracking-wider text-slate-500">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
                       {msg.sender === 'doctor' ? 'Capsule Envoyée' : 'Réponse Patient'}
                     </span>
-                    <span className="text-[9px] font-bold text-slate-400">
+                    <span className="text-[9px] font-bold text-slate-500">
                       {msg.createdAt?.seconds ? new Date(msg.createdAt.seconds * 1000).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}) : ''}
                     </span>
                   </div>
@@ -671,7 +671,7 @@ Ensuite, formulez CLAIREMENT ET EN DÉTAIL le message éducatif ou l'instruction
                     <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-[#5C7F67] border-2 border-white rounded-full"></div>
                   </div>
                   <div>
-                    <h2 className="text-2xl font-black text-[#0F1E36] tracking-tight">Copilote Hanen</h2>
+                    <h2 className="text-2xl font-extrabold text-[#0F1E36] tracking-tight">Copilote Hanen</h2>
                     <p className="text-xs font-bold text-[#E07A5F] uppercase tracking-widest mt-1">Brouillon IA Généré</p>
                   </div>
                 </div>
@@ -679,7 +679,7 @@ Ensuite, formulez CLAIREMENT ET EN DÉTAIL le message éducatif ou l'instruction
                 <div className="space-y-6 relative z-10">
                   {/* Text Review Box */}
                   <div className="space-y-2">
-                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest pl-1">Traduction Clinique & Empathique</label>
+                    <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest pl-1">Traduction Clinique & Empathique</label>
                     <textarea 
                       value={generatedText}
                       onChange={(e) => setGeneratedText(e.target.value)}
@@ -693,7 +693,7 @@ Ensuite, formulez CLAIREMENT ET EN DÉTAIL le message éducatif ou l'instruction
                     <div className="p-4 rounded-2xl border-2 border-rose-100 bg-rose-50/50 flex flex-col gap-2">
                       <div className="flex items-center gap-2 text-rose-500">
                         <Youtube size={16} />
-                        <span className="text-[10px] font-black uppercase tracking-widest">Vidéo Pédagogique Associée</span>
+                        <span className="text-[10px] font-bold uppercase tracking-widest">Vidéo Pédagogique Associée</span>
                       </div>
                       {suggestedVideo ? (
                          <a href={suggestedVideo.url} target="_blank" rel="noopener noreferrer" className="block bg-white p-3 rounded-xl border border-rose-100 flex items-center gap-3 shadow-sm hover:shadow-md transition-shadow">
@@ -721,7 +721,7 @@ Ensuite, formulez CLAIREMENT ET EN DÉTAIL le message éducatif ou l'instruction
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2 text-slate-600">
                           <Paperclip size={16} />
-                          <span className="text-[10px] font-black uppercase tracking-widest">Contexte Visuel (PDF/Image)</span>
+                          <span className="text-[10px] font-bold uppercase tracking-widest">Contexte Visuel (PDF/Image)</span>
                         </div>
                         
                         {!attachedContext && (
@@ -737,7 +737,7 @@ Ensuite, formulez CLAIREMENT ET EN DÉTAIL le message éducatif ou l'instruction
                            <button onClick={() => setAttachedContext(null)} className="text-red-400 hover:text-red-600"><X size={14}/></button>
                          </div>
                       ) : (
-                         <div className="text-[10px] text-slate-400 font-medium">Optionnel : Attachez le résumé clinique à lire.</div>
+                         <div className="text-[10px] text-slate-500 font-medium">Optionnel : Attachez le résumé clinique à lire.</div>
                       )}
                     </div>
                   </div>
@@ -763,7 +763,7 @@ Ensuite, formulez CLAIREMENT ET EN DÉTAIL le message éducatif ou l'instruction
                       
                       <button 
                         onClick={handleSendViaHanen}
-                        className="px-6 py-3 rounded-2xl font-black bg-[#E07A5F] text-white hover:bg-[#C96F53] transition-colors text-sm flex items-center gap-2 flex-1 sm:flex-none justify-center shadow-lg shadow-[#E07A5F]/30"
+                        className="px-6 py-3 rounded-2xl font-bold bg-[#E07A5F] text-white hover:bg-[#C96F53] transition-colors text-sm flex items-center gap-2 flex-1 sm:flex-none justify-center shadow-lg shadow-[#E07A5F]/30"
                       >
                         <Send size={16} />
                         Envoyer via Hanen
@@ -775,7 +775,7 @@ Ensuite, formulez CLAIREMENT ET EN DÉTAIL le message éducatif ou l'instruction
             ) : (
               <div className="h-full flex flex-col items-center justify-center text-center p-10 bg-white shadow-sm border border-slate-200 rounded-[32px]">
                 
-                <h3 className="text-xl font-black text-[#0F1E36] mb-8">Assistant Vocal IA</h3>
+                <h3 className="text-xl font-extrabold text-[#0F1E36] mb-8">Assistant Vocal IA</h3>
                 
                 <div className="w-32 h-32 mb-8 relative">
                   <div className="absolute inset-0 bg-[#E8C547]/90 rounded-full scale-[1.05] shadow-inner"></div>
@@ -801,7 +801,7 @@ Ensuite, formulez CLAIREMENT ET EN DÉTAIL le message éducatif ou l'instruction
             )}
           </div>
         ) : (
-          <div className="h-full border-2 border-dashed border-slate-200 rounded-[32px] flex items-center justify-center text-slate-400 font-bold p-10 text-center bg-white/30 text-sm">
+          <div className="h-full border-2 border-dashed border-slate-200 rounded-[32px] flex items-center justify-center text-slate-500 font-bold p-10 text-center bg-white/30 text-sm">
             Veuillez sélectionner un patient à gauche pour démarrer la messagerie assistée.
           </div>
         )}
@@ -842,7 +842,7 @@ Ensuite, formulez CLAIREMENT ET EN DÉTAIL le message éducatif ou l'instruction
                 )}
               </div>
               
-              <h3 className="text-3xl font-black text-[#0F1E36] tracking-tight mb-2 relative z-10">
+              <h3 className="text-3xl font-extrabold text-[#0F1E36] tracking-tight mb-2 relative z-10">
                 {aiState === 'listening' ? "Appel en cours..." : "Analyse en cours..."}
               </h3>
               

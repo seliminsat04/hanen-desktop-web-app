@@ -161,7 +161,7 @@ export function Patients() {
           <div className="bg-white rounded-3xl shadow-2xl w-full max-w-md overflow-hidden flex flex-col max-h-[90vh]">
              <div className="flex justify-between items-center p-5 border-b border-slate-100 bg-slate-50/50">
                 <div className="flex items-center gap-4">
-                  <h2 className="text-xl font-black text-slate-800 tracking-tight">Nouveau Patient</h2>
+                  <h2 className="text-xl font-extrabold text-slate-800 tracking-tight">Nouveau Patient</h2>
                   <input type="file" ref={fileInputRef} className="hidden" accept="image/*,application/pdf" onChange={handleFileUpload} />
                   <button onClick={() => fileInputRef.current?.click()} type="button" disabled={isScanning} className={cn("text-[11px] uppercase tracking-wider font-bold bg-indigo-50 text-indigo-600 hover:bg-indigo-100 px-3 py-2 rounded-xl transition-all shadow-sm disabled:cursor-not-allowed flex items-center gap-1.5 focus:outline-none relative overflow-hidden", isScanning ? "ring-2 ring-indigo-400 border-indigo-400" : "border-indigo-100 border")}>
                      {isScanning && <div className="absolute inset-0 bg-indigo-200/50 animate-pulse z-0"></div>}
@@ -171,7 +171,7 @@ export function Patients() {
                      </span>
                   </button>
                 </div>
-                <button onClick={() => setIsAddModalOpen(false)} className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-full transition-colors focus:outline-none">
+                <button onClick={() => setIsAddModalOpen(false)} className="p-2 text-slate-500 hover:text-slate-600 hover:bg-slate-100 rounded-full transition-colors focus:outline-none">
                   <X size={20} strokeWidth={2.5} />
                 </button>
              </div>
@@ -227,7 +227,7 @@ export function Patients() {
                  </div>
                  
                  <div className="pt-4 border-t border-slate-100">
-                    <h3 className="text-sm font-black text-slate-800 tracking-tight mb-4 flex items-center gap-2"><Heart size={16} className="text-rose-400"/> Contexte Social & Impact IA</h3>
+                    <h3 className="text-sm font-extrabold text-slate-800 tracking-tight mb-4 flex items-center gap-2"><Heart size={16} className="text-rose-400"/> Contexte Social & Impact IA</h3>
                     <div className="space-y-4">
                       <label className="flex items-start gap-3 p-3 bg-indigo-50/30 border border-indigo-100 rounded-xl cursor-pointer hover:bg-slate-50 transition-colors">
                         <input type="checkbox" checked={newPatient.livesAlone} onChange={e => setNewPatient({...newPatient, livesAlone: e.target.checked})} className="mt-1 rounded text-indigo-600 focus:ring-indigo-500" />
@@ -271,7 +271,7 @@ export function Patients() {
 
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
         <div>
-          <h1 className="text-3xl font-black text-slate-800 tracking-tight">Mes Patients</h1>
+          <h1 className="text-3xl font-extrabold text-slate-800 tracking-tight">Mes Patients</h1>
           <p className="text-slate-500 font-medium mt-1">Gérez le suivi vocal de vos patients avec Hanen.</p>
         </div>
         
@@ -283,7 +283,7 @@ export function Patients() {
             <Plus size={18} strokeWidth={2.5} /> Nouveau Patient
           </button>
           <div className="relative group flex-1 sm:flex-none">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-indigo-500 transition-colors" size={18} />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-indigo-500 transition-colors" size={18} />
             <input 
               type="text" 
               placeholder="Rechercher patient..." 
@@ -308,7 +308,7 @@ export function Patients() {
             
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-slate-50/50 border-b border-slate-200/60 text-slate-400 text-xs uppercase tracking-wider font-bold">
+              <tr className="bg-slate-50/50 border-b border-slate-200/60 text-slate-500 text-xs uppercase tracking-wider font-bold">
                 <th className="px-8 py-5">Patient & Contexte</th>
                 <th className="px-6 py-5">Dernier Appel</th>
                 <th className="px-6 py-5">État Vocal & Humeur</th>
@@ -333,7 +333,7 @@ export function Patients() {
                         <Link to={`/patients/${patient.id}`} className="font-bold text-slate-800 text-base tracking-tight hover:text-indigo-600 block transition-colors">
                           {patient.name}
                         </Link>
-                        <div className="flex flex-wrap gap-2 text-xs text-slate-400 font-medium tracking-wide mt-1">
+                        <div className="flex flex-wrap gap-2 text-xs text-slate-500 font-medium tracking-wide mt-1">
                            <span>{patient.age} ans</span>
                            {patient.lifestylePreference && <span className="bg-slate-100 px-1.5 rounded">{patient.lifestylePreference}</span>}
                         </div>
@@ -348,7 +348,7 @@ export function Patients() {
                       </div>
                       <div className="flex flex-wrap gap-1">
                         {patient.conditions?.map(c => (
-                          <span key={c} className="text-[10px] uppercase font-bold text-slate-400">{c}</span>
+                          <span key={c} className="text-[10px] uppercase font-bold text-slate-500">{c}</span>
                         ))}
                       </div>
                     </div>
@@ -373,7 +373,7 @@ export function Patients() {
                     <div className="flex flex-col gap-1">
                       <div className="flex items-center gap-2" title="Indice de Dignité (santé mentale & émotionnelle)">
                         <Heart size={14} className={patient.dignityIndex < 50 ? "text-rose-500" : patient.dignityIndex < 80 ? "text-amber-500" : "text-emerald-500"} />
-                        <span className="text-sm font-black text-slate-700">{patient.dignityIndex}<span className="text-xs text-slate-400">/100</span></span>
+                        <span className="text-sm font-extrabold text-slate-700">{patient.dignityIndex}<span className="text-xs text-slate-500">/100</span></span>
                       </div>
                       <div className="w-24 h-1.5 bg-slate-100 rounded-full overflow-hidden mt-1" title={`Observance médicale ${patient.adherenceRate || 0}%`}>
                         <div 
@@ -401,7 +401,7 @@ export function Patients() {
           {!loading && filteredPatients.length === 0 && (
               <div className="text-center py-12">
                   <p className="text-slate-500 font-medium">Aucun patient trouvé dans la base de données Firebase.</p>
-                  <p className="text-sm text-slate-400 mt-1">Utilisez le bouton "Installer Données de Test" en haut si vous venez de vous connecter.</p>
+                  <p className="text-sm text-slate-500 mt-1">Utilisez le bouton "Installer Données de Test" en haut si vous venez de vous connecter.</p>
               </div>
           )}
         </div>

@@ -482,7 +482,7 @@ export function Statistics() {
       {/* Title & Action Filters Bar */}
       <div id="stats-header-banner" className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 border-b border-slate-100 pb-6 print:hidden">
         <div>
-          <h1 className="text-3xl font-black text-slate-800 tracking-tight flex items-center gap-2">
+          <h1 className="text-3xl font-extrabold text-slate-800 tracking-tight flex items-center gap-2">
             Tableau d'Observance & Clinique
           </h1>
           <p className="text-slate-500 text-sm mt-1">
@@ -493,7 +493,7 @@ export function Statistics() {
         <div id="stats-filter-container" className="flex flex-wrap items-center gap-3">
           {/* Pathologie Selector */}
           <div className="flex items-center bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-700 shadow-sm focus-within:ring-2 focus-within:ring-indigo-500 transition-all">
-            <Filter size={14} className="text-slate-400 mr-2" />
+            <Filter size={14} className="text-slate-500 mr-2" />
             <select 
               id="filter-pathology"
               value={selectedPathology}
@@ -517,7 +517,7 @@ export function Statistics() {
                 type="button"
                 onClick={() => setTimeRange(range)}
                 className={cn(
-                  "px-3 py-1.5 rounded-lg text-xs font-black transition-all",
+                  "px-3 py-1.5 rounded-lg text-xs font-bold transition-all",
                   timeRange === range
                     ? "bg-white text-indigo-600 shadow-sm"
                     : "text-slate-500 hover:text-slate-800"
@@ -567,11 +567,11 @@ export function Statistics() {
         {/* Total follow up */}
         <div id="kpi-total-patients" className="bg-white p-5 rounded-2xl border border-slate-200/60 shadow-sm flex flex-col justify-between hover:border-indigo-100 transition-colors">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Suivis Actifs</span>
+            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Suivis Actifs</span>
             <span className="p-2 bg-indigo-50 rounded-xl text-indigo-600"><Users size={16} /></span>
           </div>
           <div className="mt-4">
-            <p className="text-2xl font-black text-slate-800 tracking-tight">{kpis.totalFollowed}</p>
+            <p className="text-2xl font-extrabold text-slate-800 tracking-tight">{kpis.totalFollowed}</p>
             <p className="text-[10px] text-emerald-600 font-bold mt-1 flex items-center gap-1">
               <ArrowUpRight size={12} /> +12% ce mois-ci
             </p>
@@ -581,13 +581,13 @@ export function Statistics() {
         {/* Adherence rates */}
         <div id="kpi-observance-rate" className="bg-white p-5 rounded-2xl border border-slate-200/60 shadow-sm flex flex-col justify-between hover:border-indigo-100 transition-colors">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Observance Moyenne</span>
+            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Observance Moyenne</span>
             <span className="p-2 bg-emerald-50 rounded-xl text-emerald-600"><Activity size={16} /></span>
           </div>
           <div className="mt-4">
             <div className="flex items-baseline gap-1.5">
-              <span className="text-2xl font-black text-slate-800 tracking-tight">{kpis.avgAdherence}%</span>
-              <span className="text-xs font-medium text-slate-400">du traitement</span>
+              <span className="text-2xl font-extrabold text-slate-800 tracking-tight">{kpis.avgAdherence}%</span>
+              <span className="text-xs font-medium text-slate-500">du traitement</span>
             </div>
             <p className={cn(
               "text-[10px] font-bold mt-1 flex items-center gap-1",
@@ -602,12 +602,12 @@ export function Statistics() {
         {/* Total Call volume */}
         <div id="kpi-total-calls" className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col justify-between hover:border-indigo-100 transition-colors">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Appels Hanen</span>
+            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Appels Hanen</span>
             <span className="p-2 bg-pink-50 rounded-xl text-pink-500"><Phone size={16} /></span>
           </div>
           <div className="mt-4">
-            <p className="text-2xl font-black text-slate-800 tracking-tight">{kpis.appelsCount}</p>
-            <p className="text-[10px] text-slate-400 font-bold mt-1">
+            <p className="text-2xl font-extrabold text-slate-800 tracking-tight">{kpis.appelsCount}</p>
+            <p className="text-[10px] text-slate-500 font-bold mt-1">
               Durée moyenne: <span className="text-indigo-600">4min 20s</span>
             </p>
           </div>
@@ -616,11 +616,11 @@ export function Statistics() {
         {/* Dignity and comfort Index */}
         <div id="kpi-avg-dignity" className="bg-white p-5 rounded-2xl border border-slate-200/60 shadow-sm flex flex-col justify-between hover:border-indigo-100 transition-colors">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Indice Dignité Senior</span>
+            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Indice Dignité Senior</span>
             <span className="p-2 bg-rose-50 rounded-xl text-rose-500"><Heart size={16} /></span>
           </div>
           <div className="mt-4">
-            <p className="text-2xl font-black text-slate-800 tracking-tight">{kpis.avgDignity}/100</p>
+            <p className="text-2xl font-extrabold text-slate-800 tracking-tight">{kpis.avgDignity}/100</p>
             <p className="text-[10px] text-emerald-600 font-semibold mt-1 flex items-center gap-1">
               <Star size={10} className="fill-emerald-500 stroke-none" /> Écoute et intégrité préservées
             </p>
@@ -635,17 +635,17 @@ export function Statistics() {
             : "bg-white border-slate-200/60 hover:border-slate-300"
         )}>
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Alertes Actives</span>
+            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Alertes Actives</span>
             <span className={cn(
               "p-2 rounded-xl",
               kpis.activeAlerts > 0 ? "bg-rose-100 text-rose-600" : "bg-slate-100 text-slate-600"
             )}><AlertTriangle size={16} /></span>
           </div>
           <div className="mt-4">
-            <p className="text-2xl font-black text-slate-800 tracking-tight">{kpis.activeAlerts}</p>
+            <p className="text-2xl font-extrabold text-slate-800 tracking-tight">{kpis.activeAlerts}</p>
             <p className={cn(
               "text-[10px] font-bold mt-1",
-              kpis.activeAlerts > 0 ? "text-rose-600 animate-pulse" : "text-slate-400"
+              kpis.activeAlerts > 0 ? "text-rose-600 animate-pulse" : "text-slate-500"
             )}>
               {kpis.activeAlerts > 0 ? 'Urgence d\'intervention' : 'Aucune alerte critique'}
             </p>
@@ -712,8 +712,8 @@ export function Statistics() {
             <div id="chart-evolution-panel" className="bg-white rounded-3xl border border-slate-200/60 shadow-sm p-6 lg:col-span-2">
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
                 <div>
-                  <h3 className="text-base font-black text-slate-800 tracking-tight">Suivi Chronologique Médicaments / Humeur</h3>
-                  <p className="text-xs text-slate-400 mt-0.5">Corrélation temporelle des comportements d'adhérence du patient.</p>
+                  <h3 className="text-base font-bold text-slate-800 tracking-tight">Suivi Chronologique Médicaments / Humeur</h3>
+                  <p className="text-xs text-slate-500 mt-0.5">Corrélation temporelle des comportements d'adhérence du patient.</p>
                 </div>
                 {/* Chart indicators legend layout */}
                 <div className="flex items-center gap-4 text-xs font-semibold">
@@ -762,8 +762,8 @@ export function Statistics() {
             {/* Calling Reasons Distribution Chart */}
             <div id="reasons-horizontal-panel" className="bg-white rounded-3xl border border-slate-200/60 shadow-sm p-6">
               <div>
-                <h3 className="text-base font-black text-slate-800 tracking-tight">Motifs d'appels à Hanen (30J)</h3>
-                <p className="text-xs text-slate-400 mt-0.5">Analyses sémantiques basées sur les transcriptions audio.</p>
+                <h3 className="text-base font-bold text-slate-800 tracking-tight">Motifs d'appels à Hanen (30J)</h3>
+                <p className="text-xs text-slate-500 mt-0.5">Analyses sémantiques basées sur les transcriptions audio.</p>
               </div>
 
               <div className="mt-6 space-y-4">
@@ -807,8 +807,8 @@ export function Statistics() {
             {/* Pathology share with Compliance details */}
             <div id="chart-pathology-distribution" className="bg-white rounded-3xl border border-slate-200/60 shadow-sm p-6 space-y-6">
               <div>
-                <h3 className="text-base font-black text-slate-800 tracking-tight">Répartition par Pathologie active</h3>
-                <p className="text-xs text-slate-400 mt-0.5">Nombre total de seniors par affection médicale chronique au cabinet.</p>
+                <h3 className="text-base font-bold text-slate-800 tracking-tight">Répartition par Pathologie active</h3>
+                <p className="text-xs text-slate-500 mt-0.5">Nombre total de seniors par affection médicale chronique au cabinet.</p>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
@@ -873,8 +873,8 @@ export function Statistics() {
             {/* Vocal Signs and fatigue/dyspnea indicator */}
             <div id="chart-vocal-anomalies" className="bg-white rounded-3xl border border-slate-200/60 shadow-sm p-6 space-y-6">
               <div>
-                <h3 className="text-base font-black text-slate-800 tracking-tight">Anomalies Vocales Détectées (30J)</h3>
-                <p className="text-xs text-slate-400 mt-0.5">Biomarqueurs vocaux identifiés par l'intelligence artificielle Hanen.</p>
+                <h3 className="text-base font-bold text-slate-800 tracking-tight">Anomalies Vocales Détectées (30J)</h3>
+                <p className="text-xs text-slate-500 mt-0.5">Biomarqueurs vocaux identifiés par l'intelligence artificielle Hanen.</p>
               </div>
 
               <div className="h-52 w-full">
@@ -890,16 +890,16 @@ export function Statistics() {
               </div>
 
               <div className="space-y-3 pt-4 border-t border-slate-100">
-                <span className="text-xs font-black text-slate-800 tracking-tight uppercase block">Gravité clinique des anomalies detectées</span>
+                <span className="text-xs font-bold text-slate-800 tracking-tight uppercase block">Gravité clinique des anomalies detectées</span>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   <div className="p-3 bg-rose-50 border border-rose-100 rounded-xl">
-                    <span className="text-[10px] text-rose-700 font-black uppercase tracking-wider block">Insuffisance Cardiaque & Parkinson</span>
+                    <span className="text-[10px] text-rose-700 font-bold uppercase tracking-wider block">Insuffisance Cardiaque & Parkinson</span>
                     <p className="text-xs font-bold text-rose-900 mt-1">Essoufflement aigu & tremblement</p>
                     <p className="text-[10px] text-rose-600 font-semibold mt-0.5">56 cas signalés (Niveau de vigilance: CRITIQUE)</p>
                   </div>
 
                   <div className="p-3 bg-amber-50 border border-amber-100 rounded-xl">
-                    <span className="text-[10px] text-amber-700 font-black uppercase tracking-wider block">Isolement social & sédentarité</span>
+                    <span className="text-[10px] text-amber-700 font-bold uppercase tracking-wider block">Isolement social & sédentarité</span>
                     <p className="text-xs font-bold text-amber-900 mt-1">Fatigue vocale / pauses prolongées</p>
                     <p className="text-[10px] text-amber-600 font-semibold mt-0.5">30 cas signalés (Niveau de vigilance: MODÉRÉ)</p>
                   </div>
@@ -916,7 +916,7 @@ export function Statistics() {
           <div id="dignity-insights-module" className="bg-white rounded-3xl border border-slate-200/60 shadow-sm p-8 space-y-8">
             <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
               <div>
-                <h3 className="text-xl font-black text-slate-800 tracking-tight flex items-center gap-2">
+                <h3 className="text-xl font-extrabold text-slate-800 tracking-tight flex items-center gap-2">
                   Indice de Dignité & Qualité d'accompagnement
                 </h3>
                 <p className="text-slate-500 text-sm mt-1">
@@ -938,49 +938,49 @@ export function Statistics() {
               <div className="space-y-2 p-5 bg-slate-50 rounded-2xl border border-slate-100">
                 <h4 className="font-bold text-slate-800 text-sm">Respect du Repos</h4>
                 <div className="flex items-baseline gap-1.5">
-                  <span className="text-3xl font-black text-indigo-600">98%</span>
-                  <span className="text-xs text-slate-400">conformité</span>
+                  <span className="text-3xl font-extrabold text-indigo-600">98%</span>
+                  <span className="text-xs text-slate-500">conformité</span>
                 </div>
                 <div className="h-2 w-full bg-slate-200 rounded-full overflow-hidden mt-2">
                   <div className="h-full bg-indigo-500 rounded-full" style={{ width: '98%' }}></div>
                 </div>
-                <p className="text-[10px] text-slate-400 mt-2 font-medium">Aucun appel pendant la sieste préservée ou après 19h30 en Tunisie.</p>
+                <p className="text-[10px] text-slate-500 mt-2 font-medium">Aucun appel pendant la sieste préservée ou après 19h30 en Tunisie.</p>
               </div>
 
               <div className="space-y-2 p-5 bg-slate-50 rounded-2xl border border-slate-100">
                 <h4 className="font-bold text-slate-800 text-sm">Écoute Libre (Parole)</h4>
                 <div className="flex items-baseline gap-1.5">
-                  <span className="text-3xl font-black text-indigo-600">89%</span>
-                  <span className="text-xs text-slate-400">d'auto-expression</span>
+                  <span className="text-3xl font-extrabold text-indigo-600">89%</span>
+                  <span className="text-xs text-slate-500">d'auto-expression</span>
                 </div>
                 <div className="h-2 w-full bg-slate-200 rounded-full overflow-hidden mt-2">
                   <div className="h-full bg-indigo-500 rounded-full" style={{ width: '89%' }}></div>
                 </div>
-                <p className="text-[10px] text-slate-400 mt-2 font-medium">L'IA laisse le senior s'exprimer pleinement sans l'interrompre brutalement.</p>
+                <p className="text-[10px] text-slate-500 mt-2 font-medium">L'IA laisse le senior s'exprimer pleinement sans l'interrompre brutalement.</p>
               </div>
 
               <div className="space-y-2 p-5 bg-slate-50 rounded-2xl border border-slate-100">
                 <h4 className="font-bold text-slate-800 text-sm">Soulagement Solitude</h4>
                 <div className="flex items-baseline gap-1.5">
-                  <span className="text-3xl font-black text-indigo-600">76%</span>
-                  <span className="text-xs text-slate-400">baisse ressentie</span>
+                  <span className="text-3xl font-extrabold text-indigo-600">76%</span>
+                  <span className="text-xs text-slate-500">baisse ressentie</span>
                 </div>
                 <div className="h-2 w-full bg-slate-200 rounded-full overflow-hidden mt-2">
                   <div className="h-full bg-indigo-500 rounded-full" style={{ width: '76%' }}></div>
                 </div>
-                <p className="text-[10px] text-slate-400 mt-2 font-medium">Les aînés rapportent se sentir plus entourés et en sécurité psychologique.</p>
+                <p className="text-[10px] text-slate-500 mt-2 font-medium">Les aînés rapportent se sentir plus entourés et en sécurité psychologique.</p>
               </div>
 
               <div className="space-y-2 p-5 bg-slate-50 rounded-2xl border border-slate-100">
                 <h4 className="font-bold text-slate-800 text-sm">Absence Frustration</h4>
                 <div className="flex items-baseline gap-1.5">
-                  <span className="text-3xl font-black text-indigo-600">81%</span>
-                  <span className="text-xs text-slate-400">clarté d'échange</span>
+                  <span className="text-3xl font-extrabold text-indigo-600">81%</span>
+                  <span className="text-xs text-slate-500">clarté d'échange</span>
                 </div>
                 <div className="h-2 w-full bg-slate-200 rounded-full overflow-hidden mt-2">
                   <div className="h-full bg-indigo-500 rounded-full" style={{ width: '81%' }}></div>
                 </div>
-                <p className="text-[10px] text-slate-400 mt-2 font-medium">Dialecte tunisien (Derja) compris et imité sans sentiment d'échecs de discussion.</p>
+                <p className="text-[10px] text-slate-500 mt-2 font-medium">Dialecte tunisien (Derja) compris et imité sans sentiment d'échecs de discussion.</p>
               </div>
 
             </div>
@@ -1010,8 +1010,8 @@ export function Statistics() {
                    <Sparkles size={20} />
                  </div>
                  <div>
-                   <h3 className="text-lg font-black text-slate-800 tracking-tight">Rapport de Cohorte Clinique IA (Hanen)</h3>
-                   <p className="text-xs text-slate-400">Analyse consolidée du comportement des patients générée le 21 mai 2026.</p>
+                   <h3 className="text-lg font-extrabold text-slate-800 tracking-tight">Rapport de Cohorte Clinique IA (Hanen)</h3>
+                   <p className="text-xs text-slate-500">Analyse consolidée du comportement des patients générée le 21 mai 2026.</p>
                  </div>
                </div>
                <span className="text-[10px] text-slate-500 bg-slate-100 border border-slate-200 rounded-full px-2.5 py-1 font-bold">
@@ -1052,7 +1052,7 @@ export function Statistics() {
                </div>
                <button 
                  onClick={handleExportReport} 
-                 className="text-xs font-black text-indigo-600 hover:text-indigo-800 bg-indigo-50 hover:bg-indigo-100 px-4 py-2.5 rounded-xl transition-all"
+                 className="text-xs font-bold text-indigo-600 hover:text-indigo-800 bg-indigo-50 hover:bg-indigo-100 px-4 py-2.5 rounded-xl transition-all"
                >
                  Télecharger Rapport Clinique Complet
                </button>
@@ -1068,7 +1068,7 @@ export function Statistics() {
         {/* Top 5 - Adherence */}
         <div className="bg-white rounded-3xl border border-slate-200/60 shadow-sm p-5 space-y-4">
           <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-            <h4 className="font-black text-xs text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+            <h4 className="font-bold text-xs text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
               <Star size={14} className="text-indigo-500 fill-indigo-500" /> Meilleure Observance
             </h4>
             <span className="text-[10px] font-bold text-indigo-600 bg-indigo-50 px-2.5 py-0.5 rounded-full">Top 5</span>
@@ -1079,10 +1079,10 @@ export function Statistics() {
               <div key={idx} className="flex items-center justify-between">
                 <div className="space-y-0.5">
                   <p className="text-xs font-bold text-slate-700">{patient.name}</p>
-                  <p className="text-[10px] text-slate-400 font-medium">{patient.conditions.join(', ')}</p>
+                  <p className="text-[10px] text-slate-500 font-medium">{patient.conditions.join(', ')}</p>
                 </div>
                 <div className="text-right">
-                  <span className="text-xs font-black text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-lg">
+                  <span className="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-lg">
                     {patient.adherenceRate}%
                   </span>
                 </div>
@@ -1094,7 +1094,7 @@ export function Statistics() {
         {/* Top 5 - Requires Attention (Low adherence or unstable) */}
         <div className="bg-white rounded-3xl border border-slate-200/60 shadow-sm p-5 space-y-4">
           <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-            <h4 className="font-black text-xs text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+            <h4 className="font-bold text-xs text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
               <AlertTriangle size={14} className="text-amber-500" /> Vigilance Clinique
             </h4>
             <span className="text-[10px] font-bold text-amber-600 bg-amber-50 px-2.5 py-0.5 rounded-full">Prise d'action</span>
@@ -1115,7 +1115,7 @@ export function Statistics() {
                   </div>
                 </div>
                 <div className="text-right">
-                  <span className="text-xs font-black text-rose-600 bg-rose-50 px-2 py-0.5 rounded-lg">
+                  <span className="text-xs font-bold text-rose-600 bg-rose-50 px-2 py-0.5 rounded-lg">
                     {patient.adherenceRate}% obs.
                   </span>
                 </div>
@@ -1127,7 +1127,7 @@ export function Statistics() {
         {/* Top 5 - Active Attachment (Seniors calling the most) */}
         <div className="bg-white rounded-3xl border border-slate-200/60 shadow-sm p-5 space-y-4">
           <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-            <h4 className="font-black text-xs text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+            <h4 className="font-bold text-xs text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
               <Radio size={14} className="text-pink-500" /> Attachement social IA
             </h4>
             <span className="text-[10px] font-bold text-pink-600 bg-pink-50 px-2.5 py-0.5 rounded-full">Séniors actifs</span>
@@ -1138,7 +1138,7 @@ export function Statistics() {
               <div key={idx} className="flex items-center justify-between">
                 <div className="space-y-0.5">
                   <p className="text-xs font-bold text-slate-700">{patient.name}</p>
-                  <p className="text-[10px] text-slate-400 font-medium">{patient.age} ans · Vis seul</p>
+                  <p className="text-[10px] text-slate-500 font-medium">{patient.age} ans · Vis seul</p>
                 </div>
                 <div className="text-right">
                   <span className="text-[10px] text-slate-500 font-bold bg-slate-100 px-2 py-0.5 rounded-lg">

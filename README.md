@@ -34,14 +34,52 @@
 - **Exportation de Rapports PDF** : Génération de synthèses cliniques professionnelles avec `jsPDF` pour le dossier patient physique.
 - **Filtrage par Pathologie** : Analyse granulaire des cohortes (Diabète, Insuffisance Cardiaque, Alzheimer).
 
-### 4. 🎙️ Capsule Vocale Hanen (Communication Avancée)
+### 4. 🎙️ Capsule Vocale Hanen (Communication Avancée & Agent Live)
 - **Moteur de Synthèse IA** : Conversion de consignes (texte ou voix enregistrée) en appels téléphoniques synthétisés.
+- **Agent Vocal Conversationnel (Gemini Live API)** : Interaction fluide en temps réel (Audio-à-Audio) avec l'assistante virtuelle Hanen. Le médecin peut dicter ses consignes à haute voix et dialoguer en temps réel.
 - **Paramètres Cognitifs** :
   - **Élocution Adaptative** : Rythme standard ou *Lent/Apaisé* pour les patients fragiles.
   - **Tonalité Émotionnelle** : Choix entre un ton *Chaleureux* ou *Solennel*.
 - **Modes de Distribution** : Appels immédiats ou insertion dans le "Journal Vocal Matinal".
 - **Bibliothèque de Modèles** : Templates cliniques pré-paramétrés (Consultation, Résultats, Motivation).
 - **Speech-to-Text** : Transcription automatique des mémos vocaux du médecin avant envoi.
+
+---
+
+## 🎙️ Zoom Technique : L'Agent de Télésurveillance Vocale Live
+
+L'application intègre une expérience de **vrai dialogue Audio-à-Audio temps réel (Full-Duplex)**. Loin des modèles classiques combinant laborieusement trois systèmes distincts (STT -> LLM -> TTS), cet outil utilise l'API **Gemini Multimodal Live**.
+
+### 🛠️ Architecture et Flux du Signal
+
+```
+[Microphone Médecin] ──(44.1/48kHz Float32)──► [Client Browser / AudioContext]
+                                                      │
+                                           Downsampling à 16kHz
+                                           Int16 signed PCM conversion
+                                                      │
+[Gemini Live Server] ◄──(Base64 WebSockets)─── [Serveur Express Proxy (/live)]
+         │
+  Génère des blocs
+  24kHz Int16 Raw PCM
+         │
+[Serveur Express Proxy (/live)] ──(Base64)──► [Client Browser / AudioBufferSource]
+                                                      │
+       Haut-parleur (24kHz Playback) ◄────────────────┘
+```
+
+#### 1. Traitement Audio Client (`src/pages/Messages.tsx`)
+- **Captation native** : Utilisation de `navigator.mediaDevices.getUserMedia` avec filtres matériels activés (`echoCancellation: true`, `noiseSuppression: true`).
+- **Downsampling Temps Réel** : Les flux navigateurs (généralement cadencés à 44.1kHz ou 48kHz) sont filtrés et sous-échantillonnés de manière dynamique à **16 000 Hz (16kHz signed 16-bit PCM)** pour correspondre précisément aux spécifications de flux d'entrée de Gemini.
+- **Lecture Synchrone** : Le décodage s'effectue en sens inverse à une fréquence de **24 000 Hz (24kHz)** à l'intérieur d'un pipeline d'alimentation dynamique régulé par `nextStartTimeRef.current` pour éliminer tout effet de hachage audio.
+- **Support des Interruptions (Barge-In)** : Dès que le médecin parle pendant que Gemini émet, le serveur Gemini transmet un signal `interrupted: true`. Le code client arrête immédiatement toutes les sources d'audio actives (`activeSourcesRef.current.forEach(src => src.stop())`), instanciant un dialogue fluide et des interruptions naturelles.
+
+#### 2. Passerelle de Communication Serveur (`server.ts`)
+- **Passerelle WebSockets sécurisée** : Un serveur WebSockets (`ws`) monté sur la route `/live` intercepte et maintient la connexion persistante bidirectionnelle entre l'UI du navigateur et le serveur d'API de Google Gemini.
+- **Protocole Multimodal Gemini** : Initialise la connexion via le SDK officiel `@google/genai` en utilisant le modèle à ultra-basse latence **`gemini-2.0-flash-exp`**, configuré avec la modalité exclusive `Modality.AUDIO` et le profil vocal `"Zephyr"`.
+- **Aide Contextuelle Dynamique** : Injecte à la volée le dossier clinique actif du patient sélectionné dans le paramètre `systemInstruction`, guidant ainsi le comportement et l'expertise médicale de la voix de Hanen.
+
+---
 
 ### 5. 🤖 Copilote Médical IA (Assistant Virtuel)
 - **Analyse de Contexte** : L'assistant sait quel dossier patient vous consultez pour répondre avec précision.

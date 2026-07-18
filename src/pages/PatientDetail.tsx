@@ -746,7 +746,7 @@ export function PatientDetail() {
     return (
       <div className="max-w-6xl mx-auto p-12 text-center text-slate-550 border-2 border-dashed border-slate-200 rounded-2xl space-y-3">
         <User size={48} className="mx-auto text-slate-300" />
-        <h3 className="text-lg font-black text-slate-800">Dossier Clinique Introuvable</h3>
+        <h3 className="text-lg font-extrabold text-slate-800">Dossier Clinique Introuvable</h3>
         <p className="text-xs text-slate-500 max-w-sm mx-auto">Le patient demandé n'a pas pu être extrait des collections physiques ou de secours.</p>
         <Link to="/patients" className="inline-block mt-4 text-xs font-bold text-indigo-600 hover:text-indigo-500">&larr; Retourner aux patients</Link>
       </div>
@@ -777,20 +777,20 @@ export function PatientDetail() {
             </Link>
             
             {/* Circular picture fallback initialized */}
-            <div className="w-18 h-18 md:w-20 md:h-20 rounded-2xl bg-slate-150 border border-slate-250 flex items-center justify-center text-3xl font-black text-slate-700 shrink-0 shadow-inner">
+            <div className="w-18 h-18 md:w-20 md:h-20 rounded-2xl bg-slate-150 border border-slate-250 flex items-center justify-center text-3xl font-extrabold text-slate-700 shrink-0 shadow-inner">
               {patient.name.charAt(0)}
             </div>
 
             <div className="space-y-1.5 flex-1">
               <div className="flex items-center gap-3 flex-wrap">
-                <h1 className="text-2xl md:text-3xl font-black text-slate-900 tracking-tight">{patient.name}</h1>
+                <h1 className="text-2xl md:text-3xl font-extrabold text-slate-900 tracking-tight">{patient.name}</h1>
                 <span className="text-xs font-extrabold px-3 py-1 bg-slate-100 border border-slate-200 text-slate-600 rounded-lg">
                   {patient.age} ans • {patient.gender === 'M' ? 'Homme' : 'Femme'}
                 </span>
                 
                 {/* Global Status badge */}
                 <span className={cn(
-                  "text-[10px] font-black uppercase tracking-wider px-3 py-1 rounded-full border flex items-center gap-1.5",
+                  "text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full border flex items-center gap-1.5",
                   patient.voiceHealthStatus === 'Stable' 
                     ? "bg-emerald-50 text-emerald-700 border-emerald-200" 
                     : patient.voiceHealthStatus === 'Attention' 
@@ -808,12 +808,12 @@ export function PatientDetail() {
               {/* Badges of pathologies */}
               <div className="flex flex-wrap items-center gap-2">
                 {patient.conditions?.map((cond) => (
-                  <span key={cond} className="px-2.5 py-1 bg-indigo-50 border border-indigo-300 text-indigo-950 rounded-lg text-[10px] font-black tracking-wide uppercase shadow-2xs">
+                  <span key={cond} className="px-2.5 py-1 bg-indigo-50 border border-indigo-300 text-indigo-950 rounded-lg text-[10px] font-bold tracking-wide uppercase shadow-2xs">
                     {cond}
                   </span>
                 ))}
                 
-                <span className="text-[11px] font-semibold text-slate-400 inline-flex items-center gap-1 ml-1">
+                <span className="text-[11px] font-semibold text-slate-500 inline-flex items-center gap-1 ml-1">
                   <Clock size={12} /> Dernier échange Hanen : <b className="text-slate-600">{formatSafeDate(patient.lastCallDate, 'datetime')}</b>
                 </span>
               </div>
@@ -824,7 +824,7 @@ export function PatientDetail() {
           <div className="flex items-center gap-3 shrink-0 flex-wrap lg:flex-nowrap">
             <button
                onClick={() => setIsExportModalOpen(true)}
-              className="w-full lg:w-auto inline-flex items-center justify-center gap-2 px-4 py-3 bg-indigo-50 hover:bg-indigo-100 text-indigo-950 font-black text-[11px] rounded-xl border border-indigo-250 shadow-xs tracking-wider uppercase transition-all"
+              className="w-full lg:w-auto inline-flex items-center justify-center gap-2 px-4 py-3 bg-indigo-50 hover:bg-indigo-100 text-indigo-950 font-bold text-[11px] rounded-xl border border-indigo-250 shadow-xs tracking-wider uppercase transition-all"
             >
               <FileText size={14} className="text-indigo-600" />
               Exporter Dossier (ZIP AES-250)
@@ -838,7 +838,7 @@ export function PatientDetail() {
             </button>
             <button
                onClick={() => setIsVocalModalOpen(true)}
-              className="w-full lg:w-auto inline-flex items-center justify-center gap-2 px-4 py-3 bg-rose-500 hover:bg-rose-600 text-white text-[11px] font-black rounded-xl border border-rose-600/20 shadow-md tracking-wider uppercase hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 animate-pulse"
+              className="w-full lg:w-auto inline-flex items-center justify-center gap-2 px-4 py-3 bg-rose-500 hover:bg-rose-600 text-white text-[11px] font-bold rounded-xl border border-rose-600/20 shadow-md tracking-wider uppercase hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 animate-pulse"
             >
               <Mic size={14} strokeWidth={2.5} />
               Envoyer message Hanen
@@ -865,7 +865,7 @@ export function PatientDetail() {
                   setActiveTab(e.target.value as any);
                   setPlayingSessionId(null);
                 }}
-                className="w-full bg-slate-905 bg-slate-900 text-white font-black text-xs py-3.5 pl-4 pr-10 rounded-2xl appearance-none border border-slate-850 focus:outline-none"
+                className="w-full bg-slate-905 bg-slate-900 text-white font-bold text-xs py-3.5 pl-4 pr-10 rounded-2xl appearance-none border border-slate-850 focus:outline-none"
               >
                 <option value="overview">Aperçu Général</option>
                 <option value="voice">Analyse Vocale & Historique</option>
@@ -934,27 +934,27 @@ export function PatientDetail() {
               {/* Basic Medical stats (Weight, BP, HR, etc.) */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-4 border-t border-slate-100">
                 <div className="p-3.5 bg-slate-50 border border-slate-150 rounded-xl">
-                  <span className="text-[10px] uppercase font-black tracking-wider text-slate-400 block">Tension Artérielle</span>
-                  <span className="text-sm font-black text-slate-800 mt-1 block">{details.bloodPressure}</span>
+                  <span className="text-[10px] uppercase font-bold tracking-wider text-slate-500 block">Tension Artérielle</span>
+                  <span className="text-sm font-bold text-slate-800 mt-1 block">{details.bloodPressure}</span>
                 </div>
                 <div className="p-3.5 bg-slate-50 border border-slate-150 rounded-xl">
-                  <span className="text-[10px] uppercase font-black tracking-wider text-slate-400 block">Fréquence Cardiaque</span>
-                  <span className="text-sm font-black text-slate-800 mt-1 block">{details.heartRate}</span>
+                  <span className="text-[10px] uppercase font-bold tracking-wider text-slate-500 block">Fréquence Cardiaque</span>
+                  <span className="text-sm font-bold text-slate-800 mt-1 block">{details.heartRate}</span>
                 </div>
                 <div className="p-3.5 bg-slate-50 border border-slate-150 rounded-xl">
-                  <span className="text-[10px] uppercase font-black tracking-wider text-slate-400 block">Poids Constaté</span>
-                  <span className="text-sm font-black text-slate-800 mt-1 block">{details.weight}</span>
+                  <span className="text-[10px] uppercase font-bold tracking-wider text-slate-500 block">Poids Constaté</span>
+                  <span className="text-sm font-bold text-slate-800 mt-1 block">{details.weight}</span>
                 </div>
                 <div className="p-3.5 bg-slate-50 border border-slate-150 rounded-xl">
-                  <span className="text-[10px] uppercase font-black tracking-wider text-slate-400 block">Groupe Sanguin</span>
-                  <span className="text-sm font-black text-slate-800 mt-1 block">{details.bloodType}</span>
+                  <span className="text-[10px] uppercase font-bold tracking-wider text-slate-500 block">Groupe Sanguin</span>
+                  <span className="text-sm font-bold text-slate-800 mt-1 block">{details.bloodType}</span>
                 </div>
               </div>
 
               {/* Extended Profile details info */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
                 <div className="p-4 bg-slate-50/30 border border-slate-150 rounded-2xl space-y-2">
-                  <h4 className="text-xs font-black uppercase tracking-wider text-slate-500">Informations Clés de Contact</h4>
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500">Informations Clés de Contact</h4>
                   <p className="text-xs font-semibold text-slate-600">
                     Médecin Traitant : <br/><span className="text-slate-800 font-bold">{details.referringDoctor}</span>
                   </p>
@@ -964,13 +964,13 @@ export function PatientDetail() {
                 </div>
 
                 <div className="p-4 bg-slate-50/30 border border-slate-150 rounded-2xl space-y-2">
-                  <h4 className="text-xs font-black uppercase tracking-wider text-slate-500">Préférences d'Interaction</h4>
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500">Préférences d'Interaction</h4>
                   <p className="text-xs font-semibold text-slate-600">
                     Langue parlée préférée : <br/><span className="text-indigo-700 font-extrabold">{details.preferredLanguage}</span>
                   </p>
                   <p className="text-xs font-semibold text-slate-600">
                     Allergies recensées : <br/>
-                    <span className="text-rose-600 font-black">
+                    <span className="text-rose-600 font-bold">
                       {details.allergies.join(', ') || "Aucune allergie connue"}
                     </span>
                   </p>
@@ -979,7 +979,7 @@ export function PatientDetail() {
 
               {/* Highlight current treatments list */}
               <div className="space-y-3 pt-4 border-t border-slate-100">
-                <h3 className="text-sm font-black text-slate-800 uppercase tracking-wider flex items-center gap-2">
+                <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wider flex items-center gap-2">
                   <FileText size={15} className="text-indigo-500" />
                   Prescription Thérapeutique Actuelle ({treatments.length})
                 </h3>
@@ -988,10 +988,10 @@ export function PatientDetail() {
                     <div key={idx} className="flex justify-between items-center p-3.5 bg-slate-50 hover:bg-slate-100/50 rounded-xl border border-slate-200/60 transition-colors">
                       <div className="space-y-0.5">
                         <span className="text-xs font-extrabold text-slate-800">{med.name} — {med.dosage}</span>
-                        <div className="text-[10px] text-slate-400 font-semibold">{med.frequency} • {med.timing}</div>
-                        <p className="text-[10px] italic text-slate-400 mt-1">{med.doctorNotes}</p>
+                        <div className="text-[10px] text-slate-500 font-semibold">{med.frequency} • {med.timing}</div>
+                        <p className="text-[10px] italic text-slate-500 mt-1">{med.doctorNotes}</p>
                       </div>
-                      <span className="text-xs font-black text-emerald-600 bg-emerald-50 border border-emerald-100 rounded px-2 py-0.5">
+                      <span className="text-xs font-bold text-emerald-600 bg-emerald-50 border border-emerald-100 rounded px-2 py-0.5">
                         {med.adherenceRate}% obs.
                       </span>
                     </div>
@@ -1001,7 +1001,7 @@ export function PatientDetail() {
 
               {/* Next appointments list */}
               <div className="space-y-3 pt-4 border-t border-slate-100">
-                <h3 className="text-sm font-black text-slate-800 uppercase tracking-wider flex items-center gap-2">
+                <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wider flex items-center gap-2">
                   <Calendar size={15} className="text-slate-500" />
                   Prochains Rendez-vous du Cabinet
                 </h3>
@@ -1014,10 +1014,10 @@ export function PatientDetail() {
                         </div>
                         <div>
                           <p className="font-extrabold text-slate-800">{app.type}</p>
-                          <p className="text-[10px] text-slate-400">{app.doctor} • {app.room}</p>
+                          <p className="text-[10px] text-slate-500">{app.doctor} • {app.room}</p>
                         </div>
                       </div>
-                      <span className="text-[10px] font-black uppercase text-indigo-600 tracking-wider bg-indigo-50 px-2 py-1 rounded">
+                      <span className="text-[10px] font-bold uppercase text-indigo-600 tracking-wider bg-indigo-50 px-2 py-1 rounded">
                         le {formatSafeDate(app.date, 'date')} à {app.time}
                       </span>
                     </div>
@@ -1035,28 +1035,28 @@ export function PatientDetail() {
               {/* Header section with toggle for chart range */}
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-150 pb-4">
                 <div>
-                  <h3 className="text-lg font-black text-slate-800 tracking-tight flex items-center gap-2">
+                  <h3 className="text-lg font-extrabold text-slate-800 tracking-tight flex items-center gap-2">
                     <TrendingUp size={18} className="text-indigo-500" />
                     Indicateurs Vocaux Cliniques (Phonant-IA)
                   </h3>
-                  <p className="text-[11px] text-slate-400 font-medium">Bilan combiné des 4 anomalies chroniques basées sur les dialogues automatiques.</p>
+                  <p className="text-[11px] text-slate-500 font-medium">Bilan combiné des 4 anomalies chroniques basées sur les dialogues automatiques.</p>
                 </div>
 
                 <div className="flex bg-slate-100 p-1 rounded-xl self-start sm:self-center border border-slate-200 w-fit">
                   <button
                     onClick={() => setChartPeriod(30)}
-                    className={cn("px-3 py-1.5 text-[10px] font-black tracking-wide rounded-lg transition-all", chartPeriod === 30 ? "bg-white text-slate-900 shadow-xs" : "text-slate-550 hover:text-slate-800")}
+                    className={cn("px-3 py-1.5 text-[10px] font-bold tracking-wide rounded-lg transition-all", chartPeriod === 30 ? "bg-white text-slate-900 shadow-xs" : "text-slate-550 hover:text-slate-800")}
                   >30 Jours</button>
                   <button
                     onClick={() => setChartPeriod(60)}
-                    className={cn("px-3 py-1.5 text-[10px] font-black tracking-wide rounded-lg transition-all", chartPeriod === 60 ? "bg-white text-slate-900 shadow-xs" : "text-slate-550 hover:text-slate-800")}
+                    className={cn("px-3 py-1.5 text-[10px] font-bold tracking-wide rounded-lg transition-all", chartPeriod === 60 ? "bg-white text-slate-900 shadow-xs" : "text-slate-550 hover:text-slate-800")}
                   >60 Jours</button>
                 </div>
               </div>
 
               {/* Informative Help Alert Box with glossary trigger tags on click */}
               <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200/50">
-                <span className="text-[10px] font-extrabold text-slate-400 block mb-2 uppercase tracking-wider flex items-center gap-1">
+                <span className="text-[10px] font-extrabold text-slate-500 block mb-2 uppercase tracking-wider flex items-center gap-1">
                   <Info size={12} className="text-indigo-500" /> Hover / Cliquez pour comprendre les indicateurs :
                 </span>
                 <div className="flex flex-wrap gap-2">
@@ -1101,7 +1101,7 @@ export function PatientDetail() {
 
               {/* FILTER FOR CALLS */}
               <div className="pt-4 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                <h4 className="text-xs font-black uppercase text-slate-400 tracking-wider">Historique Vocal Interactif ({filteredSessions.length})</h4>
+                <h4 className="text-xs font-bold uppercase text-slate-500 tracking-wider">Historique Vocal Interactif ({filteredSessions.length})</h4>
                 
                 <div className="flex flex-wrap items-center gap-2">
                   <div className="relative">
@@ -1117,7 +1117,7 @@ export function PatientDetail() {
                   <select
                     value={periodFilter}
                     onChange={(e: any) => setPeriodFilter(e.target.value)}
-                    className="px-3.5 py-1.5 bg-slate-50 border border-slate-250 rounded-lg text-[10px] font-bold text-slate-600 focus:outline-none bg-white font-black"
+                    className="px-3.5 py-1.5 bg-slate-50 border border-slate-250 rounded-lg text-[10px] font-bold text-slate-600 focus:outline-none bg-white font-bold"
                   >
                     <option value="all">Tous les appels</option>
                     <option value="7days">Derniers 7 jours</option>
@@ -1153,7 +1153,7 @@ export function PatientDetail() {
                           <div className="flex flex-wrap items-center gap-1.5">
                             {session.sentiment && (
                               <span className={cn(
-                                "text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full border",
+                                "text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border",
                                 session.sentiment === 'Positive' ? 'bg-emerald-50 text-emerald-800 border-emerald-150' : session.sentiment === 'Negative' ? 'bg-rose-50 text-rose-800 border-rose-150' : 'bg-slate-100 text-slate-600 border-slate-200'
                               )}>
                                 Humeur : {session.sentiment === 'Positive' ? 'Positive' : session.sentiment === 'Negative' ? 'Négative' : 'Neutre'}
@@ -1162,7 +1162,7 @@ export function PatientDetail() {
 
                             {session.fatigueLevel !== undefined && (
                               <span className={cn(
-                                "text-[9px] font-black tracking-wider px-2 py-0.5 rounded-full border",
+                                "text-[9px] font-bold tracking-wider px-2 py-0.5 rounded-full border",
                                 session.fatigueLevel > 6 ? "bg-amber-50 text-amber-800 border-amber-200" : "bg-indigo-50 text-indigo-700 border-indigo-150"
                               )}>
                                 Fatigue : {session.fatigueLevel}/10
@@ -1175,7 +1175,7 @@ export function PatientDetail() {
                         <div className="p-4 space-y-4">
                           {/* Summary sentence */}
                           <div>
-                            <span className="text-[10px] uppercase font-black tracking-wider text-slate-400 block mb-1">Résumé conversationnel IA</span>
+                            <span className="text-[10px] uppercase font-bold tracking-wider text-slate-500 block mb-1">Résumé conversationnel IA</span>
                             <p className="text-xs text-slate-600 leading-relaxed font-semibold">{session.summary}</p>
                           </div>
 
@@ -1214,7 +1214,7 @@ export function PatientDetail() {
                                 </div>
                               </div>
 
-                              <span className="text-[9px] font-mono text-slate-400 shrink-0 select-none">
+                              <span className="text-[9px] font-mono text-slate-500 shrink-0 select-none">
                                 {isPlaying ? `${Math.round(playProgress * 0.45)}s` : "00:00"} / 04:12
                               </span>
                             </div>
@@ -1222,7 +1222,7 @@ export function PatientDetail() {
                             {/* Dialect translation focus line when selected */}
                             {session.transcript && (
                               <div className="pt-2 border-t border-slate-800 text-[11px] leading-relaxed text-slate-300 font-medium">
-                                <span className="text-[10px] font-black text-indigo-400 uppercase tracking-widest block mb-1.5">Transcription extrait</span>
+                                <span className="text-[10px] font-bold text-indigo-400 uppercase tracking-widest block mb-1.5">Transcription extrait</span>
                                 <div className="space-y-1.5 pl-2 border-l border-indigo-500/50">
                                   {session.transcript.split('\n').slice(0, 3).map((line, lIdx) => (
                                     <p key={lIdx} className="italic text-slate-200">
@@ -1250,16 +1250,16 @@ export function PatientDetail() {
             <div className="space-y-6 animate-in fade-in duration-300">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
                 <div>
-                  <h3 className="text-lg font-black text-slate-800 tracking-tight flex items-center gap-2">
+                  <h3 className="text-lg font-extrabold text-slate-800 tracking-tight flex items-center gap-2">
                     <Calendar className="text-indigo-500" size={18} />
                     Calendrier Clinique d'Observance (Mai 2026)
                   </h3>
-                  <p className="text-[11px] text-slate-400 font-medium">Suivi quotidien des notifications reçues et de la validation vocale par l'aîné.</p>
+                  <p className="text-[11px] text-slate-500 font-medium">Suivi quotidien des notifications reçues et de la validation vocale par l'aîné.</p>
                 </div>
 
                 <div className="flex items-center gap-2.5">
-                  <span className="text-xs font-black text-slate-700 bg-slate-50 border border-slate-200 px-3 py-1.5 rounded-lg">
-                    Taux Global : <b className="text-indigo-600 font-black">{patient.adherenceRate}%</b>
+                  <span className="text-xs font-bold text-slate-700 bg-slate-50 border border-slate-200 px-3 py-1.5 rounded-lg">
+                    Taux Global : <b className="text-indigo-600 font-bold">{patient.adherenceRate}%</b>
                   </span>
                 </div>
               </div>
@@ -1269,7 +1269,7 @@ export function PatientDetail() {
                 
                 {/* Legend indicator bar */}
                 <div className="flex flex-wrap justify-between items-center gap-3 mb-5 border-b border-slate-200/50 pb-3">
-                  <span className="text-[10px] font-black uppercase text-slate-400 tracking-wider">État quotidien de prise</span>
+                  <span className="text-[10px] font-bold uppercase text-slate-500 tracking-wider">État quotidien de prise</span>
                   
                   <div className="flex flex-wrap items-center gap-3 text-[10px] font-bold text-slate-500">
                     <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 bg-emerald-500 rounded-sm" /> Complète (100%)</span>
@@ -1280,7 +1280,7 @@ export function PatientDetail() {
                 </div>
 
                 {/* Day Calendar Grid (May 2026 starts on Friday) */}
-                <div className="grid grid-cols-7 gap-2 text-center text-[10px] font-black text-slate-400 mb-2 uppercase tracking-wider">
+                <div className="grid grid-cols-7 gap-2 text-center text-[10px] font-bold text-slate-500 mb-2 uppercase tracking-wider">
                   <div>Lun</div><div>Mar</div><div>Mer</div><div>Jeu</div><div>Ven</div><div>Sam</div><div>Dim</div>
                 </div>
                 
@@ -1302,10 +1302,10 @@ export function PatientDetail() {
                           ? "bg-amber-500 border-amber-500 text-white shadow-xs" 
                           : dayData.status === 'missed' 
                           ? "bg-rose-500 border-rose-500 text-white shadow-xs" 
-                          : "bg-white border-slate-250 border-dashed text-slate-400 hover:border-slate-400"
+                          : "bg-white border-slate-250 border-dashed text-slate-500 hover:border-slate-400"
                       )}
                     >
-                      <span className="text-xs font-black">{dayData.day}</span>
+                      <span className="text-xs font-bold">{dayData.day}</span>
                       
                       {/* Micro visual symbol inside */}
                       {dayData.status === 'full' && <Check size={10} className="mt-0.5 opacity-90 stroke-[3]" />}
@@ -1324,7 +1324,7 @@ export function PatientDetail() {
                             dayData.status === 'partial' ? "bg-amber-400" :
                             dayData.status === 'missed' ? "bg-rose-500" : "bg-slate-500"
                           )} />
-                          <span className="text-[8px] font-black uppercase text-slate-400 tracking-wider">
+                          <span className="text-[8px] font-bold uppercase text-slate-500 tracking-wider">
                             {dayData.status === 'full' ? "Prises complètes" :
                              dayData.status === 'partial' ? "Incomplet / Partiel" :
                              dayData.status === 'missed' ? "Zéro observance" : "Futur"}
@@ -1339,14 +1339,14 @@ export function PatientDetail() {
 
               {/* STATS DETAILS BY MEDICATION */}
               <div className="space-y-4 pt-4 border-t border-slate-100">
-                <h4 className="text-xs font-black uppercase text-slate-400 tracking-wider">Taux d'observance par médicament prescrit</h4>
+                <h4 className="text-xs font-bold uppercase text-slate-500 tracking-wider">Taux d'observance par médicament prescrit</h4>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {treatments.map((med, idx) => (
                     <div key={idx} className="p-4 bg-slate-50 border border-slate-200/60 rounded-xl space-y-3.5">
                       <div className="flex justify-between items-center">
-                        <span className="text-xs font-black text-slate-800 block truncate max-w-[150px]">{med.name}</span>
-                        <span className="text-xs font-black text-indigo-600 block">{med.adherenceRate}%</span>
+                        <span className="text-xs font-bold text-slate-800 block truncate max-w-[150px]">{med.name}</span>
+                        <span className="text-xs font-bold text-indigo-600 block">{med.adherenceRate}%</span>
                       </div>
 
                       {/* Bar indicator layout */}
@@ -1362,7 +1362,7 @@ export function PatientDetail() {
 
                       <div className="text-[10px] text-slate-500 font-bold flex justify-between">
                         <span>Posologie: {med.dosage}</span>
-                        <span className="uppercase text-slate-400 font-black">{med.frequency}</span>
+                        <span className="uppercase text-slate-500 font-bold">{med.frequency}</span>
                       </div>
                     </div>
                   ))}
@@ -1371,7 +1371,7 @@ export function PatientDetail() {
 
               {/* LIST OF ADHERENCE ALERTS */}
               <div className="pt-4 border-t border-slate-150 space-y-3">
-                <h4 className="text-xs font-black uppercase text-slate-400 tracking-wider">Alertes de non-observance actives</h4>
+                <h4 className="text-xs font-bold uppercase text-slate-500 tracking-wider">Alertes de non-observance actives</h4>
                 
                 {id === 'p3' || id === 'p2' ? (
                   <div className="p-4 bg-rose-50 border border-rose-150 rounded-2xl flex items-start gap-3 text-xs leading-relaxed font-semibold text-rose-800 animate-in slide-in-from-top-3">
@@ -1400,26 +1400,26 @@ export function PatientDetail() {
               
               <div className="flex justify-between items-center border-b border-slate-100 pb-4">
                 <div>
-                  <h3 className="text-lg font-black text-slate-800 tracking-tight flex items-center gap-2">
+                  <h3 className="text-lg font-extrabold text-slate-800 tracking-tight flex items-center gap-2">
                     <HeartHandshake className="text-indigo-500" size={18} />
                     Scores d'Indice de Dignité & Confort
                   </h3>
-                  <p className="text-[11px] text-slate-400 font-medium font-bold">Rapports d'impact respectueux générés sur la solitude ressentie et l'image de soi.</p>
+                  <p className="text-[11px] text-slate-500 font-medium font-bold">Rapports d'impact respectueux générés sur la solitude ressentie et l'image de soi.</p>
                 </div>
 
                 <div className="flex items-end gap-1 shrink-0 bg-slate-50 border border-slate-200 rounded-xl px-3 py-1.5 text-center">
-                  <span className="text-2xl font-black text-slate-800">{patient.dignityIndex}</span>
-                  <span className="text-xs text-slate-400 font-bold mb-1">/100</span>
+                  <span className="text-2xl font-extrabold text-slate-800">{patient.dignityIndex}</span>
+                  <span className="text-xs text-slate-500 font-bold mb-1">/100</span>
                 </div>
               </div>
 
               {/* Indicators bar display */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="p-4 bg-slate-50/50 border border-slate-150 rounded-2xl space-y-2">
-                  <span className="text-[10px] font-black uppercase text-slate-400 tracking-widest block">Sentiment d'autonomie</span>
+                  <span className="text-[10px] font-bold uppercase text-slate-500 tracking-widest block">Sentiment d'autonomie</span>
                   <div className="flex justify-between items-center">
-                    <span className="text-sm font-black text-slate-800">{id === 'p1' ? '92' : id === 'p2' ? '74' : '52'}/100</span>
-                    <span className="text-[10px] font-black text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded">Rassuré</span>
+                    <span className="text-sm font-bold text-slate-800">{id === 'p1' ? '92' : id === 'p2' ? '74' : '52'}/100</span>
+                    <span className="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded">Rassuré</span>
                   </div>
                   <div className="w-full h-1.5 bg-slate-200 rounded-full overflow-hidden">
                     <div className="bg-indigo-500 h-full rounded-full" style={{ width: id === 'p1' ? '92%' : id === 'p2' ? '74%' : '52%' }} />
@@ -1427,10 +1427,10 @@ export function PatientDetail() {
                 </div>
 
                 <div className="p-4 bg-slate-50/50 border border-slate-150 rounded-2xl space-y-2">
-                  <span className="text-[10px] font-black uppercase text-slate-400 tracking-widest block">Énergie & Bien-être ressenti</span>
+                  <span className="text-[10px] font-bold uppercase text-slate-500 tracking-widest block">Énergie & Bien-être ressenti</span>
                   <div className="flex justify-between items-center">
-                    <span className="text-sm font-black text-slate-800">{id === 'p1' ? '88' : id === 'p2' ? '70' : '45'}/100</span>
-                    <span className="text-[10px] font-black text-indigo-600 bg-indigo-50 px-1.5 py-0.5 rounded">Stable</span>
+                    <span className="text-sm font-bold text-slate-800">{id === 'p1' ? '88' : id === 'p2' ? '70' : '45'}/100</span>
+                    <span className="text-[10px] font-bold text-indigo-600 bg-indigo-50 px-1.5 py-0.5 rounded">Stable</span>
                   </div>
                   <div className="w-full h-1.5 bg-slate-200 rounded-full overflow-hidden">
                     <div className="bg-indigo-500 h-full rounded-full" style={{ width: id === 'p1' ? '88%' : id === 'p2' ? '70%' : '45%' }} />
@@ -1445,20 +1445,20 @@ export function PatientDetail() {
 
               {/* LIST OF SENIORS' DIRECT VERBATIMS & DIALECT TRANSLATIONS */}
               <div className="space-y-4 pt-4 border-t border-slate-100">
-                <h4 className="text-xs font-black uppercase text-slate-400 tracking-wider">Remarques & Verbatims collectés (Traduit du dialecte)</h4>
+                <h4 className="text-xs font-bold uppercase text-slate-500 tracking-wider">Remarques & Verbatims collectés (Traduit du dialecte)</h4>
                 
                 <div className="space-y-3">
                   {comfortFeedbacks.map((f, i) => (
                     <div key={i} className="p-5 bg-white border border-slate-200 rounded-2xl shadow-xs space-y-3">
                       <div className="flex justify-between items-start gap-4 flex-wrap">
-                        <span className="text-[10px] font-black uppercase text-slate-400 tracking-wider bg-slate-50 px-2 py-1 rounded">
+                        <span className="text-[10px] font-bold uppercase text-slate-500 tracking-wider bg-slate-50 px-2 py-1 rounded">
                           Catégorie : {f.category}
                         </span>
                         
                         <div className="flex items-center gap-1">
-                          <span className="text-[10px] text-slate-400 font-bold">{f.date}</span>
+                          <span className="text-[10px] text-slate-500 font-bold">{f.date}</span>
                           <span className="w-1.5 h-1.5 bg-slate-200 rounded-full mx-1.5" />
-                          <span className="text-xs font-black text-indigo-600">Note Dignité : {f.dignityScore}/100</span>
+                          <span className="text-xs font-bold text-indigo-600">Note Dignité : {f.dignityScore}/100</span>
                         </div>
                       </div>
 
@@ -1483,16 +1483,16 @@ export function PatientDetail() {
             <div className="space-y-6 animate-in fade-in duration-300">
               
               <div className="border-b border-slate-100 pb-4">
-                <h3 className="text-lg font-black text-slate-800 tracking-tight flex items-center gap-2">
+                <h3 className="text-lg font-extrabold text-slate-800 tracking-tight flex items-center gap-2">
                   <FileText className="text-indigo-500" size={18} />
                   Journal de Suivi Clinique (Dr. Slim)
                 </h3>
-                <p className="text-[11px] text-slate-400 font-semibold font-medium">Consignez vos conclusions cliniques, les retours familiaux et les consignes de correction d'observance.</p>
+                <p className="text-[11px] text-slate-500 font-semibold font-medium">Consignez vos conclusions cliniques, les retours familiaux et les consignes de correction d'observance.</p>
               </div>
 
               {/* NEW NOTE INPUT FORM */}
               <form onSubmit={handleAddNewNote} className="space-y-3 bg-slate-50 p-5 rounded-2xl border border-slate-200">
-                <label className="text-[10px] font-black uppercase text-slate-400 tracking-wider block mb-1">
+                <label className="text-[10px] font-bold uppercase text-slate-500 tracking-wider block mb-1">
                   Créer une nouvelle annotation datée
                 </label>
                 <textarea
@@ -1506,7 +1506,7 @@ export function PatientDetail() {
                 <div className="flex justify-end">
                   <button
                     type="submit"
-                    className="inline-flex items-center gap-2 px-5 py-2.5 bg-slate-900 hover:bg-slate-800 text-white xs font-black rounded-xl text-xs transition-colors shadow-sm"
+                    className="inline-flex items-center gap-2 px-5 py-2.5 bg-slate-900 hover:bg-slate-800 text-white xs font-bold rounded-xl text-xs transition-colors shadow-sm"
                   >
                     <Save size={14} />
                     Sauvegarder l'annotation
@@ -1516,7 +1516,7 @@ export function PatientDetail() {
 
               {/* CLINICAL HISTORY LIST OF NOTES */}
               <div className="space-y-4 pt-4 border-t border-slate-100">
-                <h4 className="text-xs font-black uppercase text-slate-400 tracking-wider">Historique des annotations médicales ({notesHistory.length})</h4>
+                <h4 className="text-xs font-bold uppercase text-slate-500 tracking-wider">Historique des annotations médicales ({notesHistory.length})</h4>
                 
                 <div className="space-y-3">
                   {notesHistory.map((note) => (
@@ -1531,7 +1531,7 @@ export function PatientDetail() {
                         <Trash2 size={13} />
                       </button>
 
-                      <div className="flex items-center gap-2 text-slate-400 text-[10px] font-bold">
+                      <div className="flex items-center gap-2 text-slate-500 text-[10px] font-bold">
                         <Clock size={12} />
                         <span>Créé le {formatSafeDate(note.date, 'datetime')}</span>
                         <span className="w-1.5 h-1.5 bg-slate-200 rounded-full mx-1.5" />
@@ -1556,7 +1556,7 @@ export function PatientDetail() {
           
           {/* Diagnostic Stats Snapshot */}
           <div className="bg-slate-900 text-slate-100 rounded-3xl p-6 border border-slate-850 shadow-md">
-            <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-4 flex items-center gap-1.5">
+            <h4 className="text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-4 flex items-center gap-1.5">
               <Activity size={14} className="text-indigo-400" />
               État Clinique Vocal
             </h4>
@@ -1587,14 +1587,14 @@ export function PatientDetail() {
                   <span className="text-slate-300">Humeur Surchargée</span>
                   <span className="text-white">{id === 'p3' ? 'Sévère' : id === 'p2' ? 'Modérée' : 'Sereine'}</span>
                 </div>
-                <p className="text-[10px] italic text-slate-400 leading-normal mt-1">Évaluation cumulée par Hanen après analyses de phonation hebdomadaires.</p>
+                <p className="text-[10px] italic text-slate-500 leading-normal mt-1">Évaluation cumulée par Hanen après analyses de phonation hebdomadaires.</p>
               </div>
             </div>
           </div>
 
           {/* Quick Action links to companion diagnostic tools */}
           <div className="bg-white rounded-3xl border border-slate-200/60 p-6 shadow-xs space-y-4">
-            <h4 className="text-[10px] font-black uppercase tracking-wider text-slate-400">Liens Pratiques d'Action</h4>
+            <h4 className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Liens Pratiques d'Action</h4>
             
             <div className="space-y-2">
               <Link 
@@ -1605,7 +1605,7 @@ export function PatientDetail() {
                   <AlertTriangle size={15} className="text-rose-500" />
                   Consulter les alertes correspondantes
                 </span>
-                <ChevronRight size={14} className="text-slate-400 group-hover:translate-x-0.5 transition-transform" />
+                <ChevronRight size={14} className="text-slate-500 group-hover:translate-x-0.5 transition-transform" />
               </Link>
             </div>
           </div>
@@ -1622,14 +1622,14 @@ export function PatientDetail() {
             {/* Header modal */}
             <div className="flex justify-between items-start gap-3">
               <div>
-                <span className="text-[9px] font-black uppercase tracking-widest text-indigo-600 bg-indigo-50 border border-indigo-100 rounded px-2.5 py-1">
+                <span className="text-[9px] font-bold uppercase tracking-widest text-indigo-600 bg-indigo-50 border border-indigo-100 rounded px-2.5 py-1">
                   COMPAGNON HANEN PRO
                 </span>
-                <h3 className="text-lg font-black text-slate-900 mt-2">Envoyer un message à {patient.name}</h3>
+                <h3 className="text-lg font-extrabold text-slate-900 mt-2">Envoyer un message à {patient.name}</h3>
               </div>
               <button 
                 onClick={() => setIsVocalModalOpen(false)}
-                className="p-1.5 text-slate-400 hover:text-slate-600 rounded-lg hover:bg-slate-100"
+                className="p-1.5 text-slate-500 hover:text-slate-600 rounded-lg hover:bg-slate-100"
               >
                 <X size={18} />
               </button>
@@ -1639,7 +1639,7 @@ export function PatientDetail() {
             {vocalStatus === 'idle' ? (
               <div className="space-y-4">
                 <div className="space-y-1.5">
-                  <label className="text-[10px] uppercase font-black tracking-widest text-slate-400">Objet de l'envoi</label>
+                  <label className="text-[10px] uppercase font-bold tracking-widest text-slate-500">Objet de l'envoi</label>
                   <div className="grid grid-cols-2 gap-2">
                     {[
                       { id: 'dwe', label: "💊 Rappel Dwe" },
@@ -1652,7 +1652,7 @@ export function PatientDetail() {
                         type="button"
                         onClick={() => setVocalCategory(opt.id as any)}
                         className={cn(
-                          "p-3 rounded-xl text-xs font-black tracking-wide border transition-all text-center flex flex-col items-center justify-center gap-1",
+                          "p-3 rounded-xl text-xs font-bold tracking-wide border transition-all text-center flex flex-col items-center justify-center gap-1",
                           vocalCategory === opt.id 
                             ? "bg-slate-900 border-slate-900 text-white" 
                             : "bg-slate-50 border-slate-200 text-slate-655 hover:bg-slate-100"
@@ -1666,7 +1666,7 @@ export function PatientDetail() {
 
                 {/* Text preview of Synth */}
                 <div className="space-y-2">
-                  <label className="text-[10px] uppercase font-black tracking-widest text-slate-400 block">Message synthétisé</label>
+                  <label className="text-[10px] uppercase font-bold tracking-widest text-slate-500 block">Message synthétisé</label>
                   
                   {vocalCategory === 'custom' ? (
                     <textarea
@@ -1696,7 +1696,7 @@ export function PatientDetail() {
 
                   <button
                     onClick={triggerSendVocalMessage}
-                    className="flex-1 py-3 bg-rose-500 hover:bg-rose-600 text-white text-xs font-black rounded-xl tracking-wide shadow-md transition-colors flex items-center justify-center gap-1.5"
+                    className="flex-1 py-3 bg-rose-500 hover:bg-rose-600 text-white text-xs font-bold rounded-xl tracking-wide shadow-md transition-colors flex items-center justify-center gap-1.5"
                   >
                     <Send size={13} />
                     Générer et envoyer
@@ -1720,7 +1720,7 @@ export function PatientDetail() {
 
                 {vocalStatus !== 'success' && (
                   <div className="bg-slate-50 border border-slate-200/60 p-5 rounded-2xl max-w-sm mx-auto space-y-3">
-                    <span className="text-[9px] font-black uppercase text-indigo-600 bg-indigo-50 border border-indigo-150 px-2 py-0.5 rounded tracking-wider">
+                    <span className="text-[9px] font-bold uppercase text-indigo-600 bg-indigo-50 border border-indigo-150 px-2 py-0.5 rounded tracking-wider">
                       Traitement acoustique temps réel
                     </span>
                     <div className="flex items-center justify-center gap-1 min-h-[46px]">
@@ -1739,7 +1739,7 @@ export function PatientDetail() {
                 )}
 
                 <div className="space-y-1 max-w-xs mx-auto">
-                  <p className="text-xs font-black text-slate-800 uppercase tracking-widest">{vocalStatus === 'success' ? "Message Transmis" : "Opération en cours"}</p>
+                  <p className="text-xs font-bold text-slate-800 uppercase tracking-widest">{vocalStatus === 'success' ? "Message Transmis" : "Opération en cours"}</p>
                   <p className="text-[11px] text-slate-500 leading-relaxed font-semibold">{vocalStepText}</p>
                 </div>
 
@@ -1760,8 +1760,8 @@ export function PatientDetail() {
                   <ShieldAlert size={22} className="animate-pulse" />
                 </div>
                 <div>
-                  <h3 className="text-base font-black text-slate-900">Exportation Chiffrée Haute Sécurité</h3>
-                  <p className="text-[11px] text-slate-400 font-semibold">Chiffrement symétrique AES-256 client-side (RGPD / Secret Médical)</p>
+                  <h3 className="text-base font-bold text-slate-900">Exportation Chiffrée Haute Sécurité</h3>
+                  <p className="text-[11px] text-slate-500 font-semibold">Chiffrement symétrique AES-256 client-side (RGPD / Secret Médical)</p>
                 </div>
               </div>
               <button 
@@ -1770,7 +1770,7 @@ export function PatientDetail() {
                   setExportPassword('');
                   setExportError(null);
                 }}
-                className="p-1 text-slate-400 hover:text-slate-600 rounded-lg hover:bg-slate-100"
+                className="p-1 text-slate-500 hover:text-slate-600 rounded-lg hover:bg-slate-100"
               >
                 <X size={18} />
               </button>
@@ -1796,8 +1796,8 @@ export function PatientDetail() {
 
             <div className="space-y-3 pt-1">
               <div className="space-y-1">
-                <label className="text-[10px] uppercase font-extrabold tracking-wider text-slate-400 block">DÉFINIR UN MOT DE PASSE DE SÉCURITÉ</label>
-                <p className="text-[11px] text-slate-400 pb-1 leading-normal font-medium">Ce mot de passe restera confidentiel et n'est stocké nulle part. Conservez-le pour déchiffrer votre archive ultérieurement.</p>
+                <label className="text-[10px] uppercase font-extrabold tracking-wider text-slate-500 block">DÉFINIR UN MOT DE PASSE DE SÉCURITÉ</label>
+                <p className="text-[11px] text-slate-500 pb-1 leading-normal font-medium">Ce mot de passe restera confidentiel et n'est stocké nulle part. Conservez-le pour déchiffrer votre archive ultérieurement.</p>
                 <div className="relative">
                   <input
                     type={showPassword ? "text" : "password"}
@@ -1848,7 +1848,7 @@ export function PatientDetail() {
                 type="button"
                 disabled={isGeneratingZip}
                 onClick={handleExportDossierSecure}
-                className="flex-2 py-3 text-xs bg-indigo-600 hover:bg-indigo-700 text-white font-black rounded-xl transition-all shadow-md flex items-center justify-center gap-2"
+                className="flex-2 py-3 text-xs bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl transition-all shadow-md flex items-center justify-center gap-2"
               >
                 {isGeneratingZip ? 'Chiffrement AES-256...' : 'Compresser & Chiffrer Dossier'}
               </button>
@@ -1867,8 +1867,8 @@ export function PatientDetail() {
                   <ShieldCheck size={22} className="animate-pulse" />
                 </div>
                 <div>
-                  <h3 className="text-base font-black text-slate-900 font-sans">Convertisseur-Décontracteur d'Archives</h3>
-                  <p className="text-[11px] text-slate-400 font-semibold">Déverrouillage AES-256 RGPD et décompression locale de votre dossier</p>
+                  <h3 className="text-base font-bold text-slate-900 font-sans">Convertisseur-Décontracteur d'Archives</h3>
+                  <p className="text-[11px] text-slate-500 font-semibold">Déverrouillage AES-256 RGPD et décompression locale de votre dossier</p>
                 </div>
               </div>
               <button 
@@ -1878,7 +1878,7 @@ export function PatientDetail() {
                   setDecryptError(null);
                   setEncryptedFile(null);
                 }}
-                className="p-1 text-slate-400 hover:text-slate-600 rounded-lg hover:bg-slate-100"
+                className="p-1 text-slate-500 hover:text-slate-600 rounded-lg hover:bg-slate-100"
               >
                 <X size={18} />
               </button>
@@ -1886,7 +1886,7 @@ export function PatientDetail() {
 
             <div className="space-y-4">
               <div className="space-y-1.5">
-                <label className="text-[10px] uppercase font-black tracking-widest text-slate-400">1. Charger le pack chiffré (.zip.enc)</label>
+                <label className="text-[10px] uppercase font-bold tracking-widest text-slate-500">1. Charger le pack chiffré (.zip.enc)</label>
                 <div className="border-2 border-dashed border-slate-200 hover:border-indigo-400 bg-slate-50/50 hover:bg-slate-50 p-6 rounded-2xl transition-all text-center relative cursor-pointer">
                   <input
                     type="file"
@@ -1900,18 +1900,18 @@ export function PatientDetail() {
                     className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                   />
                   <div className="flex flex-col items-center gap-1.5 pointer-events-none">
-                    <FileText size={24} className="text-slate-400" />
+                    <FileText size={24} className="text-slate-500" />
                     {encryptedFile ? (
-                      <span className="text-xs font-black text-slate-800">{encryptedFile.name} ({(encryptedFile.size / 1024).toFixed(1)} KB)</span>
+                      <span className="text-xs font-bold text-slate-800">{encryptedFile.name} ({(encryptedFile.size / 1024).toFixed(1)} KB)</span>
                     ) : (
-                      <span className="text-xs font-semibold text-slate-400">Déposer ou cliquer pour importer le document `.zip.enc`</span>
+                      <span className="text-xs font-semibold text-slate-500">Déposer ou cliquer pour importer le document `.zip.enc`</span>
                     )}
                   </div>
                 </div>
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-[10px] uppercase font-black tracking-widest text-slate-400">2. Entrer le mot de passe de déverrouillage</label>
+                <label className="text-[10px] uppercase font-bold tracking-widest text-slate-500">2. Entrer le mot de passe de déverrouillage</label>
                 <input
                   type="password"
                   placeholder="Tapez le code secret configuré lors de l'exportation..."
@@ -1951,7 +1951,7 @@ export function PatientDetail() {
               <button
                 type="button"
                 onClick={handleDecryptFile}
-                className="flex-2 py-3 text-xs bg-emerald-600 hover:bg-emerald-700 text-white font-black rounded-xl transition-all shadow-md flex items-center justify-center gap-2"
+                className="flex-2 py-3 text-xs bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl transition-all shadow-md flex items-center justify-center gap-2"
               >
                 Déchiffrer et Télécharger ZIP
               </button>

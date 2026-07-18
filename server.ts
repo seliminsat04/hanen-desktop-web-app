@@ -28,7 +28,7 @@ async function startServer() {
       const ai = new GoogleGenAI({ apiKey, httpOptions: { headers: { 'User-Agent': 'aistudio-build' } } });
       
       const sessionPromise = ai.live.connect({
-        model: "gemini-2.0-flash-exp",
+        model: "gemini-3.1-flash-live-preview",
         callbacks: {
           onmessage: (message: any) => {
             console.log("[Live API] Received message from Gemini server.");
@@ -61,25 +61,27 @@ async function startServer() {
               clientWs.send(JSON.stringify({ interrupted: true }));
             }
           },
+          onerror: (err: any) => {
+            console.error("[Live API] Error from Gemini:", err);
+            clientWs.send(JSON.stringify({ error: err?.message || "Live API Error" }));
+          },
+          onclose: (e: any) => {
+            console.log("[Live API] Connection closed by Gemini:", e);
+            clientWs.close();
+          }
         },
         config: {
           responseModalities: [Modality.AUDIO],
           speechConfig: {
             voiceConfig: { prebuiltVoiceConfig: { voiceName: "Zephyr" } },
           },
-          systemInstruction: sysPrompt,
+          systemInstruction: { parts: [{ text: sysPrompt }] },
         },
       });
 
-      // Trigger the first message
+      // Just log successful connection
       sessionPromise.then(session => {
-        console.log("[Live API] Live session connected, triggering first prompt...");
-        session.sendClientContent({
-          turns: [
-            { role: "user", parts: [{ text: "Bonjour Hanen. Tu m'entends ?" }] }
-          ],
-          turnComplete: true
-        });
+        console.log("[Live API] Live session connected, ready for audio.");
       }).catch(err => {
         console.error("[Live API] Handshake promise rejected:", err);
         try { clientWs.close(1011, "LIVE_HANDSHAKE_FAILED"); } catch (_) {}

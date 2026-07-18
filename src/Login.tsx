@@ -226,7 +226,7 @@ export function Login() {
           </div>
 
           <div className="animate-in fade-in slide-in-from-bottom-4 duration-1000 delay-300">
-            <p className="text-[10px] text-[#5C7F67] uppercase tracking-[0.3em] font-black opacity-80">
+            <p className="text-[10px] text-[#5C7F67] uppercase tracking-[0.3em] font-bold opacity-80">
               Plateforme Clinique de Télésurveillance
             </p>
           </div>
@@ -275,7 +275,7 @@ export function Login() {
         >
           <img src="/hanen-logo.png" alt="Hanen Pro" className="h-14 w-auto" />
         </motion.div>
-        <p className="mt-4 text-[10px] text-[#5C7F67] font-black uppercase tracking-[0.2em] text-center opacity-70">
+        <p className="mt-4 text-[10px] text-[#5C7F67] font-bold uppercase tracking-[0.2em] text-center opacity-70">
           Plateforme Clinique de Télésurveillance
         </p>
       </div>
@@ -297,13 +297,13 @@ export function Login() {
                   setSuccessMessage(null);
                 }}
                 className={cn(
-                  "flex-1 py-3 text-xs font-black uppercase tracking-wider rounded-xl transition-all duration-300 flex items-center justify-center gap-1.5",
+                  "flex-1 py-3 text-xs font-bold uppercase tracking-wider rounded-xl transition-all duration-300 flex items-center justify-center gap-1.5",
                   authMode === 'login' 
-                    ? "bg-white text-[#0F1E36] shadow-sm font-black"
+                    ? "bg-white text-[#0F1E36] shadow-sm font-extrabold"
                     : "text-slate-500 hover:text-slate-800 font-bold"
                 )}
               >
-                <LockKeyhole size={14} className={authMode === 'login' ? "text-[#C96F53]" : "text-slate-400"} />
+                <LockKeyhole size={14} className={authMode === 'login' ? "text-[#C96F53]" : "text-slate-500"} />
                 Se connecter
               </button>
               <button
@@ -314,13 +314,13 @@ export function Login() {
                   setSuccessMessage(null);
                 }}
                 className={cn(
-                  "flex-1 py-3 text-xs font-black uppercase tracking-wider rounded-xl transition-all duration-300 flex items-center justify-center gap-1.5",
+                  "flex-1 py-3 text-xs font-bold uppercase tracking-wider rounded-xl transition-all duration-300 flex items-center justify-center gap-1.5",
                   authMode === 'register' 
-                    ? "bg-white text-[#0F1E36] shadow-sm font-black"
+                    ? "bg-white text-[#0F1E36] shadow-sm font-extrabold"
                     : "text-slate-500 hover:text-slate-800 font-bold"
                 )}
               >
-                <User size={14} className={authMode === 'register' ? "text-[#5C7F67]" : "text-slate-400"} />
+                <User size={14} className={authMode === 'register' ? "text-[#5C7F67]" : "text-slate-500"} />
                 Créer un compte
               </button>
             </div>
@@ -351,17 +351,17 @@ export function Login() {
           {authMode === 'login' && (
             <div className="animate-in fade-in duration-200">
               <div className="text-center mb-6">
-                <h2 className="text-2xl font-black text-[#0F1E36] tracking-tight">
+                <h2 className="text-2xl font-extrabold text-[#0F1E36] tracking-tight">
                   Bienvenue sur Hanen Pro
                 </h2>
-                <span className="inline-block mt-1 pl-2.5 pr-3 py-1 bg-amber-50 rounded-xl text-[11px] text-[#C96F53] font-black uppercase tracking-wider border border-amber-100">
+                <span className="inline-block mt-1 pl-2.5 pr-3 py-1 bg-amber-50 rounded-xl text-[11px] text-[#C96F53] font-bold uppercase tracking-wider border border-amber-100">
                   Espace Médecin
                 </span>
               </div>
 
               <form onSubmit={handleLogin} className="space-y-5">
                 <div>
-                  <label htmlFor="login-email" className="block text-xs font-black text-slate-700 uppercase tracking-widest mb-1.5">
+                  <label htmlFor="login-email" className="block text-xs font-bold text-slate-700 uppercase tracking-widest mb-1.5">
                     Adresse E-mail Professionnelle
                   </label>
                   <div className="relative">
@@ -382,7 +382,7 @@ export function Login() {
 
                 <div>
                   <div className="flex items-center justify-between mb-1.5">
-                    <label htmlFor="login-password" className="block text-xs font-black text-slate-700 uppercase tracking-widest">
+                    <label htmlFor="login-password" className="block text-xs font-bold text-slate-700 uppercase tracking-widest">
                       Mot de passe d'accès
                     </label>
                   </div>
@@ -427,7 +427,7 @@ export function Login() {
                       setErrorMessage(null);
                       setSuccessMessage(null);
                     }}
-                    className="text-xs font-black text-[#C96F53] hover:text-[#B55D42] uppercase tracking-wider"
+                    className="text-xs font-bold text-[#C96F53] hover:text-[#B55D42] uppercase tracking-wider"
                   >
                     Mot de passe oublié ?
                   </button>
@@ -436,7 +436,7 @@ export function Login() {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full relative flex items-center justify-center gap-2.5 py-4 px-4 bg-[#0F1E36] hover:bg-slate-800 text-white font-black text-xs uppercase tracking-widest rounded-xl transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-85 disabled:cursor-not-allowed cursor-pointer"
+                  className="w-full relative flex items-center justify-center gap-2.5 py-4 px-4 bg-[#0F1E36] hover:bg-slate-800 text-white font-bold text-xs uppercase tracking-widest rounded-xl transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-85 disabled:cursor-not-allowed cursor-pointer"
                 >
                   {isSubmitting ? (
                     <>
@@ -457,7 +457,7 @@ export function Login() {
                 <div className="absolute inset-0 flex items-center bg-transparent">
                   <div className="w-full border-t border-slate-200" />
                 </div>
-                <span className="relative bg-white px-4 text-[10px] font-black text-[#5C7F67] uppercase tracking-widest">
+                <span className="relative bg-white px-4 text-[10px] font-bold text-[#5C7F67] uppercase tracking-widest">
                   Ou utiliser l'authentification externe
                 </span>
               </div>
@@ -484,21 +484,21 @@ export function Login() {
           {authMode === 'register' && (
             <div className="animate-in fade-in duration-200">
               <div className="text-center mb-6">
-                <h2 className="text-2xl font-black text-[#0F1E36] tracking-tight">
+                <h2 className="text-2xl font-extrabold text-[#0F1E36] tracking-tight">
                   Enregistrer un Cabinet
                 </h2>
-                <span className="inline-block mt-1 px-3 py-1 bg-emerald-50 rounded-xl text-[11px] text-[#5C7F67] font-black uppercase tracking-wider border border-emerald-100">
+                <span className="inline-block mt-1 px-3 py-1 bg-emerald-50 rounded-xl text-[11px] text-[#5C7F67] font-bold uppercase tracking-wider border border-emerald-100">
                   Formulaire Praticien
                 </span>
               </div>
 
               <form onSubmit={handleRegister} className="space-y-4.5">
                 <div>
-                  <label htmlFor="reg-name" className="block text-xs font-black text-slate-700 uppercase tracking-widest mb-1.5">
+                  <label htmlFor="reg-name" className="block text-xs font-bold text-slate-700 uppercase tracking-widest mb-1.5">
                     Nom du praticien principal
                   </label>
                   <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                    <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
                       <User size={16} />
                     </div>
                     <input
@@ -514,11 +514,11 @@ export function Login() {
                 </div>
 
                 <div>
-                  <label htmlFor="reg-specialty" className="block text-xs font-black text-slate-700 uppercase tracking-widest mb-1.5">
+                  <label htmlFor="reg-specialty" className="block text-xs font-bold text-slate-700 uppercase tracking-widest mb-1.5">
                     Spécialité / Discipline Clinique (Tunisie)
                   </label>
                   <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                    <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
                       <Briefcase size={16} />
                     </div>
                     <select
@@ -545,7 +545,7 @@ export function Login() {
                       <option value="ORL">ORL (Oto-Rhino-Laryngologie)</option>
                       <option value="Autre">Autre spécialité... (Saisie libre / manuelle)</option>
                     </select>
-                    <div className="absolute inset-y-0 right-0 pr-3.5 flex items-center pointer-events-none text-slate-400">
+                    <div className="absolute inset-y-0 right-0 pr-3.5 flex items-center pointer-events-none text-slate-500">
                       <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7" />
                       </svg>
@@ -554,7 +554,7 @@ export function Login() {
 
                   {specialty === 'Autre' && (
                     <div className="mt-2.5 animate-in slide-in-from-top-1 fade-in duration-200">
-                      <label htmlFor="reg-specialty-custom" className="block text-[10px] font-black text-[#5C7F67] uppercase tracking-widest mb-1 bg-emerald-50 border border-emerald-100/65 px-2.5 py-1 rounded w-max">
+                      <label htmlFor="reg-specialty-custom" className="block text-[10px] font-bold text-[#5C7F67] uppercase tracking-widest mb-1 bg-emerald-50 border border-emerald-100/65 px-2.5 py-1 rounded w-max">
                         Saisissez votre spécialité clinique
                       </label>
                       <input
@@ -571,11 +571,11 @@ export function Login() {
                 </div>
 
                 <div>
-                  <label htmlFor="reg-email" className="block text-xs font-black text-slate-700 uppercase tracking-widest mb-1.5">
+                  <label htmlFor="reg-email" className="block text-xs font-bold text-slate-700 uppercase tracking-widest mb-1.5">
                     Adresse E-mail Professionnelle (MSSanté / Standard)
                   </label>
                   <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                    <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
                       <Mail size={16} />
                     </div>
                     <input
@@ -592,11 +592,11 @@ export function Login() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label htmlFor="reg-pass" className="block text-xs font-black text-slate-700 uppercase tracking-widest mb-1.5">
+                    <label htmlFor="reg-pass" className="block text-xs font-bold text-slate-700 uppercase tracking-widest mb-1.5">
                       Mot de passe
                     </label>
                     <div className="relative">
-                      <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                      <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
                         <Lock size={16} />
                       </div>
                       <input
@@ -612,11 +612,11 @@ export function Login() {
                   </div>
 
                   <div>
-                    <label htmlFor="reg-pass-confirm" className="block text-xs font-black text-slate-700 uppercase tracking-widest mb-1.5">
+                    <label htmlFor="reg-pass-confirm" className="block text-xs font-bold text-slate-700 uppercase tracking-widest mb-1.5">
                       Confirmation
                     </label>
                     <div className="relative">
-                      <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                      <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
                         <Lock size={16} />
                       </div>
                       <input
@@ -635,7 +635,7 @@ export function Login() {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full relative flex items-center justify-center gap-2 py-4 px-4 bg-[#5C7F67] hover:bg-[#486650] text-white font-black text-xs uppercase tracking-widest rounded-xl transition-all shadow-md hover:-translate-y-0.5 active:translate-y-0 cursor-pointer text-center mt-3"
+                  className="w-full relative flex items-center justify-center gap-2 py-4 px-4 bg-[#5C7F67] hover:bg-[#486650] text-white font-bold text-xs uppercase tracking-widest rounded-xl transition-all shadow-md hover:-translate-y-0.5 active:translate-y-0 cursor-pointer text-center mt-3"
                 >
                   {isSubmitting ? (
                     <>
@@ -666,10 +666,10 @@ export function Login() {
                 >
                   <ArrowLeft size={18} strokeWidth={2.5} />
                 </button>
-                <h2 className="text-2xl font-black text-[#0F1E36] tracking-tight">
+                <h2 className="text-2xl font-extrabold text-[#0F1E36] tracking-tight">
                   Identifiants oubliés
                 </h2>
-                <span className="inline-block mt-1 px-3 py-1 bg-orange-50 rounded-xl text-xs text-[#C96F53] font-black uppercase tracking-wider border border-orange-100">
+                <span className="inline-block mt-1 px-3 py-1 bg-orange-50 rounded-xl text-xs text-[#C96F53] font-bold uppercase tracking-wider border border-orange-100">
                   Restauration de clef d'accès
                 </span>
               </div>
@@ -680,7 +680,7 @@ export function Login() {
                     <CheckCircle size={28} />
                   </div>
                   <div className="space-y-1">
-                    <h4 className="text-sm font-black text-[#0F1E36] uppercase tracking-wider">Lien de Restauration Expédié</h4>
+                    <h4 className="text-sm font-bold text-[#0F1E36] uppercase tracking-wider">Lien de Restauration Expédié</h4>
                     <p className="text-xs text-slate-600 font-semibold leading-relaxed">
                       {successMessage}
                     </p>
@@ -691,7 +691,7 @@ export function Login() {
                       setAuthMode('login');
                       setSuccessMessage(null);
                     }}
-                    className="w-full py-3.5 bg-[#0F1E36] text-white text-xs font-black uppercase tracking-widest rounded-xl hover:bg-slate-800 transition-colors"
+                    className="w-full py-3.5 bg-[#0F1E36] text-white text-xs font-bold uppercase tracking-widest rounded-xl hover:bg-slate-800 transition-colors"
                   >
                     Retourner à l'authentification
                   </button>
@@ -702,11 +702,11 @@ export function Login() {
                     Saisissez l'adresse e-mail professionnelle liée à votre cabinet. Un e-mail contenant les instructions de récupération ainsi qu'un code temporaire à usage unique vous parviendront immédiatement.
                   </p>
                   <div>
-                    <label htmlFor="reset-email" className="block text-xs font-black text-slate-700 uppercase tracking-widest mb-1.5">
+                    <label htmlFor="reset-email" className="block text-xs font-bold text-slate-700 uppercase tracking-widest mb-1.5">
                       Adresse e-mail de récupération
                     </label>
                     <div className="relative">
-                      <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                      <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
                         <Mail size={16} />
                       </div>
                       <input
@@ -724,7 +724,7 @@ export function Login() {
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full relative flex items-center justify-center gap-2 py-4 px-4 bg-[#C96F53] hover:bg-[#B55D42] text-white font-black text-xs uppercase tracking-widest rounded-xl transition-all shadow-md hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
+                    className="w-full relative flex items-center justify-center gap-2 py-4 px-4 bg-[#C96F53] hover:bg-[#B55D42] text-white font-bold text-xs uppercase tracking-widest rounded-xl transition-all shadow-md hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
                   >
                     {isSubmitting ? (
                       <>
@@ -750,20 +750,20 @@ export function Login() {
         <div className="flex items-center justify-center gap-6 text-slate-500 py-1 bg-white/40 backdrop-blur-xs rounded-2xl max-w-sm mx-auto border border-slate-100/50 shadow-2xs">
           <div className="flex items-center gap-1.5">
             <Award size={14} className="text-[#5C7F67]" />
-            <span className="text-[9px] font-black uppercase tracking-wider text-slate-600">Conforme HDS</span>
+            <span className="text-[9px] font-bold uppercase tracking-wider text-slate-600">Conforme HDS</span>
           </div>
           <div className="w-1 h-1 rounded-full bg-slate-300" />
           <div className="flex items-center gap-1.5">
             <ShieldCheck size={14} className="text-[#0F1E36]" />
-            <span className="text-[9px] font-black uppercase tracking-wider text-slate-600">RGPD Sécurisé</span>
+            <span className="text-[9px] font-bold uppercase tracking-wider text-slate-600">RGPD Sécurisé</span>
           </div>
         </div>
 
-        <p className="text-[9px] text-slate-400 font-semibold leading-normal max-w-sm mx-auto">
+        <p className="text-[9px] text-slate-500 font-semibold leading-normal max-w-sm mx-auto">
           Hanen Pro assure le cryptage SSL/TLS de l'ensemble des transmissions cliniques à destination de nos serveurs souverains. L'accès à cette plateforme est strictement réservé aux professionnels de santé agréés.
         </p>
 
-        <div className="flex justify-center gap-4 text-[9px] text-[#5C7F67] font-black uppercase tracking-wider">
+        <div className="flex justify-center gap-4 text-[9px] text-[#5C7F67] font-bold uppercase tracking-wider">
           <span className="hover:underline cursor-pointer">Conditions Générales d'Usage (CGU)</span>
           <span>•</span>
           <span className="hover:underline cursor-pointer">Assistance & Support technique via Hanen Pro</span>

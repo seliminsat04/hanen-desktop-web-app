@@ -45,7 +45,7 @@ export function Header() {
         )}
 
         <div className="relative ml-2">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" size={18} />
           <input 
             type="text" 
             placeholder="Rechercher un patient..." 

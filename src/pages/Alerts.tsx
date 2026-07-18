@@ -534,31 +534,31 @@ export function Alerts() {
         {/* KPI 1 */}
         <div className="bg-white rounded-2xl border border-slate-200/70 p-5 shadow-xs relative overflow-hidden group hover:border-indigo-200 transition-colors">
           <div className="flex items-center justify-between">
-            <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block">Total Alertes Ce Mois</span>
+            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block">Total Alertes Ce Mois</span>
             <div className="w-8 h-8 rounded-lg bg-indigo-50/70 flex items-center justify-center text-indigo-500 shrink-0">
               <Activity size={16} />
             </div>
           </div>
           <div className="mt-3.5 flex items-baseline gap-2">
-            <span className="text-3xl font-black text-slate-800 tracking-tight">{statsOverview.totalThisMonth + 14}</span>
+            <span className="text-3xl font-extrabold text-slate-800 tracking-tight">{statsOverview.totalThisMonth + 14}</span>
             <span className="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded flex items-center gap-0.5">
               +12% vs avril
             </span>
           </div>
-          <p className="text-[10px] text-slate-400 font-medium mt-1">Cumulé actif & hist. de résolutions</p>
+          <p className="text-[10px] text-slate-500 font-medium mt-1">Cumulé actif & hist. de résolutions</p>
         </div>
 
         {/* KPI 2 */}
         <div className="bg-white rounded-2xl border border-rose-100 p-5 shadow-xs relative overflow-hidden group hover:border-rose-300 transition-colors">
           <div className="absolute top-0 right-0 w-16 h-16 bg-rose-50/40 rounded-full translate-x-3 -translate-y-3 shrink-0" />
           <div className="flex items-center justify-between">
-            <span className="text-[10px] font-black text-rose-700 uppercase tracking-widest block">Urgences Critiques Actives</span>
+            <span className="text-[10px] font-bold text-rose-700 uppercase tracking-widest block">Urgences Critiques Actives</span>
             <div className="w-8 h-8 rounded-lg bg-rose-50 flex items-center justify-center text-rose-500 shrink-0">
               <ShieldAlert size={16} />
             </div>
           </div>
           <div className="mt-3.5 flex items-baseline gap-2">
-            <span className="text-3xl font-black text-rose-600 tracking-tight">
+            <span className="text-3xl font-extrabold text-rose-600 tracking-tight">
               {statsOverview.highActiveCount}
             </span>
             <span className="text-[10px] font-bold text-rose-500 bg-rose-50 px-1.5 py-0.5 rounded">
@@ -571,35 +571,35 @@ export function Alerts() {
         {/* KPI 3 */}
         <div className="bg-white rounded-2xl border border-slate-200/70 p-5 shadow-xs relative overflow-hidden group hover:border-indigo-200 transition-colors">
           <div className="flex items-center justify-between">
-            <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block">Taux anomalies vocales</span>
+            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block">Taux anomalies vocales</span>
             <div className="w-8 h-8 rounded-lg bg-emerald-50/70 flex items-center justify-center text-emerald-600 shrink-0">
               <Mic size={16} />
             </div>
           </div>
           <div className="mt-3.5 flex items-baseline gap-2">
-            <span className="text-3xl font-black text-slate-800 tracking-tight">{statsOverview.anomaliesRate}%</span>
+            <span className="text-3xl font-extrabold text-slate-800 tracking-tight">{statsOverview.anomaliesRate}%</span>
             <span className="text-[10px] font-bold text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded">
               stable
             </span>
           </div>
-          <p className="text-[10px] text-slate-400 font-medium mt-1">Rapporté à l'effectif actif du cabinet</p>
+          <p className="text-[10px] text-slate-500 font-medium mt-1">Rapporté à l'effectif actif du cabinet</p>
         </div>
 
         {/* KPI 4 */}
         <div className="bg-white rounded-2xl border border-slate-200/70 p-5 shadow-xs relative overflow-hidden group hover:border-indigo-200 transition-colors">
           <div className="flex items-center justify-between">
-            <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block">Évolution clinique</span>
+            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block">Évolution clinique</span>
             <div className="w-8 h-8 rounded-lg bg-indigo-50/70 flex items-center justify-center text-indigo-500 shrink-0">
               <HeartHandshake size={16} />
             </div>
           </div>
           <div className="mt-3.5 flex items-baseline gap-2">
-            <span className="text-3xl font-black text-indigo-600 tracking-tight">-15% d'urgences</span>
+            <span className="text-3xl font-extrabold text-indigo-600 tracking-tight">-15% d'urgences</span>
             <span className="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded">
               efficace
             </span>
           </div>
-          <p className="text-[10px] text-slate-400 font-medium mt-1">Grâce aux appels de prévention rapides</p>
+          <p className="text-[10px] text-slate-500 font-medium mt-1">Grâce aux appels de prévention rapides</p>
         </div>
 
       </div>
@@ -617,7 +617,7 @@ export function Alerts() {
                 setStatusFilter('Active');
               }}
               className={cn(
-                "flex-1 lg:flex-none px-6 py-2.5 rounded-xl text-xs font-black transition-all flex items-center justify-center gap-2",
+                "flex-1 lg:flex-none px-6 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2",
                 statusFilter === 'Active'
                   ? "bg-white text-rose-600 shadow-xs"
                   : "text-slate-500 hover:text-slate-800"
@@ -631,7 +631,7 @@ export function Alerts() {
                 setStatusFilter('Resolved');
               }}
               className={cn(
-                "flex-1 lg:flex-none px-6 py-2.5 rounded-xl text-xs font-black transition-all flex items-center justify-center gap-2",
+                "flex-1 lg:flex-none px-6 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2",
                 statusFilter === 'Resolved'
                   ? "bg-white text-indigo-600 shadow-xs"
                   : "text-slate-500 hover:text-slate-800"
@@ -644,7 +644,7 @@ export function Alerts() {
 
           {/* Search bar inputs */}
           <div className="relative flex-1 max-w-md w-full">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={15} />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" size={15} />
             <input
               type="text"
               placeholder="Rechercher par patient ou mot-clé (toux, essoufflement...)"
@@ -672,7 +672,7 @@ export function Alerts() {
           
           {/* Period Filter */}
           <div className="space-y-1.5">
-            <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-1.5">
+            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest flex items-center gap-1.5">
               <Clock size={12} /> Période d'identification
             </span>
             <div className="flex flex-wrap items-center gap-1.5">
@@ -695,7 +695,7 @@ export function Alerts() {
 
           {/* Priority Filter */}
           <div className="space-y-1.5">
-            <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-1.5">
+            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest flex items-center gap-1.5">
               <Filter size={12} /> Niveau d'Urgence
             </span>
             <div className="flex flex-wrap items-center gap-1.5">
@@ -704,7 +704,7 @@ export function Alerts() {
                   key={prio}
                   onClick={() => setPriorityFilter(prio)}
                   className={cn(
-                    "p-1.5 px-3 rounded-lg text-[10px] font-black tracking-wide border transition-all",
+                    "p-1.5 px-3 rounded-lg text-[10px] font-bold tracking-wide border transition-all",
                     priorityFilter === prio
                       ? prio === 'High' ? "bg-rose-50 border-rose-300 text-rose-700"
                         : prio === 'Medium' ? "bg-orange-50 border-orange-300 text-orange-700"
@@ -721,7 +721,7 @@ export function Alerts() {
 
           {/* Pathology Filter Selection */}
           <div className="space-y-1.5">
-            <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-1.5">
+            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest flex items-center gap-1.5">
               <Activity size={12} /> Diagnostic Pathologique
             </span>
             <select
@@ -748,11 +748,11 @@ export function Alerts() {
       <div className="space-y-6">
         {filteredAlerts.length === 0 ? (
           <div className="bg-white rounded-3xl border border-slate-200/60 p-16 text-center space-y-4">
-            <div className="w-16 h-16 bg-slate-50 border border-slate-100 rounded-full flex items-center justify-center mx-auto text-slate-400">
+            <div className="w-16 h-16 bg-slate-50 border border-slate-100 rounded-full flex items-center justify-center mx-auto text-slate-500">
               <ShieldCheck size={36} className="text-emerald-500 animate-pulse" />
             </div>
             <div className="max-w-md mx-auto">
-              <h3 className="text-base font-black text-slate-800">Aucune alerte trouvée</h3>
+              <h3 className="text-base font-bold text-slate-800">Aucune alerte trouvée</h3>
               <p className="text-xs text-slate-500 mt-1 leading-relaxed">
                 Toutes les alertes cliniques correspondant à vos critères de filtres ont été traitées ou archivées. Le cabinet médical de Dr. Slim est entièrement à jour !
               </p>
@@ -869,7 +869,7 @@ export function Alerts() {
                       </button>
 
                       {alert.status === 'Resolved' && alert.resolvedAt && (
-                        <span className="text-[10px] font-black text-emerald-600 bg-emerald-50 border border-emerald-100 rounded-lg px-2.5 py-1">
+                        <span className="text-[10px] font-bold text-emerald-600 bg-emerald-50 border border-emerald-100 rounded-lg px-2.5 py-1">
                           Clos le {new Date(alert.resolvedAt).toLocaleDateString('fr-FR')}
                         </span>
                       )}
@@ -886,18 +886,18 @@ export function Alerts() {
                       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 bg-[#fdfaf5] p-5 rounded-2xl border border-[#ede3d1]/80 shadow-3xs">
                         <div>
                           <div className="flex items-center gap-2.5 flex-wrap">
-                            <Link to={`/patients/${patient.id}`} className="text-2xl font-black text-slate-900 hover:text-red-700 transition-colors tracking-tight">
+                            <Link to={`/patients/${patient.id}`} className="text-2xl font-extrabold text-slate-900 hover:text-red-700 transition-colors tracking-tight">
                               {patient.name}
                             </Link>
-                            <span className="text-slate-800 font-black text-xs bg-white border border-[#e2d6bf] px-2.5 py-1 rounded-lg">
+                            <span className="text-slate-800 font-bold text-xs bg-white border border-[#e2d6bf] px-2.5 py-1 rounded-lg">
                               {patient.age} ans
                             </span>
                             <span className="text-xs font-extrabold text-[#5c4a31] bg-[#efe9dd] border border-[#dfd4c0] px-2.5 py-1 rounded-lg">
                               Tél: {patient.phone}
                             </span>
                           </div>
-                          <p className="text-xs text-slate-500 font-black mt-2 uppercase tracking-wide">
-                            Contexte Pathologique : <span className="text-red-900 normal-case font-black text-sm bg-red-100/50 border border-red-200/40 px-2 py-0.5 rounded ml-1.5">{patient.conditions.join(' + ')}</span>
+                          <p className="text-xs text-slate-500 font-bold mt-2 uppercase tracking-wide">
+                            Contexte Pathologique : <span className="text-red-900 normal-case font-bold text-sm bg-red-100/50 border border-red-200/40 px-2 py-0.5 rounded ml-1.5">{patient.conditions.join(' + ')}</span>
                           </p>
                         </div>
 
@@ -911,7 +911,7 @@ export function Alerts() {
                       {/* Decoded/biomarked Vocal signs */}
                       <div className="bg-[#fcfaf7] border border-[#eadeca]/80 rounded-2xl p-5 space-y-4 shadow-3xs">
                         <div className="flex items-center justify-between border-b border-[#e2d6bf] pb-3">
-                          <h4 className="text-xs font-black uppercase tracking-widest text-[#5c442d] flex items-center gap-2">
+                          <h4 className="text-xs font-bold uppercase tracking-widest text-[#5c442d] flex items-center gap-2">
                             <Activity size={15} className="text-red-600 animate-pulse" strokeWidth={2.5} /> 
                             Anomalies Cliniques Vocales Détectées (Durée de l'appel : {alert.duration})
                           </h4>
@@ -927,7 +927,7 @@ export function Alerts() {
                               className="relative cursor-help"
                             >
                               <button className={cn(
-                                "text-xs font-black border rounded-xl px-3 py-2 flex items-center gap-2 select-none transition-colors shadow-3xs",
+                                "text-xs font-bold border rounded-xl px-3 py-2 flex items-center gap-2 select-none transition-colors shadow-3xs",
                                 alert.status === 'Resolved'
                                   ? "bg-slate-100 text-slate-700 border-slate-300"
                                   : alert.priority === 'High'
@@ -991,7 +991,7 @@ export function Alerts() {
                         
                         {/* Audio Wave Header */}
                         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                          <span className="text-[10px] font-black uppercase tracking-widest text-slate-400 flex items-center gap-1.5">
+                          <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500 flex items-center gap-1.5">
                             <MessageSquare size={13} className="text-indigo-400" /> Extrait de la Discussion Enregistrée (Tunisian Derja)
                           </span>
                           
@@ -1001,7 +1001,7 @@ export function Alerts() {
                             <button
                               onClick={() => handlePlayToggle(alert.id)}
                               className={cn(
-                                "flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-black transition-all",
+                                "flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all",
                                 isPlaying 
                                   ? "bg-rose-500 text-white" 
                                   : "bg-slate-800 hover:bg-slate-700 text-indigo-400 hover:text-indigo-300"
@@ -1053,7 +1053,7 @@ export function Alerts() {
                             <span className="text-slate-500">
                               Progression : {Math.round(playProgress)}%
                             </span>
-                            <span className="text-slate-400 font-extrabold flex items-center gap-1">
+                            <span className="text-slate-500 font-extrabold flex items-center gap-1">
                               <Volume2 size={10} className="text-indigo-500" />
                               {Math.round(playProgress * tracking.audioDurationSec / 100)}s / {tracking.audioDurationSec}s
                             </span>
@@ -1062,7 +1062,7 @@ export function Alerts() {
 
                         {/* Tunisian Derja dialetic transcript text */}
                         <div className="space-y-3 pt-2">
-                          <p className="text-base font-black leading-relaxed tracking-wide text-slate-100 border-l-3 border-emerald-500 pl-4.5 bg-slate-900/60 py-2.5 rounded-r-lg">
+                          <p className="text-base font-bold leading-relaxed tracking-wide text-slate-100 border-l-3 border-emerald-500 pl-4.5 bg-slate-900/60 py-2.5 rounded-r-lg">
                             {tracking.dialectText}
                           </p>
                           <p className="text-[13px] font-semibold text-slate-300 italic pl-4.5 leading-relaxed bg-slate-900/30 py-1.5 rounded-r-lg">
@@ -1074,7 +1074,7 @@ export function Alerts() {
 
                       {/* CLINICAL NOTES BY DR. SLIM (Interactive live comment box) */}
                       <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200/60 shadow-inner">
-                        <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 block mb-1.5">
+                        <label className="text-[10px] font-bold uppercase tracking-widest text-slate-500 block mb-1.5">
                           Commentaires de suivi médical (Sauvegardé automatiquement) :
                         </label>
                         <textarea
@@ -1089,7 +1089,7 @@ export function Alerts() {
                       {/* Display closure note if resolved */}
                       {alert.status === 'Resolved' && alert.closureNote && (
                         <div className="p-4 bg-emerald-50 border border-emerald-100 rounded-2xl animate-in slide-in-from-top-3">
-                          <p className="text-xs font-black text-emerald-800">
+                          <p className="text-xs font-bold text-emerald-800">
                             <b>Note clinique de clôture :</b>
                           </p>
                           <p className="text-xs text-slate-600 font-medium mt-1">
@@ -1113,13 +1113,13 @@ export function Alerts() {
 
                           {expandedHistoryId === alert.id && (
                             <div className="mt-3.5 p-4 rounded-2xl bg-slate-50 border border-slate-150 space-y-3 animate-in fade-in duration-200">
-                              <span className="text-[9px] font-black text-indigo-650 uppercase tracking-wider block">
+                              <span className="text-[9px] font-bold text-indigo-650 uppercase tracking-wider block">
                                 Progression clinique antérieure du senior ({patient.name})
                               </span>
                               
                               <div className="space-y-2.5">
                                 <div className="p-3 bg-white rounded-xl border border-slate-200 border-l-3 border-orange-500 text-xs">
-                                  <div className="flex justify-between text-[10px] text-slate-400 font-bold">
+                                  <div className="flex justify-between text-[10px] text-slate-500 font-bold">
                                     <span>14 Mai 2026 - Alerte Important</span>
                                     <span>Traité par Dr. Slim</span>
                                   </div>
@@ -1128,7 +1128,7 @@ export function Alerts() {
                                 </div>
 
                                 <div className="p-3 bg-white rounded-xl border border-slate-200 border-l-3 border-emerald-500 text-xs">
-                                  <div className="flex justify-between text-[10px] text-slate-400 font-bold">
+                                  <div className="flex justify-between text-[10px] text-slate-500 font-bold">
                                     <span>05 Mai 2026 - Alerte Suivi</span>
                                     <span>Traité par Dr. Slim</span>
                                   </div>
@@ -1147,13 +1147,13 @@ export function Alerts() {
                     <div className="col-span-1 lg:col-span-4 flex flex-col justify-between border-t lg:border-t-0 lg:border-l border-slate-150/80 lg:pl-6 pt-5 lg:pt-0 gap-5 min-h-[220px]">
                       
                       <div className="space-y-3 w-full">
-                        <span className="text-[10px] font-black uppercase tracking-widest text-indigo-400 block mb-1">
+                        <span className="text-[10px] font-bold uppercase tracking-widest text-indigo-400 block mb-1">
                           Actions rapides recommandées
                         </span>
                         
                         <Link 
                           to={`/patients/${patient.id}`} 
-                          className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 bg-slate-900 hover:bg-slate-800 text-white text-xs font-black rounded-xl transition-all shadow-sm focus:outline-none text-center"
+                          className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-xl transition-all shadow-sm focus:outline-none text-center"
                         >
                           <Activity size={14} /> Explorer dossier complet
                         </Link>
@@ -1176,14 +1176,14 @@ export function Alerts() {
                         {alert.status === 'Active' ? (
                           <button
                             onClick={() => openResolveModal(alert.id)}
-                            className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 bg-emerald-50 hover:bg-emerald-600 text-emerald-700 hover:text-white text-xs font-black rounded-xl transition-all border border-emerald-200"
+                            className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 bg-emerald-50 hover:bg-emerald-600 text-emerald-700 hover:text-white text-xs font-bold rounded-xl transition-all border border-emerald-200"
                           >
                             <CheckCircle2 size={14} /> Marquer comme traitée / résolue
                           </button>
                         ) : (
                           <button
                             onClick={() => handleReopenAlert(alert.id)}
-                            className="w-full inline-flex items-center justify-center gap-1.5 px-4 py-3 bg-white hover:bg-slate-50 text-slate-600 text-xs font-black rounded-xl transition-all border border-slate-200"
+                            className="w-full inline-flex items-center justify-center gap-1.5 px-4 py-3 bg-white hover:bg-slate-50 text-slate-600 text-xs font-bold rounded-xl transition-all border border-slate-200"
                           >
                             <RefreshCw size={13} /> Ré-ouvrir l'anomalie
                           </button>
@@ -1212,13 +1212,13 @@ export function Alerts() {
                   <Mic size={18} />
                 </div>
                 <div>
-                  <h3 className="font-black text-slate-800 text-base">Envoyer une Capsule de Soins (Vocal)</h3>
-                  <p className="text-slate-400 text-xs mt-0.5 font-semibold">Le message sera prononcé par Hanen lors du prochain appel.</p>
+                  <h3 className="font-bold text-slate-800 text-base">Envoyer une Capsule de Soins (Vocal)</h3>
+                  <p className="text-slate-500 text-xs mt-0.5 font-semibold">Le message sera prononcé par Hanen lors du prochain appel.</p>
                 </div>
               </div>
               <button 
                 onClick={() => setCapsuleId(null)}
-                className="text-slate-400 hover:text-slate-600 p-1 bg-slate-50 hover:bg-slate-100 rounded-lg transition-colors"
+                className="text-slate-500 hover:text-slate-600 p-1 bg-slate-50 hover:bg-slate-100 rounded-lg transition-colors"
               >
                 <X size={16} />
               </button>
@@ -1238,7 +1238,7 @@ export function Alerts() {
               </div>
             ) : (
               <div className="space-y-4 pt-5">
-                <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 block">Choisissez le modèle de capsule médicale :</label>
+                <label className="text-[10px] font-bold uppercase tracking-widest text-slate-500 block">Choisissez le modèle de capsule médicale :</label>
                 
                 <div className="grid grid-cols-1 gap-2.5">
                   
@@ -1372,13 +1372,13 @@ export function Alerts() {
                   <CheckCircle2 size={18} />
                 </div>
                 <div>
-                  <h3 className="font-black text-slate-800 text-base tracking-tight">Clôture de l'Alerte IA</h3>
-                  <p className="text-slate-400 text-xs mt-0.5 font-semibold">Clôturer l'alerte médicale après examen clinique.</p>
+                  <h3 className="font-bold text-slate-800 text-base tracking-tight">Clôture de l'Alerte IA</h3>
+                  <p className="text-slate-500 text-xs mt-0.5 font-semibold">Clôturer l'alerte médicale après examen clinique.</p>
                 </div>
               </div>
               <button 
                 onClick={handleCloseResolveModal}
-                className="text-slate-400 hover:text-slate-600 p-1 bg-slate-50 hover:bg-slate-100 rounded-lg transition-colors"
+                className="text-slate-500 hover:text-slate-600 p-1 bg-slate-50 hover:bg-slate-100 rounded-lg transition-colors"
               >
                 <X size={16} />
               </button>
@@ -1386,7 +1386,7 @@ export function Alerts() {
 
             <div className="space-y-4 pt-5">
               <div>
-                <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 block mb-1.5">Note médicale définitive de clôture :</label>
+                <label className="text-[10px] font-bold uppercase tracking-widest text-slate-500 block mb-1.5">Note médicale définitive de clôture :</label>
                 <textarea
                   placeholder="Ex: Famille contactée. Observance diurétiques corrigée ce midi. État réévalué stable..."
                   value={resolutionNote}
@@ -1428,12 +1428,12 @@ export function Alerts() {
                 <FileText className="text-indigo-600" size={20} />
                 <div>
                   <h3 className="font-extrabold text-slate-900 text-base">Rapport Clinique Biomarqueurs Vocaux</h3>
-                  <p className="text-slate-400 text-xs">Aperçu du document PDF prêt pour intégration dossier médical.</p>
+                  <p className="text-slate-500 text-xs">Aperçu du document PDF prêt pour intégration dossier médical.</p>
                 </div>
               </div>
               <button 
                 onClick={() => setExportAlert(null)}
-                className="text-slate-400 hover:text-slate-600 p-1.5 bg-slate-50 hover:bg-slate-100 rounded-xl transition-colors"
+                className="text-slate-500 hover:text-slate-600 p-1.5 bg-slate-50 hover:bg-slate-100 rounded-xl transition-colors"
               >
                 <X size={16} />
               </button>
@@ -1441,28 +1441,28 @@ export function Alerts() {
 
             {/* Simulated Medical Dossier Structure */}
             <div className="my-6 p-6 bg-slate-50 border border-slate-200 rounded-2xl space-y-4 font-sans text-xs">
-              <div className="flex justify-between border-b pb-3 uppercase tracking-wider text-[10px] text-slate-400 font-black">
+              <div className="flex justify-between border-b pb-3 uppercase tracking-wider text-[10px] text-slate-500 font-bold">
                 <span>Cabinet De Dr. Slim Pro</span>
                 <span>Hanen IA Platform Integration</span>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <h5 className="font-bold text-[10px] text-slate-400 uppercase tracking-widest">PATIENT :</h5>
-                  <p className="font-black text-slate-900 mt-0.5 text-sm">{patients.find(p => p.id === exportAlert.patientId)?.name}</p>
+                  <h5 className="font-bold text-[10px] text-slate-500 uppercase tracking-widest">PATIENT :</h5>
+                  <p className="font-bold text-slate-900 mt-0.5 text-sm">{patients.find(p => p.id === exportAlert.patientId)?.name}</p>
                   <p className="text-slate-500">Âge : {patients.find(p => p.id === exportAlert.patientId)?.age} ans</p>
                   <p className="text-slate-500">Tél : {patients.find(p => p.id === exportAlert.patientId)?.phone}</p>
                 </div>
                 <div>
-                  <h5 className="font-bold text-[10px] text-slate-400 uppercase tracking-widest">INFORMATIONS ALERTE :</h5>
-                  <p className="font-black text-slate-900 mt-0.5">ID: {exportAlert.id}</p>
+                  <h5 className="font-bold text-[10px] text-slate-500 uppercase tracking-widest">INFORMATIONS ALERTE :</h5>
+                  <p className="font-bold text-slate-900 mt-0.5">ID: {exportAlert.id}</p>
                   <p className="text-slate-500">Créé le : {new Date(exportAlert.date).toLocaleString('fr-FR')}</p>
                   <p className="text-slate-500 font-extrabold text-indigo-600">Priorité : {exportAlert.priority}</p>
                 </div>
               </div>
 
               <div className="pt-3 border-t">
-                <h5 className="font-bold text-[10px] text-slate-400 uppercase tracking-widest mb-1">SIGNES VOCAUX IDENTIFIÉS :</h5>
+                <h5 className="font-bold text-[10px] text-slate-500 uppercase tracking-widest mb-1">SIGNES VOCAUX IDENTIFIÉS :</h5>
                 <ul className="list-disc pl-4 space-y-1 text-slate-705 font-bold">
                   {exportAlert.detectedSigns.map((s, idx) => (
                     <li key={idx}>{s}</li>
@@ -1471,12 +1471,12 @@ export function Alerts() {
               </div>
 
               <div className="pt-3 border-t space-y-1 bg-indigo-50/50 p-3 rounded-xl border border-indigo-100/50">
-                <h5 className="font-black text-[10px] text-indigo-950 uppercase tracking-widest text-[10px]">SUGGESTION DIAGNOSTIC IA :</h5>
+                <h5 className="font-bold text-[10px] text-indigo-950 uppercase tracking-widest text-[10px]">SUGGESTION DIAGNOSTIC IA :</h5>
                 <p className="text-slate-650 leading-relaxed font-semibold">{exportAlert.aiSuggestion}</p>
               </div>
 
               <div className="pt-3 border-t">
-                <h5 className="font-bold text-[10px] text-slate-400 uppercase tracking-widest mb-1">NOTES COMPLÉMENTAIRES DU MÉDECIN :</h5>
+                <h5 className="font-bold text-[10px] text-slate-500 uppercase tracking-widest mb-1">NOTES COMPLÉMENTAIRES DU MÉDECIN :</h5>
                 <p className="text-slate-600 italic font-medium leading-relaxed bg-white p-3 rounded-xl border border-slate-200">
                   {exportAlert.doctorComment || "Aucune note complémentaire ajoutée par le docteur."}
                 </p>
@@ -1486,7 +1486,7 @@ export function Alerts() {
             {zipEncryptionStatus && (
               <div className="p-3 bg-indigo-50 border border-indigo-150 rounded-xl flex items-center gap-2.5">
                 <RefreshCw size={14} className="text-indigo-650 animate-spin shrink-0" />
-                <p className="text-[11px] font-black text-indigo-950 uppercase tracking-wide">{zipEncryptionStatus}</p>
+                <p className="text-[11px] font-bold text-indigo-950 uppercase tracking-wide">{zipEncryptionStatus}</p>
               </div>
             )}
 
@@ -1494,14 +1494,14 @@ export function Alerts() {
               <button
                 onClick={() => setExportAlert(null)}
                 disabled={isGeneratingZip}
-                className="px-4 py-2.5 text-xs bg-slate-100 hover:bg-slate-200 border border-slate-250 rounded-xl text-slate-705 font-black transition-all text-center"
+                className="px-4 py-2.5 text-xs bg-slate-100 hover:bg-slate-200 border border-slate-250 rounded-xl text-slate-705 font-bold transition-all text-center"
               >
                 Annuler
               </button>
               <button
                 disabled={isGeneratingZip}
                 onClick={() => handleExportZipDirect(exportAlert)}
-                className="px-4 py-2.5 text-xs bg-emerald-50 hover:bg-emerald-100 border border-emerald-355 text-emerald-950 font-black rounded-xl transition-all flex items-center gap-1.5 text-center shadow-xs"
+                className="px-4 py-2.5 text-xs bg-emerald-50 hover:bg-emerald-100 border border-emerald-355 text-emerald-950 font-bold rounded-xl transition-all flex items-center gap-1.5 text-center shadow-xs"
               >
                 <ShieldCheck size={14} className="text-emerald-600" />
                 {isGeneratingZip ? "Compilation..." : "Exporter Dossier ZIP (AES-250)"}
@@ -1511,7 +1511,7 @@ export function Alerts() {
                 onClick={() => {
                   window.print();
                 }}
-                className="px-4 py-2.5 text-xs bg-indigo-600 hover:bg-indigo-700 text-white font-black rounded-xl transition-all shadow-md flex items-center gap-1.5 text-center"
+                className="px-4 py-2.5 text-xs bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl transition-all shadow-md flex items-center gap-1.5 text-center"
               >
                 <FileText size={14} />
                 Sauvegarder Rapport PDF

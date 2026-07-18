@@ -33,8 +33,8 @@ export function Sidebar() {
             <img src="/hanen-vide.png" alt="Hanen" className="h-14 w-auto drop-shadow-lg" />
           </div>
           <div className="flex flex-col min-w-0">
-            <span className="text-xl font-black font-sans text-white tracking-tight leading-none">Hanen <span className="text-emerald-400">Pro</span></span>
-            <p className="mt-1.5 text-[9px] text-emerald-400 font-black tracking-[0.2em] uppercase opacity-60">Espace Clinique</p>
+            <span className="text-xl font-extrabold font-sans text-white tracking-tight leading-none">Hanen <span className="text-emerald-400">Pro</span></span>
+            <p className="mt-1.5 text-[9px] text-emerald-400 font-bold tracking-[0.2em] uppercase opacity-60">Espace Clinique</p>
           </div>
         </div>
       </div>
